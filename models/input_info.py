@@ -267,7 +267,15 @@ class SdPayanehNaftiInputInfo(models.Model):
         else:
             raise ValidationError(_('Add a "SP.GR." from the main menu'))
 
+    @api.depends('shift')
     def _remain_amount(self):
+        # print('============   _remain_amount  =============')
+        # select registration_no of this records
+        registration_list = []
+        for rec in self:
+            registration_list.append(rec.registration_no.id)
+
+        all_inputs = self.search([('registration_no', 'in', registration_list)])
         for rec in self:
             final_gsv_b = 0
             final_mt = 0
@@ -278,9 +286,11 @@ class SdPayanehNaftiInputInfo(models.Model):
 
             # In case of new record creation
             if rec.id and str(rec.id).isdigit():
-                inputs = self.search([('id', '!=', False), ('id', '<=', rec.id), ('registration_no', '=', rec.registration_no.id), ])
+                # inputs = self.search([('id', '!=', False), ('id', '<=', rec.id), ('registration_no', '=', rec.registration_no.id), ])
+                inputs = list([re for re in all_inputs if re.id != False and re.id <= rec.id and re.registration_no.id == rec.registration_no.id])
             else:
-                inputs = self.search([('registration_no', '=', rec.registration_no.id),])
+                # inputs = self.search([('registration_no', '=', rec.registration_no.id),])
+                inputs = list([re for re in all_inputs if re.registration_no.id == rec.registration_no.id ])
 
             #  if there is no loading info, calculate based on sum of the containers amount
             if not rec.final_mt:
@@ -297,7 +307,6 @@ class SdPayanehNaftiInputInfo(models.Model):
             elif rec.registration_no.unit == 'metric_ton':
                 used_amounts = sum([ua.final_mt for ua in inputs])
                 requested_approx_amount = final_mt
-
             else:
                 used_amounts = 0
 
@@ -308,13 +317,7 @@ class SdPayanehNaftiInputInfo(models.Model):
             if rec.state != 'finished':
                 rec.amount = rec.final_gsv_b if rec.registration_no.unit == 'barrel' else rec.final_mt
 
-            # if rec.remain_amount_approx < 0:
-            #     raise ValidationError(_(f'Document No: {rec.document_no}'
-            #                             f'\nRegistration No: {rec.registration_no}'
-            #                             f'\nContract amount: {amount}'
-            #                             f'\nRemain amount: {rec.remain_amount}'
-            #                             f'\nRequested amount: {requested_approx_amount}'
-            #                             f'\nApproximate remain amount: {rec.remain_amount_approx}'))
+
 
     def _finals(self):
         # calculate the final amounts based on the totalizer or the tanker weight
