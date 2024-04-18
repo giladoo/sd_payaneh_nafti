@@ -498,7 +498,9 @@ class SdPayanehNaftiInputInfo(models.Model):
     def loading_permit(self):
         # In input info for, there is a button named "Loading Permit" which updates some fields.
         for rec in self:
-            loading_no = str(jdatetime.date.today().year) + f"/{int(rec.document_no):07d}"
+            loading_no = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.loading_no') or 0
+
+            loading_no = str(jdatetime.date.today().year) + f"/{int(loading_no):07d}"
             loading_date = datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))).date()
             rec.write({'state': 'loading_permit', 'loading_no': loading_no, 'loading_date': loading_date })
 
