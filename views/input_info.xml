@@ -384,8 +384,11 @@
                         <notebook string="More Info" >
                             <page string="Loading">
                                 <group>
-                                    <field name="loading_no" />
-                                    <field name="loading_date"/>
+                                    <group>
+                                        <field name="loading_no" readonly="1"/>
+                                        <field name="loading_date"/>
+
+                                    </group>
                                 </group>
                             </page>
                             <page string="Loading Info">
