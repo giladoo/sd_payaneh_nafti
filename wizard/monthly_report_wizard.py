@@ -38,25 +38,25 @@ class SdPayanehNaftiReportMonthly(models.TransientModel):
         data = {'form_data': read_form}
 
         return self.env.ref('sd_payaneh_nafti.monthly_report').report_action(self, data=data)
+
     # #############################################################################
     def monthly_xls_report(self):
         read_form = self.read()[0]
         data = {'form_data': read_form}
-
         return self.env.ref('sd_payaneh_nafti.monthly_xls_report').report_action(self, data=data)
-
 
     def _year_selector(self):
         # todo: timezone is needed to make sure date after 8 pm is correct
-        this_date = datetime.now(pytz.timezone(self.env.context.get('tz')))
+        this_date = datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran')))
         if self.env.context.get('lang') == 'fa_IR':
             s_this_year = jdatetime.date.fromgregorian(date=this_date).strftime("%Y")
         else:
             s_this_year = this_date.strftime("%Y")
         return s_this_year
+
     def _month_selector(self):
         # todo: timezone is needed to make sure date after 8 pm is correct
-        this_date = datetime.now(pytz.timezone(self.env.context.get('tz')))
+        this_date = datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran')))
         if self.env.context.get('lang') == 'fa_IR':
             s_this_month = jdatetime.date.fromgregorian(date=this_date).strftime("%m")
         else:
