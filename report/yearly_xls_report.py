@@ -10,14 +10,14 @@ import json
 
 
 # ########################################################################################
-class ReportSdPayanehNaftiMonthlyXlsReport(models.AbstractModel):
-    _name = 'report.sd_payaneh_nafti.monthly_xls_report_template'
+class ReportSdPayanehNaftiYearlyXlsReport(models.AbstractModel):
+    _name = 'report.sd_payaneh_nafti.yearly_xls_report_template'
     _inherit = 'report.report_xlsx.abstract'
 
 
     # ########################################################################################
     def generate_xlsx_report(self, workbook, data, p):
-        report = self.env['report.sd_payaneh_nafti.monthly_report_template']
+        report = self.env['report.sd_payaneh_nafti.yearly_report_template']
         self.create_excel(workbook, report.get_report_values([], data))
 
     # ########################################################################################

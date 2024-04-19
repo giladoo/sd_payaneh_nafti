@@ -6,16 +6,17 @@
             <field name="model">sd_payaneh_nafti.report.monthly_report</field>
             <field name="arch" type="xml">
                 <form>
-<!--                    <group>-->
-<!--                        <group>-->
-<!--&lt;!&ndash;                            <field name="start_date" options='{"no_open": True, "no_create": True}'/>&ndash;&gt;-->
-<!--                        </group>-->
-<!--                        <group>-->
-<!--                            <field name="start_date" />-->
-<!--                            <field name="calendar" invisible="context.get('lang') != 'fa_IR'"/>-->
-<!--                        </group>-->
-<!--                    </group>-->
+
                     <group>
+<!--                        <group >-->
+<!--&lt;!&ndash;                            <field name="start_date" />&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="calendar" invisible="context.get('lang') != 'fa_IR'"/>&ndash;&gt;-->
+<!--                            <label for="month" string="From Month"/>-->
+<!--                            <div class="o_row">-->
+<!--                                <field name="month_start" class="col col-lg-5" />-->
+<!--                                <field name="year_start" class="col col-lg-4"/>-->
+<!--                            </div>-->
+<!--                        </group>                        -->
                         <group >
 <!--                            <field name="start_date" />-->
 <!--                            <field name="calendar" invisible="context.get('lang') != 'fa_IR'"/>-->

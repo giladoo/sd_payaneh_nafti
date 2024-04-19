@@ -10,19 +10,19 @@ import jdatetime
 from . import get_calendare as gc
 import pytz
 # #############################################################################
-class SdPayanehNaftiReportMonthly(models.TransientModel):
-    _name = 'sd_payaneh_nafti.report.monthly_report'
-    _description = 'Monthly Report'
+class SdPayanehNaftiReportYearly(models.TransientModel):
+    _name = 'sd_payaneh_nafti.report.yearly_report'
+    _description = 'yearly Report'
 
     month_start = fields.Selection(lambda self: gc.get_months_pr() if self.env.context.get('lang') == 'fa_IR' else gc.get_months(),
-                             string='Month', required=True,
+                             string='Month', required=False,
                              default=lambda self: self._month_selector())
     year_start = fields.Selection(lambda self: gc.get_years_pr() if self.env.context.get('lang') == 'fa_IR' else gc.get_years(),
-                            string='Year', required=True,
+                            string='Year', required=False,
                             default=lambda self: self._year_selector())
 
     month = fields.Selection(lambda self: gc.get_months_pr() if self.env.context.get('lang') == 'fa_IR' else gc.get_months(),
-                             string='Month', required=True,
+                             string='Month', required=False,
                              default=lambda self: self._month_selector())
     year = fields.Selection(lambda self: gc.get_years_pr() if self.env.context.get('lang') == 'fa_IR' else gc.get_years(),
                             string='Year', required=True,
@@ -33,17 +33,17 @@ class SdPayanehNaftiReportMonthly(models.TransientModel):
                                 default=lambda self: 'fa_IR' if self.env.context.get('lang') == 'fa_IR' else 'en_US')
 
     # #############################################################################
-    def monthly_report(self):
+    def yearly_report(self):
         read_form = self.read()[0]
         data = {'form_data': read_form}
 
-        return self.env.ref('sd_payaneh_nafti.monthly_report').report_action(self, data=data)
+        return self.env.ref('sd_payaneh_nafti.yearly_report').report_action(self, data=data)
     # #############################################################################
-    def monthly_xls_report(self):
+    def yearly_xls_report(self):
         read_form = self.read()[0]
         data = {'form_data': read_form}
 
-        return self.env.ref('sd_payaneh_nafti.monthly_xls_report').report_action(self, data=data)
+        return self.env.ref('sd_payaneh_nafti.yearly_xls_report').report_action(self, data=data)
 
 
     def _year_selector(self):

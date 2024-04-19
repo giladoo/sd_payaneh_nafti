@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="monthly_report_wizard_form" model="ir.ui.view">
-            <field name="name">sd_payaneh_nafti.report.monthly_report.form</field>
-            <field name="model">sd_payaneh_nafti.report.monthly_report</field>
+        <record id="yearly_report_wizard_form" model="ir.ui.view">
+            <field name="name">sd_payaneh_nafti.report.yearly_report.form</field>
+            <field name="model">sd_payaneh_nafti.report.yearly_report</field>
             <field name="arch" type="xml">
                 <form>
 
@@ -20,9 +20,9 @@
                         <group >
 <!--                            <field name="start_date" />-->
 <!--                            <field name="calendar" invisible="context.get('lang') != 'fa_IR'"/>-->
-                            <label for="month" string="Month"/>
+                            <label for="year" string="Year"/>
                             <div class="o_row">
-                                <field name="month" class="col col-lg-5" />
+<!--                                <field name="month" class="col col-lg-5" />-->
                                 <field name="year" class="col col-lg-4"/>
                             </div>
                         </group>
@@ -31,8 +31,8 @@
 
 
                     <footer>
-                        <button name="monthly_report" string="Generate" type="object" class="btn btn-primary"/>
-                        <button name="monthly_xls_report" string="Excel" type="object" class="btn btn-primary mx-1"/>
+                        <button name="yearly_report" string="Generate" type="object" class="btn btn-primary"/>
+                        <button name="yearly_xls_report" string="Excel" type="object" class="btn btn-primary mx-1"/>
                         <button string="Cancel" special="cancel" class="btn-secondary"/>
                     </footer>
 
@@ -40,20 +40,20 @@
             </field>
         </record>
 
-        <record id="monthly_report_wizard_action" model="ir.actions.act_window">
-            <field name="name">Monthly Report</field>
-            <field name="res_model">sd_payaneh_nafti.report.monthly_report</field>
+        <record id="yearly_report_wizard_action" model="ir.actions.act_window">
+            <field name="name">yearly Report</field>
+            <field name="res_model">sd_payaneh_nafti.report.yearly_report</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
 
 
-        <menuitem name="Monthly Report"
+        <menuitem name="yearly Report"
                   sequence="40"
-                  id="sd_payaneh_nafti_monthly_report"
+                  id="sd_payaneh_nafti_yearly_report"
                   parent="sd_payaneh_nafti.reports_menu"
                   groups="sd_payaneh_nafti.group_sd_payaneh_nafti_users"
-                  action="monthly_report_wizard_action"/>
+                  action="yearly_report_wizard_action"/>
     </data>
 </odoo>
 

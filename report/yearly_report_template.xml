@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <template id="monthly_report_table_header">
+        <template id="yearly_report_table_header">
             <tr>
                 <th>ردیف</th>
                 <th><span>شماره</span> <br/> <span>نامه</span> </th>
@@ -19,7 +19,7 @@
             </tr>
         </template>
 
-        <template id="monthly_report_table_body">
+        <template id="yearly_report_table_body">
             <tr>
                 <t t-foreach="row_data_line" t-as="row_data">
                     <td t-esc="row_data"></td>
@@ -46,7 +46,7 @@
 <!--            'final_gsv_b_export': int(sum(final_gsv_b_export)),-->
 <!--            'final_mt_export': int(sum(final_mt_export)),-->
 <!--            'tank_count_export': len(final_gsv_l_export),-->
-        <template id="sd_payaneh_nafti.monthly_report_table_footer">
+        <template id="sd_payaneh_nafti.yearly_report_table_footer">
             <tr>
                 <td rowspan="2" colspan="4">بر اساس نوع فروش</td>
                 <td colspan="5">جمع فروش در بورس انرژی</td>
@@ -64,7 +64,7 @@
                 <td t-esc="footer_data['tank_count_general']"></td>
 
             </tr>
-            <tr class="monthly_report_table_total">
+            <tr class="yearly_report_table_total">
                 <td colspan="9">جمع کل ماه جاری</td>
                 <td t-esc="'{:,d}'.format(footer_data['final_gsv_l_stock'] + footer_data['final_gsv_l_general'])"></td>
                 <td t-esc="'%.2f' % (footer_data['final_gsv_b_stock'] + footer_data['final_gsv_b_general'])"></td>
@@ -94,7 +94,7 @@
 
         </template>
 
-        <template id="monthly_report_data">
+        <template id="yearly_report_data">
 <!--            <t t-call="web.html_container">-->
 <!--                <t t-call="web.basic_layout">-->
 <!--                <t t-call="web.internal_layout">-->
@@ -123,18 +123,18 @@
 
                                                 </div>
                                                 <div >
-                                                    <table class="table table-bordered border-0 text-center monthly_report_table">
+                                                    <table class="table table-bordered border-0 text-center yearly_report_table">
                                                         <thead class=" text-center">
-                                                            <t t-call="sd_payaneh_nafti.monthly_report_table_header"/>
+                                                            <t t-call="sd_payaneh_nafti.yearly_report_table_header"/>
                                                         </thead>
                                                         <tbody>
                                                             <t t-foreach="row_data_lines" t-as="row_data_line">
 <!--                                                                <t t-set="row_index" t-value="row_index + 1"/>-->
-                                                                <t t-call="sd_payaneh_nafti.monthly_report_table_body"/>
+                                                                <t t-call="sd_payaneh_nafti.yearly_report_table_body"/>
                                                             </t>
                                                         </tbody>
                                                         <tfoot>
-                                                            <t t-call="sd_payaneh_nafti.monthly_report_table_footer"/>
+                                                            <t t-call="sd_payaneh_nafti.yearly_report_table_footer"/>
                                                         </tfoot>
                                                     </table>
 
@@ -157,7 +157,7 @@
 <!--            </t>-->
         </template>
 
-        <template id="monthly_report_template">
+        <template id="yearly_report_template">
             <t t-call="web.basic_layout" t-lang="lang">
                 <div t-if="errors != []">
                     <div class="container mt-2 text-center">
@@ -166,7 +166,7 @@
                 </div>
                 <div t-if="errors == []">
                     <t t-foreach="docs" t-as="o">
-                        <t t-call="sd_payaneh_nafti.monthly_report_data"/>
+                        <t t-call="sd_payaneh_nafti.yearly_report_data"/>
                     </t>
                 </div>
             </t>

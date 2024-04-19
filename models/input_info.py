@@ -89,7 +89,7 @@ class SdPayanehNaftiInputInfo(models.Model):
                                               ('f', 'F'),
                                               ('g', 'G'),
                                               ('h', 'H'),
-                                              ], required=True, default='h', tracking=True)
+                                              ], required=True, )
 
     loading_no = fields.Char(copy=False, readonly=False, )
     # todo: timezone
@@ -264,6 +264,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
         if len(spgr) == 1:
             self.sp_gr = spgr.spgr
+            self.centralized_container = spgr.centralized_container
         else:
             raise ValidationError(_('Add a "SP.GR." from the main menu'))
 
@@ -459,6 +460,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
         if len(spgr) == 1:
             vals['sp_gr'] = spgr.spgr
+            vals['centralized_container'] = spgr.centralized_container
         else:
             raise ValidationError(_('Add a "SP.GR." from the main menu'))
 

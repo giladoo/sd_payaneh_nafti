@@ -50,6 +50,11 @@
         'report/monthly_report_template.xml',
         'report/monthly_report.xml',
          'wizard/monthly_report_wizard.xml',
+
+        # 'report/yearly_report_template.xml',
+        # 'report/yearly_report.xml',
+        # 'wizard/yearly_report_wizard.xml',
+
         'report/contract_monthly_report_template_export.xml',
         'report/contract_monthly_report_template.xml',
         'report/contract_monthly_report.xml',

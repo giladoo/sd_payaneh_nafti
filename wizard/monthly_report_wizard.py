@@ -14,6 +14,13 @@ class SdPayanehNaftiReportMonthly(models.TransientModel):
     _name = 'sd_payaneh_nafti.report.monthly_report'
     _description = 'Monthly Report'
 
+    month_start = fields.Selection(lambda self: gc.get_months_pr() if self.env.context.get('lang') == 'fa_IR' else gc.get_months(),
+                             string='Month', required=True,
+                             default=lambda self: self._month_selector())
+    year_start = fields.Selection(lambda self: gc.get_years_pr() if self.env.context.get('lang') == 'fa_IR' else gc.get_years(),
+                            string='Year', required=True,
+                            default=lambda self: self._year_selector())
+
     month = fields.Selection(lambda self: gc.get_months_pr() if self.env.context.get('lang') == 'fa_IR' else gc.get_months(),
                              string='Month', required=True,
                              default=lambda self: self._month_selector())

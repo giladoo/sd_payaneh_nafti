@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <tree delete="0" edit="0" >
                         <field name="spgr" />
+                        <field name="centralized_container" />
                         <field name="api_a" />
                         <field name="spgr_date" />
                     <field name="description" />
@@ -25,6 +26,7 @@
                         <group>
                             <group>
                                 <field name="spgr" />
+                                <field name="centralized_container" />
                                 <field name="api_a" invisible="1" />
 
                                 <field name="spgr_date" readonly="1"/>

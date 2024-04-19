@@ -15,6 +15,15 @@ class SdPayanehNaftiSpgr(models.Model):
     spgr = fields.Float(required=True, digits=[1, 4])
     spgr_date = fields.Date(required=True, default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))) )
     api_a = fields.Float(digits=[1, 2], store=True)
+    centralized_container = fields.Selection([('a', 'A'),
+                                              ('b', 'B'),
+                                              ('c', 'C'),
+                                              ('d', 'D'),
+                                              ('e', 'E'),
+                                              ('f', 'F'),
+                                              ('g', 'G'),
+                                              ('h', 'H'),
+                                              ], required=True, default='h', tracking=True)
     description = fields.Char()
 
     @api.model

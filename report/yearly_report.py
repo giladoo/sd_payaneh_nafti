@@ -8,9 +8,9 @@ from odoo import http
 
 
 # ########################################################################################
-class ReportSdPayanehNaftiMonthly(models.AbstractModel):
-    _name = 'report.sd_payaneh_nafti.monthly_report_template'
-    _description = 'Monthly Report'
+class ReportSdPayanehNaftiYearly(models.AbstractModel):
+    _name = 'report.sd_payaneh_nafti.yearly_report_template'
+    _description = 'yearly Report'
 
     # ########################################################################################
     def get_report_values(self, docids, data=None):
