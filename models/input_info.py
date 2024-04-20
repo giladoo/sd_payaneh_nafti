@@ -99,7 +99,7 @@ class SdPayanehNaftiInputInfo(models.Model):
 
     sp_gr = fields.Float( string='SP. GR.', required=True, default=0.3, store=True, readonly=True)
     # sp_gr = fields.Many2one('sd_payaneh_nafti.spgr', string='SP. GR.', required=True, default=0.7252)
-    temperature = fields.Integer(string='Temp. (C)', required=True, default=30, tracking=True)
+    temperature = fields.Float(string='Temp. (C)', required=True, default=30, tracking=True, digits=(12, 1))
     temperature_f = fields.Float(string='Temp. (F)', compute='_temperature_f', digits=(12, 1))
     pressure = fields.Float(string='Pressure (bar)', required=True, default=2.5, tracking=True)
     pressure_psi = fields.Integer(compute='_pressure_psi')
