@@ -19,32 +19,8 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
     def _get_report_values(self, docids, data=None):
         errors = []
         doc_data_list = []
-        row_data_lines = []
-        # context = self.env.context
-        # time_z = pytz.timezone(context.get('tz'))
-        # date_time = datetime.now(time_z)
-        # date_time = self.date_converter(date_time, context.get('lang'))
-        #
-        # form_data = data.get('form_data')
-        # start_date = form_data.get('start_date')
-        # date_format = '%Y-%m-%d'
-        # start_date = datetime.strptime(start_date, date_format).date()
-        # calendar = form_data.get('calendar')
-        #
-        # if calendar == 'fa_IR':
-        #     first_day = jdatetime.date.fromgregorian(date=start_date).replace(day=1)
-        #     next_month = first_day.replace(day=28) + timedelta(days=5)
-        #     last_day = (next_month - timedelta(days=next_month.day)).togregorian()
-        #     first_day = first_day.togregorian()
-        #     s_first_day = jdatetime.date.fromgregorian(date=first_day).strftime("%Y/%m/%d")
-        #     s_last_day = jdatetime.date.fromgregorian(date=last_day).strftime("%Y/%m/%d")
-        #
-        # else:
-        #     first_day = start_date.replace(day=1)
-        #     next_month = first_day.replace(day=28) + timedelta(days=5)
-        #     last_day = next_month - timedelta(days=next_month.day)
-        #     s_first_day = first_day.strftime("%Y-%m-%d")
-        #     s_last_day = last_day.strftime("%Y-%m-%d")
+        row_data_lines_all = []
+        row_data_lines_all_temp = []
         calendar = self.env.context.get('lang')
         form_data = data.get('form_data')
         year = form_data.get('year')
@@ -92,8 +68,11 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
             unit = reg.unit
             loading_type = reg.loading_type
             contract_type = reg.contract_type
+            final_gsv_l_sum = round(sum(final_gsv_l)) or 0
+            final_gsv_b_sum = round(sum(final_gsv_b), 2) or 0
+            final_mt_sum = round(sum(final_mt), 3) or 0
 
-            row_data_lines.append((index + 1,
+            row_data_lines_all.append((index + 1,
                                    d.registration_no.letter_no or '',
                                    d.registration_no.contract_no or '',
                                    d.registration_no.order_no or '',
@@ -102,14 +81,28 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
                                    self.type_name(unit, calendar),
                                    self.type_name(loading_type, calendar),
                                    self.type_name(contract_type, calendar),
-                                   round(sum(final_gsv_l)) or 0,
-                                   round(sum(final_gsv_b), 2) or 0,
-                                   round(sum(final_mt), 3) or 0,
+                                   #     todo: show rounded number with filling, 3333.5 > 3333.500
+                                   final_gsv_l_sum,
+                                   final_gsv_b_sum,
+                                   final_mt_sum ,
                                    len(data) or 0,
                                    ))
+            row_data_lines_all_temp.append({'index': index + 1,
+                                            'contract_type': contract_type,
+                                            'loading_type': loading_type,
+                                            'unit': unit,
+                                            'final_gsv_l_sum': final_gsv_l_sum,
+                                            'final_gsv_b_sum': final_gsv_b_sum,
+                                            'final_mt_sum': final_mt_sum,
+                                            'count': len(data) or 0,
 
-        final_gsv_l_stock_1 = [rec[9] for rec in row_data_lines if rec[8] == 'stock']
+                                            })
 
+        final_gsv_l_stock_1 = [rec[9] for rec in row_data_lines_all if rec[8] == 'stock']
+        row_data_lines_split = [row_data_lines_all[x:x + 50] for x in range(0, len(row_data_lines_all), 50)]
+        # row_data_lines_all_temp_split = [row_data_lines_all_temp[x:x + 50] for x in range(0, len(row_data_lines_all_temp), 50)]
+
+        row_data_lines  = row_data_lines_split[0]
             # final_gsv_l_stock_1: {sum(final_gsv_l_stock_1)}
         final_gsv_l_stock = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.contract_type == 'stock']
         final_gsv_l_general = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.contract_type == 'general']
@@ -123,6 +116,7 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
         final_mt_general = [rec.final_mt for rec in input_records if rec.registration_no.contract_type == 'general']
         final_mt_internal = [rec.final_mt for rec in input_records if rec.registration_no.loading_type == 'internal']
         final_mt_export = [rec.final_mt for rec in input_records if rec.registration_no.loading_type == 'export']
+
         footer_data = {
             'final_gsv_l_stock': round(sum(final_gsv_l_stock)),
             'final_gsv_b_stock': round(sum(final_gsv_b_stock), 2),
@@ -149,14 +143,17 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
         company_logo = f'/web/image/res.partner/{1}/image_128/'
         doc_data_list = [('', '')]
         # errors = ['test error']
+        all_page_date = list([[rec, footer_data] for rec in  row_data_lines_split])
         return {
             'docs': input_records[0] if input_records else '',
             'doc_ids': docids,
             'doc_model': 'sd_payaneh_nafti.input_info',
             # 'document_no': document_no,
             'doc_data_list': doc_data_list,
-            'row_data_lines': row_data_lines,
-            'footer_data': footer_data,
+            # 'row_data_lines': row_data_lines,
+            # 'footer_data': footer_data,
+            'all_page_date': all_page_date,
+            'page_count': len(all_page_date),
             'dates': [s_first_day, s_last_day],
             'errors': errors,
             }

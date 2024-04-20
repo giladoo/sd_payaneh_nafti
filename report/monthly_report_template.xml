@@ -100,7 +100,7 @@
 <!--                <t t-call="web.internal_layout">-->
                     <div class="page">
                         <div class="container iransans_font" style="font-size: .9rem">
-                                <div class="container mt-2">
+                                <div class="container mt-2" style="page-break-inside: avoid; page-break-after: always;">
                                          <div class="container iransans_font">
                                             <div style="direction:rtl">
                                                 <div class="text-center">
@@ -116,10 +116,11 @@
                                                     <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
                                                     <div class="h5 mt-2 mb-4">گزارش ماهیانه قراردادهای بارگیری نفتکش های زمینی میعانات گازی</div>
                                                 </div>
-                                                <div class="row my-1">
-                                                    <div class="col-6"></div>
+                                                <div class="row mb-3">
                                                     <div class="col-3" ><span>تاریخ شروع : </span><span t-esc="dates[0]"></span></div>
                                                     <div class="col-3"><span> تاریخ پایان : </span><span t-esc="dates[1]"></span></div>
+                                                    <div class="col-4"></div>
+                                                    <div class="col-2"><span> صفحه  </span><span t-esc="page_index"></span><span> از </span><span t-esc="page_count"></span></div>
 
                                                 </div>
                                                 <div >
@@ -134,7 +135,7 @@
                                                             </t>
                                                         </tbody>
                                                         <tfoot>
-                                                            <t t-call="sd_payaneh_nafti.monthly_report_table_footer"/>
+                                                            <t t-if="page_index == page_count" t-call="sd_payaneh_nafti.monthly_report_table_footer"/>
                                                         </tfoot>
                                                     </table>
 
@@ -145,10 +146,6 @@
                                     <div class="mb-5"></div>
                                     <div class="mb-5"></div>
                                 </div>
-
-
-
-
                         </div>
 
                     </div>
@@ -166,7 +163,14 @@
                 </div>
                 <div t-if="errors == []">
                     <t t-foreach="docs" t-as="o">
-                        <t t-call="sd_payaneh_nafti.monthly_report_data"/>
+                        <t t-set="page_index" t-value="0"/>
+                        <t t-foreach="all_page_date" t-as="page_date">
+                            <t t-set="row_data_lines" t-value="page_date[0]"/>
+                            <t t-set="footer_data" t-value="page_date[1]"/>
+                            <t t-set="page_index" t-value="page_index + 1"/>
+
+                            <t t-call="sd_payaneh_nafti.monthly_report_data"/>
+                        </t>
                     </t>
                 </div>
             </t>
