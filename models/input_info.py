@@ -455,7 +455,9 @@ class SdPayanehNaftiInputInfo(models.Model):
         # doc_no = vals.get('document_no', 0)
         # if doc_no == 0 or doc_no < 10000 or doc_no > 99999:
         #     raise ValidationError(_('Document No'))
+        loading_no = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.loading_no') or 0
 
+        vals['loading_no'] = str(jdatetime.date.today().year) + f"/{int(loading_no):07d}"
 
         spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
         if len(spgr) == 1:
@@ -500,11 +502,11 @@ class SdPayanehNaftiInputInfo(models.Model):
     def loading_permit(self):
         # In input info for, there is a button named "Loading Permit" which updates some fields.
         for rec in self:
-            loading_no = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.loading_no') or 0
-
-            loading_no = str(jdatetime.date.today().year) + f"/{int(loading_no):07d}"
+            # loading_no = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.loading_no') or 0
+            #
+            # loading_no = str(jdatetime.date.today().year) + f"/{int(loading_no):07d}"
             loading_date = datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))).date()
-            rec.write({'state': 'loading_permit', 'loading_no': loading_no, 'loading_date': loading_date })
+            rec.write({'state': 'loading_permit', 'loading_date': loading_date })
 
     def print_loading_permit(self):
 
