@@ -21,8 +21,12 @@
 
         <template id="monthly_report_table_body">
             <tr>
+                <t t-set="data_index" t-value="0"/>
                 <t t-foreach="row_data_line" t-as="row_data">
-                    <td t-esc="row_data"></td>
+                    <td t-if="data_index == 10" t-esc="'%.2f' % row_data"></td>
+                    <td t-elif="data_index == 11" t-esc="'%.3f' % row_data"></td>
+                    <td t-else="" t-esc="row_data"></td>
+                    <t t-set="data_index" t-value="data_index + 1"/>
 
                 </t>
             </tr>
@@ -51,16 +55,16 @@
                 <td rowspan="2" colspan="4">بر اساس نوع فروش</td>
                 <td colspan="5">جمع فروش در بورس انرژی</td>
                 <td t-esc="footer_data['final_gsv_l_stock']"></td>
-                <td t-esc="footer_data['final_gsv_b_stock']"></td>
-                <td t-esc="footer_data['final_mt_stock']"></td>
+                <td t-esc="'%.2f' % footer_data['final_gsv_b_stock']"></td>
+                <td t-esc="'%.3f' % footer_data['final_mt_stock']"></td>
                 <td t-esc="footer_data['tank_count_stock']"></td>
 
             </tr>
             <tr>
                 <td colspan="5">جمع فروش عادی</td>
                 <td t-esc="footer_data['final_gsv_l_general']"></td>
-                <td t-esc="footer_data['final_gsv_b_general']"></td>
-                <td t-esc="footer_data['final_mt_general']"></td>
+                <td t-esc="'%.2f' % footer_data['final_gsv_b_general']"></td>
+                <td t-esc="'%.3f' % footer_data['final_mt_general']"></td>
                 <td t-esc="footer_data['tank_count_general']"></td>
 
             </tr>
@@ -79,15 +83,15 @@
                 <td rowspan="2" colspan="4">بر اساس نوع ارسال</td>
                 <td colspan="5">جمع ارسال داخلی</td>
                 <td t-esc="footer_data['final_gsv_l_internal']"></td>
-                <td t-esc="footer_data['final_gsv_b_internal']"></td>
-                <td t-esc="footer_data['final_mt_internal']"></td>
+                <td t-esc="'%.2f' % footer_data['final_gsv_b_internal']"></td>
+                <td t-esc="'%.3f' % footer_data['final_mt_internal']"></td>
                 <td t-esc="footer_data['tank_count_internal']"></td>
             </tr>
             <tr>
                 <td colspan="5">جمع ارسال صادراتی</td>
                 <td t-esc="footer_data['final_gsv_l_export']"></td>
-                <td t-esc="footer_data['final_gsv_b_export']"></td>
-                <td t-esc="footer_data['final_mt_export']"></td>
+                <td t-esc="'%.2f' % footer_data['final_gsv_b_export']"></td>
+                <td t-esc="'%.3f' % footer_data['final_mt_export']"></td>
                 <td t-esc="footer_data['tank_count_export']"></td>
 
             </tr>

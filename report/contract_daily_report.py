@@ -73,7 +73,7 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
             return {
                 'errors': [_(f'No record have found for contract {registration_no} on selected date: {s_start_date} ')],
             }
-
+        print(f'            =========== report_day  {report_day}')
         input_records_behind_date = tuple(filter(lambda rec: rec.request_date <= report_day, input_records))
         registration = input_records[0].registration_no
         if loading_type == 'internal':
@@ -104,7 +104,6 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
 
         input_records_day = tuple(filter(lambda rec: rec.request_date == report_day, input_records))
         input_records_day = sorted(input_records_day, key=lambda rec: rec.loading_no)
-        # print(f'\n input_records: {len(input_records)} \n {input_records} \ninput_records_day {len(input_records_day)}\n {input_records_day}\n')
         inputs_list = []
         pages = []
         total = {
@@ -121,7 +120,8 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
             totalizer_diff_sum = sum([_input.totalizer_difference for _input in inputs if _input.weighbridge == 'no'])
             final_tov_l_sum = sum([_input.final_tov_l for _input in inputs])
             final_gsv_l_sum = sum([_input.final_gsv_l for _input in inputs])
-            final_gsv_b_sum = sum([round(_input.final_gsv_l / 158.987, 2) for _input in inputs])
+            final_gsv_b_sum = sum([round(_input.final_gsv_l / 158.987, 3) for _input in inputs])
+            # print(list([round(_input.final_gsv_l / 158.987, 3) for _input in inputs]))
             final_mt_sum = sum([_input.final_mt for _input in inputs])
             page = {
                 'totalizer_diff_sum': totalizer_diff_sum,

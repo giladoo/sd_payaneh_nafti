@@ -51,13 +51,50 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
         docids = [input_records.ids]
 
 
+
+
+
         registration_nos = sorted(list({rec.registration_no.registration_no for rec in input_records }))
         # print(f'\nregistration_codes:{registration_nos}\n')
         row_data_temp = []
         for index, reg_no in enumerate(registration_nos):
             data = [rec for rec in input_records if rec.registration_no.registration_no == reg_no]
             final_gsv_l = [rec.final_gsv_l for rec in input_records if rec.registration_no.registration_no == reg_no]
-            final_gsv_b = [rec.final_gsv_b for rec in input_records if rec.registration_no.registration_no == reg_no]
+            # excel: EXTRA Data, FO~GW
+            # it calculates round(rec.final_gsv_l / 158.987, 2) for each day of the month, and then it calculate the sum.
+            final_gsv_b_list = []
+            final_gsv_b_list_stock = []
+            final_gsv_b_list_general = []
+            final_gsv_b_list_internal = []
+            final_gsv_b_list_export = []
+
+            for day_date in self._daterange(first_day, last_day + timedelta(days=1)):
+                # print(day_date.strftime("%Y-%m-%d"))
+                final_gsv_b_list.append(round(sum(list([rec.final_gsv_l for rec in input_records
+                                         if rec.registration_no.registration_no == reg_no and
+                                                        rec.loading_date == day_date ])) / 158.987, 2))
+                final_gsv_b_list_stock.append(round(sum(list([rec.final_gsv_l for rec in input_records
+                                         if rec.registration_no.registration_no == reg_no and
+                                                        rec.loading_date == day_date and
+                                                        rec.registration_no.contract_type == 'stock'])) / 158.987, 2))
+                final_gsv_b_list_general.append(round(sum(list([rec.final_gsv_l for rec in input_records
+                                         if rec.registration_no.registration_no == reg_no and
+                                                        rec.loading_date == day_date and
+                                                        rec.registration_no.contract_type == 'general'])) / 158.987, 2))
+                final_gsv_b_list_internal.append(round(sum(list([rec.final_gsv_l for rec in input_records
+                                         if rec.registration_no.registration_no == reg_no and
+                                                        rec.loading_date == day_date and
+                                                        rec.registration_no.loading_type == 'internal'])) / 158.987, 2))
+                final_gsv_b_list_export.append(round(sum(list([rec.final_gsv_l for rec in input_records
+                                         if rec.registration_no.registration_no == reg_no and
+                                                        rec.loading_date == day_date and
+                                                        rec.registration_no.loading_type == 'export'])) / 158.987, 2))
+
+
+
+            final_gsv_b = final_gsv_b_list
+            # final_gsv_b = [round(rec.final_gsv_l / 158.987, 3) for rec in input_records if rec.registration_no.registration_no == reg_no]
+            # final_gsv_b = [round(rec.final_gsv_b, 3) for rec in input_records if rec.registration_no.registration_no == reg_no]
             final_mt = [rec.final_mt for rec in input_records if rec.registration_no.registration_no == reg_no]
             # for d in data:
             d = data[0]
@@ -70,7 +107,9 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
             contract_type = reg.contract_type
             final_gsv_l_sum = round(sum(final_gsv_l)) or 0
             final_gsv_b_sum = round(sum(final_gsv_b), 2) or 0
+            # final_gsv_b_sum1 = round(sum(final_gsv_b), 3) or 0
             final_mt_sum = round(sum(final_mt), 3) or 0
+            # print(final_gsv_b)
 
             row_data_lines_all.append((index + 1,
                                    d.registration_no.letter_no or '',
@@ -88,6 +127,7 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
                                    # f'{final_gsv_b_sum:.2f}',
                                    # f'{final_mt_sum:.3f}' ,
                                    len(data) or 0,
+                                       # final_gsv_b_sum1,
                                    ))
             row_data_lines_all_temp.append({'index': index + 1,
                                             'contract_type': contract_type,
@@ -97,6 +137,7 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
                                             'final_gsv_b_sum': final_gsv_b_sum,
                                             'final_mt_sum': final_mt_sum,
                                             'count': len(data) or 0,
+                                            # 'final_gsv_b_sum': final_gsv_b_sum1,
 
                                             })
 
@@ -106,14 +147,19 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
 
         row_data_lines  = row_data_lines_split[0]
             # final_gsv_l_stock_1: {sum(final_gsv_l_stock_1)}
+
+
+        #  todo: calculate each one based on the final_gsv_b_list_export and oter lists
+
+
         final_gsv_l_stock = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.contract_type == 'stock']
         final_gsv_l_general = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.contract_type == 'general']
         final_gsv_l_internal = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.loading_type == 'internal']
         final_gsv_l_export = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.loading_type == 'export']
-        final_gsv_b_stock = [rec.final_gsv_b for rec in input_records if rec.registration_no.contract_type == 'stock']
-        final_gsv_b_general = [rec.final_gsv_b for rec in input_records if rec.registration_no.contract_type == 'general']
-        final_gsv_b_internal = [rec.final_gsv_b for rec in input_records if rec.registration_no.loading_type == 'internal']
-        final_gsv_b_export = [rec.final_gsv_b for rec in input_records if rec.registration_no.loading_type == 'export']
+        final_gsv_b_stock = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.contract_type == 'stock']
+        final_gsv_b_general = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.contract_type == 'general']
+        final_gsv_b_internal = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.loading_type == 'internal']
+        final_gsv_b_export = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.loading_type == 'export']
         final_mt_stock = [rec.final_mt for rec in input_records if rec.registration_no.contract_type == 'stock']
         final_mt_general = [rec.final_mt for rec in input_records if rec.registration_no.contract_type == 'general']
         final_mt_internal = [rec.final_mt for rec in input_records if rec.registration_no.loading_type == 'internal']
@@ -241,3 +287,6 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
         total = int(round(total, 0))
         return day, month, total
 
+    def _daterange(self, start_date, end_date):
+        for n in range(int((end_date - start_date).days)):
+            yield start_date + timedelta(n)

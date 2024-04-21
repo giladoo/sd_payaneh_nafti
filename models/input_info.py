@@ -134,8 +134,8 @@ class SdPayanehNaftiInputInfo(models.Model):
     # compartment_locker_3 = fields.Many2one('sd_payaneh_nafti.lockers')
 
     api_a = fields.Float(string='API', compute='_api_a')
-    ctl = fields.Float(string='CTL', compute='_ctl_cpl')
-    cpl = fields.Float(string='CPL', compute='_ctl_cpl')
+    ctl = fields.Float(string='CTL', compute='_ctl_cpl', )
+    cpl = fields.Float(string='CPL', compute='_ctl_cpl', )
     tab_13 = fields.Float(string='TAB.13', digits=(12, 5), compute='_tab_13')
     # this variables are useless
     meter_tov_l = fields.Float(string='Meter T.O.V Liter')
@@ -325,10 +325,17 @@ class SdPayanehNaftiInputInfo(models.Model):
     def _finals(self):
         # calculate the final amounts based on the totalizer or the tanker weight
         for rec in self:
+            # print(f'=======> {rec.document_no} rec.cpl:{rec.cpl}  rec.ctl:{rec.ctl} ')
             if rec.weighbridge == 'yes':
+                # final_mt = round(rec.tanker_pure_weight / 1000, 3)
+                # final_gsv_b = final_mt / rec.tab_13
+                # final_gsv_l = round(final_gsv_b * 158.987, 0)
+                # final_tov_l = round((final_gsv_l / rec.ctl) / rec.cpl, 0)
+
                 final_mt = round(rec.tanker_pure_weight / 1000, 3)
-                final_gsv_b = final_mt / rec.tab_13
-                final_gsv_l = round(final_gsv_b * 158.987, 0)
+                final_gsv_l = round((rec.tanker_pure_weight / 6.28981) / rec.tab_13, 0)
+
+                final_gsv_b = final_gsv_l / 158.987
                 final_tov_l = round((final_gsv_l / rec.ctl) / rec.cpl, 0)
             else:
                 final_tov_l = round((rec.cpl * rec.totalizer_difference * rec.correction_factor), 0 )
@@ -397,8 +404,8 @@ class SdPayanehNaftiInputInfo(models.Model):
                 t_star = ((rec.temperature-((param_ai1+(param_ai2+(param_ai3+(param_ai4+(param_ai5+(param_ai6+(param_ai7+param_ai8*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630)))*1.8)+32
                 delta_t = t_star - tref
                 fp = math.exp((param_a+param_b*t_star+((param_c+param_d*t_star)/(rec_pi_star**2))))
-                rec.ctl = math.exp((-(alpha_60 * delta_t)) * (1 + ((0.8 * alpha_60) * (delta_t + delta_60))))
-                rec.cpl = 1 / (1-((10 ** -5) * (fp * rec.pressure_psi)))
+                rec.ctl = round(math.exp((-(alpha_60 * delta_t)) * (1 + ((0.8 * alpha_60) * (delta_t + delta_60)))), 15)
+                rec.cpl = round(1 / (1-((10 ** -5) * (fp * rec.pressure_psi))), 13)
                 # print(f'\nrec_pi: {rec_pi}\nrec_a: {rec_a}\nrec_b: {rec_b}\nrec_pi_star: {rec_pi_star}\nalpha_60: {alpha_60}\n  ')
             except Exception as e:
                 logging.error(f'_ctl_cpl : {e}')
