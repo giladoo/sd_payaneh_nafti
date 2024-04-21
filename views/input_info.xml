@@ -218,6 +218,7 @@
                     <field name="driver_black_list" invisible="1"/>
 
                     <field name="document_no" class="text-center" />
+                    <field name="loading_no" class="text-center" />
                     <field name="request_date" class="text-center" />
                                         <field name="loading_date" />
                     <field name="loading_info_date" />

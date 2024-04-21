@@ -138,11 +138,11 @@ class SdPayanehNaftiInputInfo(models.Model):
     # this variables are useless
     meter_tov_l = fields.Float(string='Meter T.O.V Liter')
     meter_gsv_l = fields.Float(string='Meter G.S.V Liter')
-    meter_gsv_b = fields.Float(string='Meter G.S.V BBL', digits=[8, 2])
+    meter_gsv_b = fields.Float(string='Meter G.S.V BBL', digits=[8, 4])
     meter_mt = fields.Float(string='Meter M.T.')
     wb_tov_l = fields.Float(string='WB T.O.V Liter')
     wb_gsv_l = fields.Float(string='WB G.S.V Liter')
-    wb_gsv_b = fields.Float(string='WB G.S.V BBL', digits=[8, 2])
+    wb_gsv_b = fields.Float(string='WB G.S.V BBL', digits=[8, 4])
     wb_mt = fields.Float(string='WB M.T.')
 
     final_tov_l = fields.Float(string='Final T.O.V Liter', compute='_finals', digits=[8, 0])
