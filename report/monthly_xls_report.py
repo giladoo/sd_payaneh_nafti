@@ -76,22 +76,23 @@ class ReportSdPayanehNaftiMonthlyXlsReport(models.AbstractModel):
 
         # return
 
-        for row_data_line in report_data['row_data_lines']:
-            col = 0
-            row_no = next(row)
+        for page_data in report_data['all_page_date']:
+            for row_data_line in page_data[0]:
+                col = 0
+                row_no = next(row)
 
-            sheet.write(row_no, col, row_data_line[0], bold_center)
-            sheet.write(row_no, col + 1, row_data_line[1], bold_center)
-            sheet.write(row_no, col + 2, row_data_line[2], bold_center)
-            sheet.write(row_no, col + 3, row_data_line[3], bold_center)
-            sheet.write(row_no, col + 4, row_data_line[4], bold_center)
-            sheet.write(row_no, col + 5, row_data_line[5], bold_center)
-            sheet.write(row_no, col + 6, row_data_line[6], bold_center)
-            sheet.write(row_no, col + 7, row_data_line[7], bold_center)
-            sheet.write(row_no, col + 8, row_data_line[8], bold_center)
-            sheet.write(row_no, col + 9, row_data_line[9], bold_center)
-            sheet.write(row_no, col + 10, row_data_line[10], bold_center)
-            sheet.write(row_no, col + 11, row_data_line[11], bold_center)
-            sheet.write(row_no, col + 12, row_data_line[12], bold_center)
+                sheet.write(row_no, col, row_data_line[0], bold_center)
+                sheet.write(row_no, col + 1, row_data_line[1], bold_center)
+                sheet.write(row_no, col + 2, row_data_line[2], bold_center)
+                sheet.write(row_no, col + 3, row_data_line[3], bold_center)
+                sheet.write(row_no, col + 4, row_data_line[4], bold_center)
+                sheet.write(row_no, col + 5, row_data_line[5], bold_center)
+                sheet.write(row_no, col + 6, row_data_line[6], bold_center)
+                sheet.write(row_no, col + 7, row_data_line[7], bold_center)
+                sheet.write(row_no, col + 8, row_data_line[8], bold_center)
+                sheet.write(row_no, col + 9, row_data_line[9], bold_center)
+                sheet.write(row_no, col + 10, row_data_line[10], bold_center)
+                sheet.write(row_no, col + 11, row_data_line[11], bold_center)
+                sheet.write(row_no, col + 12, row_data_line[12], bold_center)
 
 
