@@ -83,8 +83,10 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
                                    self.type_name(contract_type, calendar),
                                    #     todo: show rounded number with filling, 3333.5 > 3333.500
                                    final_gsv_l_sum,
-                                   final_gsv_b_sum,
-                                   final_mt_sum ,
+                                       final_gsv_b_sum,
+                                       final_mt_sum,
+                                   # f'{final_gsv_b_sum:.2f}',
+                                   # f'{final_mt_sum:.3f}' ,
                                    len(data) or 0,
                                    ))
             row_data_lines_all_temp.append({'index': index + 1,

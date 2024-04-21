@@ -56,16 +56,17 @@ class SdPayanehNaftiInputInfo(models.Model):
                                  default=lambda self: 0)
     # document_no = fields.Integer(required=True, copy=False, readonly=False, tracking=True,
     #                              default=lambda self: self.search([], order='document_no desc', limit=1).document_no + 1)
-    request_date = fields.Date(default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))), required=True,)
+    request_date = fields.Date(default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))),
+                               required=True, tracking=True)
     registration_no = fields.Many2one('sd_payaneh_nafti.contract_registration', required=True, tracking=True,
                                       default=lambda self: self.env.context.get('registration_no', False))
     date_validation = fields.Boolean(related='registration_no.date_validation', store=False)
-    contract_no = fields.Char(related='registration_no.contract_no',)
+    contract_no = fields.Char(related='registration_no.contract_no', tracking=True,)
     order_no = fields.Char(related='registration_no.order_no')
     buyer = fields.Many2one(related='registration_no.buyer')
     contractors = fields.Many2many(related='registration_no.contractors')
     contractor = fields.Many2one('sd_payaneh_nafti.contractors', required=True, tracking=True,)
-    driver = fields.Many2one('sd_payaneh_nafti.drivers', required=True,)
+    driver = fields.Many2one('sd_payaneh_nafti.drivers', required=True, tracking=True,)
     driver_black_list = fields.Boolean(related='driver.black_list')
     card_no = fields.Char(related='driver.card_no')
     truck_no = fields.Many2one('sd_payaneh_nafti.trucks', required=True, tracking=True,)
@@ -77,9 +78,9 @@ class SdPayanehNaftiInputInfo(models.Model):
     # front_container = fields.Integer(related='truck_no.front_container')
     # middle_container = fields.Integer(related='truck_no.middle_container')
     # back_container = fields.Integer(related='truck_no.back_container')
-    front_container = fields.Integer(required=True,)
-    middle_container = fields.Integer(required=True,)
-    back_container = fields.Integer(required=True,)
+    front_container = fields.Integer(required=True, tracking=True,)
+    middle_container = fields.Integer(required=True, tracking=True,)
+    back_container = fields.Integer(required=True, tracking=True,)
     total = fields.Integer(compute='_total')
     centralized_container = fields.Selection([('a', 'A'),
                                               ('b', 'B'),
@@ -89,15 +90,16 @@ class SdPayanehNaftiInputInfo(models.Model):
                                               ('f', 'F'),
                                               ('g', 'G'),
                                               ('h', 'H'),
-                                              ], required=True, )
+                                              ], required=True, tracking=True, )
 
-    loading_no = fields.Char(copy=False, readonly=False, )
+    loading_no = fields.Char(copy=False, readonly=False, tracking=True, )
     # todo: timezone
-    loading_date = fields.Date(copy=False, readonly=False, default=lambda self: self.request_date)
-    loading_info_date = fields.Date(copy=False, default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))))
+    loading_date = fields.Date(copy=False, readonly=False, default=lambda self: self.request_date, tracking=True)
+    loading_info_date = fields.Date(copy=False, tracking=True,
+                                    default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))))
     # driver = fields.Char(required=True,)
 
-    sp_gr = fields.Float( string='SP. GR.', required=True, default=0.3, store=True, readonly=True)
+    sp_gr = fields.Float( string='SP. GR.', required=True, default=0.3, store=True, readonly=True, tracking=True)
     # sp_gr = fields.Many2one('sd_payaneh_nafti.spgr', string='SP. GR.', required=True, default=0.7252)
     temperature = fields.Float(string='Temp. (C)', required=True, default=30, tracking=True, digits=(12, 1))
     temperature_f = fields.Float(string='Temp. (F)', compute='_temperature_f', digits=(12, 1))
