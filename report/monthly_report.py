@@ -44,22 +44,46 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
             s_last_day = last_day.strftime("%Y-%m-%d")
         input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '>=', first_day),
                                                                         ('loading_date', '<=', last_day)])
+        input_dict = list([{
+            'registration_no': rec.registration_no.registration_no,
+            'contract_type': rec.registration_no.contract_type or '',
+            'letter_no': rec.registration_no.letter_no or '',
+            'order_no': rec.registration_no.order_no or '',
+            'buyer': rec.registration_no.buyer.name or '',
+            'amount': rec.registration_no.amount or 0,
+            'unit': rec.registration_no.unit or 0,
+            'loading_type': rec.registration_no.loading_type or '',
+            'loading_date': rec.loading_date or '',
+            'final_gsv_l': rec.final_gsv_l,
+            'final_mt': rec.final_mt,
+
+                            } for rec in input_records])
+
+
+
+        print(f'===========\n'
+              f'{input_dict[0]}\n')
+
         if len(input_records) == 0:
             return{
                 'errors': [_(f'No record have found for selected time duration: {s_first_day} to {s_last_day}')],
                 }
         docids = [input_records.ids]
 
-
-
-
-
         registration_nos = sorted(list({rec.registration_no.registration_no for rec in input_records }))
         # print(f'\nregistration_codes:{registration_nos}\n')
         row_data_temp = []
+        final_gsv_b_list_types = []
+
         for index, reg_no in enumerate(registration_nos):
             data = [rec for rec in input_records if rec.registration_no.registration_no == reg_no]
-            final_gsv_l = [rec.final_gsv_l for rec in input_records if rec.registration_no.registration_no == reg_no]
+            d = data[0]
+            reg = d.registration_no
+            unit = reg.unit
+            loading_type = reg.loading_type
+            contract_type = reg.contract_type
+            # final_gsv_l = [rec.final_gsv_l for rec in input_records if rec.registration_no.registration_no == reg_no]
+            final_gsv_l = [rec['final_gsv_l'] for rec in input_dict if rec['registration_no'] == reg_no]
             # excel: EXTRA Data, FO~GW
             # it calculates round(rec.final_gsv_l / 158.987, 2) for each day of the month, and then it calculate the sum.
             final_gsv_b_list = []
@@ -70,41 +94,35 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
 
             for day_date in self._daterange(first_day, last_day + timedelta(days=1)):
                 # print(day_date.strftime("%Y-%m-%d"))
-                final_gsv_b_list.append(round(sum(list([rec.final_gsv_l for rec in input_records
-                                         if rec.registration_no.registration_no == reg_no and
-                                                        rec.loading_date == day_date ])) / 158.987, 2))
-                final_gsv_b_list_stock.append(round(sum(list([rec.final_gsv_l for rec in input_records
-                                         if rec.registration_no.registration_no == reg_no and
-                                                        rec.loading_date == day_date and
-                                                        rec.registration_no.contract_type == 'stock'])) / 158.987, 2))
-                final_gsv_b_list_general.append(round(sum(list([rec.final_gsv_l for rec in input_records
-                                         if rec.registration_no.registration_no == reg_no and
-                                                        rec.loading_date == day_date and
-                                                        rec.registration_no.contract_type == 'general'])) / 158.987, 2))
-                final_gsv_b_list_internal.append(round(sum(list([rec.final_gsv_l for rec in input_records
-                                         if rec.registration_no.registration_no == reg_no and
-                                                        rec.loading_date == day_date and
-                                                        rec.registration_no.loading_type == 'internal'])) / 158.987, 2))
-                final_gsv_b_list_export.append(round(sum(list([rec.final_gsv_l for rec in input_records
-                                         if rec.registration_no.registration_no == reg_no and
-                                                        rec.loading_date == day_date and
-                                                        rec.registration_no.loading_type == 'export'])) / 158.987, 2))
-
+                final_gsv_b_list.append(round(sum(list([rec['final_gsv_l'] for rec in input_dict
+                                         if rec['registration_no'] == reg_no and
+                                                        rec['loading_date'] == day_date ])) / 158.987, 2))
+                final_gsv_b_list_types.append(
+                    {'final_gsv_b': round(sum(list([rec['final_gsv_l'] for rec in input_dict
+                                     if rec['registration_no'] == reg_no and
+                                     rec['loading_date'] == day_date])) / 158.987, 2),
+                     'final_gsv_l': sum(list([rec['final_gsv_l'] for rec in input_dict
+                                          if rec['registration_no'] == reg_no and rec['loading_date'] == day_date])),
+                     'final_mt': round(sum(list([rec['final_mt'] for rec in input_dict
+                                          if rec['registration_no'] == reg_no and rec['loading_date'] == day_date])), 3),
+                     'contract_type': contract_type,
+                     'loading_type': loading_type,
+                     }
+                )
 
 
             final_gsv_b = final_gsv_b_list
             # final_gsv_b = [round(rec.final_gsv_l / 158.987, 3) for rec in input_records if rec.registration_no.registration_no == reg_no]
             # final_gsv_b = [round(rec.final_gsv_b, 3) for rec in input_records if rec.registration_no.registration_no == reg_no]
-            final_mt = [rec.final_mt for rec in input_records if rec.registration_no.registration_no == reg_no]
+
+            # final_mt = [rec.final_mt for rec in input_records if rec.registration_no.registration_no == reg_no]
+            final_mt = [rec['final_mt'] for rec in input_dict if rec['registration_no'] == reg_no]
+
             # for d in data:
-            d = data[0]
-            reg = d.registration_no
             # unit = dict(reg._fields['unit']._description_selection(self.env)).get(reg.unit)
             # loading_type = dict(reg._fields['loading_type']._description_selection(self.env)).get(reg.loading_type)
             # contract_type = dict(reg._fields['contract_type']._description_selection(self.env)).get(reg.contract_type)
-            unit = reg.unit
-            loading_type = reg.loading_type
-            contract_type = reg.contract_type
+
             final_gsv_l_sum = round(sum(final_gsv_l)) or 0
             final_gsv_b_sum = round(sum(final_gsv_b), 2) or 0
             # final_gsv_b_sum1 = round(sum(final_gsv_b), 3) or 0
@@ -152,39 +170,62 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
         #  todo: calculate each one based on the final_gsv_b_list_export and oter lists
 
 
-        final_gsv_l_stock = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.contract_type == 'stock']
-        final_gsv_l_general = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.contract_type == 'general']
-        final_gsv_l_internal = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.loading_type == 'internal']
-        final_gsv_l_export = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.loading_type == 'export']
-        final_gsv_b_stock = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.contract_type == 'stock']
-        final_gsv_b_general = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.contract_type == 'general']
-        final_gsv_b_internal = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.loading_type == 'internal']
-        final_gsv_b_export = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.loading_type == 'export']
-        final_mt_stock = [rec.final_mt for rec in input_records if rec.registration_no.contract_type == 'stock']
-        final_mt_general = [rec.final_mt for rec in input_records if rec.registration_no.contract_type == 'general']
-        final_mt_internal = [rec.final_mt for rec in input_records if rec.registration_no.loading_type == 'internal']
-        final_mt_export = [rec.final_mt for rec in input_records if rec.registration_no.loading_type == 'export']
+        # final_gsv_l_general = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.contract_type == 'general']
+        # final_gsv_l_internal = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.loading_type == 'internal']
+        # final_gsv_l_export = [int(rec.final_gsv_l) for rec in input_records if rec.registration_no.loading_type == 'export']
+
+        final_gsv_l_stock = [rec['final_gsv_l'] for rec in final_gsv_b_list_types if rec['contract_type'] == 'stock']
+        final_gsv_l_general = [rec['final_gsv_l'] for rec in final_gsv_b_list_types if rec['contract_type'] == 'general']
+        final_gsv_l_internal = [rec['final_gsv_l'] for rec in final_gsv_b_list_types if rec['loading_type'] == 'internal']
+        final_gsv_l_export = [rec['final_gsv_l'] for rec in final_gsv_b_list_types if rec['loading_type'] == 'export']
+
+        # final_gsv_b_stock = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.contract_type == 'stock']
+        # final_gsv_b_general = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.contract_type == 'general']
+        # final_gsv_b_internal = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.loading_type == 'internal']
+        # final_gsv_b_export = [round(rec.final_gsv_b, 13) for rec in input_records if rec.registration_no.loading_type == 'export']
+
+        final_gsv_b_stock = [rec['final_gsv_b'] for rec in final_gsv_b_list_types if rec['contract_type'] == 'stock']
+        final_gsv_b_general = [rec['final_gsv_b'] for rec in final_gsv_b_list_types if rec['contract_type'] == 'general']
+        final_gsv_b_internal = [rec['final_gsv_b'] for rec in final_gsv_b_list_types if rec['loading_type'] == 'internal']
+        final_gsv_b_export = [rec['final_gsv_b'] for rec in final_gsv_b_list_types if rec['loading_type'] == 'export']
+
+
+
+        # final_mt_stock = [rec.final_mt for rec in input_records if rec.registration_no.contract_type == 'stock']
+        # final_mt_general = [rec.final_mt for rec in input_records if rec.registration_no.contract_type == 'general']
+        # final_mt_internal = [rec.final_mt for rec in input_records if rec.registration_no.loading_type == 'internal']
+        # final_mt_export = [rec.final_mt for rec in input_records if rec.registration_no.loading_type == 'export']
+
+        final_mt_stock = [rec['final_mt'] for rec in final_gsv_b_list_types if rec['contract_type'] == 'stock']
+        final_mt_general = [rec['final_mt'] for rec in final_gsv_b_list_types if rec['contract_type'] == 'general']
+        final_mt_internal = [rec['final_mt'] for rec in final_gsv_b_list_types if rec['loading_type'] == 'internal']
+        final_mt_export = [rec['final_mt'] for rec in final_gsv_b_list_types if rec['loading_type'] == 'export']
+
+        tank_count_stock = len([1 for rec in input_records if rec.registration_no.contract_type == 'stock'])
+        tank_count_general = len([1 for rec in input_records if rec.registration_no.contract_type == 'general'])
+        tank_count_internal = len([1 for rec in input_records if rec.registration_no.loading_type == 'internal'])
+        tank_count_export = len([1 for rec in input_records if rec.registration_no.loading_type == 'export'])
 
         footer_data = {
             'final_gsv_l_stock': round(sum(final_gsv_l_stock)),
             'final_gsv_b_stock': round(sum(final_gsv_b_stock), 2),
             'final_mt_stock': round(sum(final_mt_stock), 3),
-            'tank_count_stock': len(final_gsv_l_stock),
+            'tank_count_stock': tank_count_stock,
 
             'final_gsv_l_general': round(sum(final_gsv_l_general)),
             'final_gsv_b_general': round(sum(final_gsv_b_general), 2),
             'final_mt_general': round(sum(final_mt_general), 3),
-            'tank_count_general': len(final_gsv_l_general),
+            'tank_count_general': tank_count_general,
 
             'final_gsv_l_internal': round(sum(final_gsv_l_internal)),
             'final_gsv_b_internal': round(sum(final_gsv_b_internal), 2),
             'final_mt_internal': round(sum(final_mt_internal), 3),
-            'tank_count_internal': len(final_gsv_l_internal),
+            'tank_count_internal': tank_count_internal,
 
             'final_gsv_l_export': round(sum(final_gsv_l_export)),
             'final_gsv_b_export': round(sum(final_gsv_b_export), 2),
             'final_mt_export': round(sum(final_mt_export), 3),
-            'tank_count_export': len(final_gsv_l_export),
+            'tank_count_export': tank_count_export,
 
         }
 
