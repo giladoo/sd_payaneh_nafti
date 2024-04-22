@@ -394,19 +394,44 @@ class SdPayanehNaftiInputInfo(models.Model):
         # Calculates CPL and CTL which they will be used to calculate the other parameters
         for rec in self:
             try:
+                temperature = round(rec.temperature, 0)
+                temperature_f = rec.temperature_f
+
                 rec_pi = (141.5 / (rec.api_a + 131.5)) * 999.016
                 rec_a = (delta_60 / 2) * (((k_0 / rec_pi) + k_1) * (1 / rec_pi) + k_2)
                 rec_b = ((2 * k_0) + (k_1 * rec_pi)) / ((k_0 + ((k_2 * rec_pi) + k_1) * rec_pi))
                 rec_pi_star = rec_pi * (1 + ((math.exp((rec_a * (1 + (0.8 * rec_a)))) - 1) / (1 + rec_a * (1 + (0.6 * rec_a)) * rec_b)))
                 alpha_60 = (((k_0 / rec_pi_star) + k_1) * (1 / rec_pi_star)) + k_2
-                t_star_prime = ((rec.temperature_f-32)/1.8)/630
+                t_star_prime = ((temperature_f-32)/1.8)/630
                 t_star_zegond = (param_ai1+((param_ai2+((param_ai3+((param_ai4+((param_ai5+((param_ai6+((param_ai7+(param_ai8*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime
-                t_star = ((rec.temperature-((param_ai1+(param_ai2+(param_ai3+(param_ai4+(param_ai5+(param_ai6+(param_ai7+param_ai8*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630)))*1.8)+32
+                # t_star = ((temperature-((param_ai1+(param_ai2+(param_ai3+(param_ai4+(param_ai5+(param_ai6+(param_ai7+param_ai8*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630)))*1.8)+32
+
+                t_star = ((((
+                                   (temperature_f-32) / 1.8) -
+                           ((param_ai1+(param_ai2+(param_ai3+(param_ai4+(param_ai5+(param_ai6+
+                                                                                    (param_ai7+param_ai8 * (((temperature_f-32) / 1.8) / 630)) *
+                                                                                    (((temperature_f-32) / 1.8) / 630)
+                                                                                    ) * (((temperature_f-32) / 1.8) / 630)
+                                                                         ) *
+                                                              (((temperature_f-32) / 1.8) / 630)
+                                                              ) * (((temperature_f-32) / 1.8) / 630)
+                                                   ) *(((temperature_f-32) / 1.8) / 630))*(((temperature_f-32) / 1.8) / 630)
+                             ) * (((temperature_f-32) / 1.8) / 630)) ) *1.8)+32)
+                
                 delta_t = t_star - tref
                 fp = math.exp((param_a+param_b*t_star+((param_c+param_d*t_star)/(rec_pi_star**2))))
                 rec.ctl = round(math.exp((-(alpha_60 * delta_t)) * (1 + ((0.8 * alpha_60) * (delta_t + delta_60)))), 15)
                 rec.cpl = round(1 / (1-((10 ** -5) * (fp * rec.pressure_psi))), 13)
-                # print(f'\nrec_pi: {rec_pi}\nrec_a: {rec_a}\nrec_b: {rec_b}\nrec_pi_star: {rec_pi_star}\nalpha_60: {alpha_60}\n  ')
+                # print(f'\n'
+                #       f'rec no: {rec.document_no}\n'
+                #       f'rec_pi: {rec_pi}\n'
+                #       f'rec_a: {rec_a}\n'
+                #       f'rec_b: {rec_b}\n'
+                #       f'rec_pi_star: {rec_pi_star}\n'
+                #       f't_star: {t_star}\n'
+                #       f'rec.ctl: {rec.ctl}\n'
+                #       f'rec.cpl: {rec.cpl}\n'
+                #       f'')
             except Exception as e:
                 logging.error(f'_ctl_cpl : {e}')
                 logging.error(f'_ctl_cpl : You might needed to save system parameters')

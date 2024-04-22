@@ -278,7 +278,7 @@
                 </td>
                 <td class="border-dark" t-esc="'{:,d}'.format(doc_data['pages'][page_i]['final_tov_l_sum'])"></td>
                 <td class="border-dark" t-esc="'{:,d}'.format(doc_data['pages'][page_i]['final_gsv_l_sum'])"></td>
-                <td class="border-dark" t-esc="doc_data['pages'][page_i]['final_gsv_b_sum']"></td>
+                <td class="border-dark" t-esc="'%.2f' % doc_data['pages'][page_i]['final_gsv_b_sum']"></td>
                 <td class="border-0" ></td>
                 <td class="border-dark" t-esc="'%.3f' % doc_data['pages'][page_i]['final_mt_sum']"></td>
                 <td class="border-0" ></td>
@@ -299,7 +299,7 @@
                 </td>
                 <td class="border-dark" t-esc="'{:,d}'.format(doc_data['total']['final_tov_l_sum'])"></td>
                 <td class="border-dark" t-esc="'{:,d}'.format(doc_data['total']['final_gsv_l_sum'])"></td>
-                <td class="border-dark" t-esc="doc_data['total']['final_gsv_b_sum']"></td>
+                <td class="border-dark" t-esc="'%.2f' % doc_data['total']['final_gsv_b_sum']"></td>
                 <td class="border-0" ></td>
                 <td class="border-dark" t-esc="'%.3f' % doc_data['total']['final_mt_sum']"></td>
                 <td class="border-0" ></td>

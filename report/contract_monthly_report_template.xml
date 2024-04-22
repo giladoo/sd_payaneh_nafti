@@ -77,9 +77,23 @@
 
         <template id="contract_monthly_report_table_body">
             <tr>
+<!--                <t t-foreach="row_data_line" t-as="row_data">-->
+<!--                    <td t-esc="row_data"></td>-->
+<!--                </t>-->
+
+
+
+                <t t-set="data_index" t-value="0"/>
                 <t t-foreach="row_data_line" t-as="row_data">
-                    <td t-esc="row_data"></td>
+                    <td t-if="data_index == 4" t-esc="'%.2f' % row_data"></td>
+                    <td t-elif="data_index == 5" t-esc="'%.3f' % row_data"></td>
+                    <td t-else="" t-esc="row_data"></td>
+                    <t t-set="data_index" t-value="data_index + 1"/>
+
                 </t>
+
+
+
             </tr>
         </template>
 
