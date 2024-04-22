@@ -104,7 +104,7 @@ class SdPayanehNaftiInputInfo(models.Model):
     temperature = fields.Float(string='Temp. (C)', required=True, default=30, tracking=True, digits=(12, 1))
     temperature_f = fields.Float(string='Temp. (F)', compute='_temperature_f', digits=(12, 1))
     pressure = fields.Float(string='Pressure (bar)', required=True, default=2.5, tracking=True)
-    pressure_psi = fields.Integer(compute='_pressure_psi')
+    pressure_psi = fields.Integer(compute='_pressure_psi', digits=(2, 0))
     meter_no = fields.Selection([ ('1', '1'),
                                   ('2', '2'),
                                   ('3', '3'),
@@ -368,7 +368,7 @@ class SdPayanehNaftiInputInfo(models.Model):
     def _pressure_psi(self):
         # Calculates the pressure based on PSI
         for rec in self:
-            rec.pressure_psi = rec.pressure * 14.5038
+            rec.pressure_psi = round(rec.pressure * 14.5038, 0)
 
     def _ctl_cpl(self):
         # takes the constant parameters from setting page
