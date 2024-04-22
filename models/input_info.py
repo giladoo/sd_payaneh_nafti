@@ -405,7 +405,7 @@ class SdPayanehNaftiInputInfo(models.Model):
                 t_star_prime = ((temperature_f-32)/1.8)/630
                 t_star_zegond = (param_ai1+((param_ai2+((param_ai3+((param_ai4+((param_ai5+((param_ai6+((param_ai7+(param_ai8*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime
                 # t_star = ((temperature-((param_ai1+(param_ai2+(param_ai3+(param_ai4+(param_ai5+(param_ai6+(param_ai7+param_ai8*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630)))*1.8)+32
-
+                # caculation sheet, T* column
                 t_star = ((((
                                    (temperature_f-32) / 1.8) -
                            ((param_ai1+(param_ai2+(param_ai3+(param_ai4+(param_ai5+(param_ai6+
