@@ -258,6 +258,8 @@
                                 class="oe_highlight" />
                         <button name="print_cargo_document" states="cargo_document,done" string="Print Cargo Document" type="object"
                                 class="oe_highlight" />
+                        <button name="set_spgr" states="cargo_document,loading_info" string="Update SPGR" type="object"
+                                class="oe_highlight" />
                         <button name="input_done" states="cargo_document,finished" string="Done" type="object"
                                 class="oe_highlight"  />
                         <button name="input_finished"  string="Finished" type="object"
@@ -397,6 +399,7 @@
                                         <field name="loading_info_date" readonly="1"/>
                                         <field name="sp_gr" digits="[4,4]" readonly="1"/>
                                         <field name="centralized_container" readonly="1"/>
+                                        <field name="cqq" readonly="1"/>
                                         <field name="correction_factor" readonly="1"/>
                                         <field name="temperature" readonly="1"/>
                                         <field name="temperature_f" readonly="1"/>
@@ -431,14 +434,14 @@
                                     </group>
                                 </group>
                             </page>
-                            <page string="Params" groups="base.group_system">
+                            <page string="Params">
 
                                 <group>
                                     <group>
-                                        <field name="api_a" groups="base.group_system"/>
-                                        <field name="tab_13"  groups="base.group_system"/>
-                                        <field name="ctl" groups="base.group_system"/>
-                                        <field name="cpl" groups="base.group_system"/>
+                                        <field name="api_a"/>
+                                        <field name="tab_13" />
+                                        <field name="ctl"/>
+                                        <field name="cpl"/>
 
 <!--                                        <field name="meter_tov_l" groups="base.group_system"/>-->
 <!--                                        <field name="meter_gsv_l" groups="base.group_system"/>-->
@@ -450,10 +453,10 @@
 <!--                                        <field name="wb_gsv_b" groups="base.group_system"/>-->
 <!--                                        <field name="wb_mt" groups="base.group_system"/>-->
 
-                                        <field name="final_tov_l" groups="base.group_system"/>
-                                        <field name="final_gsv_l" groups="base.group_system"/>
-                                        <field name="final_gsv_b" groups="base.group_system"/>
-                                        <field name="final_mt" groups="base.group_system"/>
+                                        <field name="final_tov_l"/>
+                                        <field name="final_gsv_l"/>
+                                        <field name="final_gsv_b"/>
+                                        <field name="final_mt"/>
 
                                     </group>
                                 </group>

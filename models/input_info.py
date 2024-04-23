@@ -153,23 +153,7 @@ class SdPayanehNaftiInputInfo(models.Model):
     final_mt = fields.Float(string='Final M.T.', compute='_finals', digits=[8, 3])
     cpl_counter = fields.Integer(default=0)
 
-    # def drivers_strip(self):
-    #     ids = self.env.context.get('active_ids')
-    #     print(f'\n active ids: {ids}')
-        # for rec in self:
-        #     rec.driver = rec.driver.strip()
-
-    # def drivers_create(self):
-    #     ids = self.env.context.get('active_ids')
-    #     print(f'\n active ids: {ids}')
-    #     records = self.browse(ids)
-    #     drivers_model = self.env['sd_payaneh_nafti.drivers']
-        # for rec in records:
-        #     if not drivers_model.search([('name', '=', rec.driver)]):
-        #         drivers_model.create({'name': rec.driver})
-        #     drivers = drivers_model.search([('name', '=', rec.driver)])
-        #     if len(drivers) == 1:
-        #         rec.write({'driver_name': drivers.id})
+    cqq = fields.Many2one('sd_payaneh_nafti.spgr')
 
     def shift_selector(self):
         shift = 1
@@ -267,6 +251,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         if len(spgr) == 1:
             self.sp_gr = spgr.spgr
             self.centralized_container = spgr.centralized_container
+            self.cqq = spgr if (self.request_date > date(2024, 4, 19)) else False
         else:
             raise ValidationError(_('Add a "SP.GR." from the main menu'))
 

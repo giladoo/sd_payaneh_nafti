@@ -24,6 +24,13 @@ class SdPayanehNaftiSpgr(models.Model):
                                               ('g', 'G'),
                                               ('h', 'H'),
                                               ], required=True, default='h', tracking=True)
+    vapour_pressure = fields.Float(required=True)
+    salt_content = fields.Float(required=True)
+    mercaptans = fields.Float(required=True)
+    h2s = fields.Selection([('trace', 'TRACE')], default='trace', required=True)
+    sulphur = fields.Float(required=True)
+    water_content = fields.Selection([('nil', 'NIL')], default='nil', required=True)
+
     description = fields.Char()
 
     @api.model
