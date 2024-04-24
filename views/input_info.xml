@@ -440,8 +440,8 @@
                                     <group>
                                         <field name="api_a"/>
                                         <field name="tab_13" />
-                                        <field name="ctl"/>
-                                        <field name="cpl"/>
+                                        <field name="ctl" digits="[2,5]"/>
+                                        <field name="cpl" digits="[2,5]"/>
 
 <!--                                        <field name="meter_tov_l" groups="base.group_system"/>-->
 <!--                                        <field name="meter_gsv_l" groups="base.group_system"/>-->

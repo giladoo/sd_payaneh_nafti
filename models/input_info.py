@@ -342,7 +342,8 @@ class SdPayanehNaftiInputInfo(models.Model):
         # calculates the API
         for rec in self:
             api_a = 141.5 / rec.sp_gr - 131.5 if rec.sp_gr else 0
-            rec.api_a = round(api_a, 2) if rec.registration_no.loading_type == 'internal' else round(api_a, 1)
+            # The api calculation had changed on 1401 mehr Excel file. The document 3215 is the first one on 1401 mehr.
+            rec.api_a = round(api_a, 2) if rec.registration_no.loading_type == 'internal' or rec.document_no < 3215 else round(api_a, 1)
 
     def _tab_13(self):
         # Calculates the TAB.13
