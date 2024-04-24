@@ -33,7 +33,7 @@
                             <group>
                                 <field name="spgr" />
                                 <field name="centralized_container" />
-                                <field name="api_a" invisible="1" />
+                                <field name="api_a" />
                         <field name="vapour_pressure" />
                         <field name="salt_content" />
                         <field name="mercaptans" />

@@ -33,6 +33,8 @@ class ReportSdPayanehNaftiCargoDocument(models.AbstractModel):
         form_data = data.get('form_data')
         document_no = form_data.get('document_no')[1]
         input_records = self.env['sd_payaneh_nafti.input_info'].search([('document_no', '=', document_no)])
+
+        spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
         calendar = form_data.get('calendar')
         docids = [input_records.id]
         print(f'>>>>  no docids  >> {docids}  >>> {input_records}')
@@ -90,6 +92,7 @@ class ReportSdPayanehNaftiCargoDocument(models.AbstractModel):
         company_logo = f'/web/image/res.partner/{1}/image_128/'
         return {
             'docs': input_records,
+            'spgr': spgr,
             'doc_ids': docids,
             'doc_model': 'sd_payaneh_nafti.input_info',
             # 'document_no': document_no,

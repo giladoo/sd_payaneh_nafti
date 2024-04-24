@@ -6,7 +6,7 @@
         <template id="cargo_document_report_data">
             <div class="page">
 
-                <div class="container mt4" style="font-size: .9rem">
+                <div class="container mt3" style="font-size: .9rem">
                     <div class="container iransans_font">
                         <div t-foreach="doc_data_list" t-as="doc_datas">
                             <t t-set="input_record" t-value="doc_datas[0]"/>
@@ -241,7 +241,7 @@
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-2">WATER<br/>CONTENT<br/>(%VOL)
                                                                     </div>
-                                                                    <div>NIL</div>
+                                                                    <div t-esc="spgr.water_content"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
 
@@ -250,66 +250,66 @@
                                                                         <br/>
                                                                         <br/>
                                                                     </div>
-                                                                    <div>TRACE</div>
+                                                                    <div t-esc="spgr.h2s"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-4">SALT CONTENT<br/>(P.T.B)
                                                                     </div>
-                                                                    <div>0.2</div>
+                                                                    <div t-esc="spgr.salt_content"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-4">MERCAPTANCS<br/>CONTENT(PPM)
                                                                     </div>
-                                                                    <div>2275</div>
+                                                                    <div t-esc="spgr.mercaptans"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-2">TOTAL<br/>SULPHOR<br/>(%WT)
                                                                     </div>
-                                                                    <div>0.297</div>
+                                                                    <div t-esc="spgr.sulphur"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
-                                                                    <div class="mb-4">VAPOR<br/>PRESURE(PSI)
+                                                                    <div class="mb-4">VAPOUR<br/>PRESURE(PSI)
                                                                     </div>
-                                                                    <div>9.07</div>
+                                                                    <div t-esc="spgr.vapour_pressure"></div>
                                                                 </div>
 
                                                             </div>
-                                                            <div class="row mx-0" style="font-size: .9rem">
+                                                            <div class="row mx-0 p-1" style="font-size: .8rem">
                                                                 <div class="col-4">
-                                                                    <div class="row">
-                                                                        <div class="col-6 border border-warning px-1">
+                                                                    <div class="row border-bottom ">
+                                                                        <div class="col-6  px-1">
                                                                             Evacuation Box Seal
                                                                         </div>
-                                                                        <div class="col-6 border border-warning px-1"
+                                                                        <div class="col-6 px-1"
                                                                              t-esc="input_record.evacuation_box_seal">
                                                                         </div>
                                                                     </div>
-                                                                    <div class="row">
-                                                                        <div class="col-6 border border-warning px-1">
+                                                                    <div class="row border-bottom ">
+                                                                        <div class="col-6 px-1">
                                                                             compartment_1
                                                                         </div>
-                                                                        <div class="col-6 border border-warning px-1"
+                                                                        <div class="col-6 px-1"
                                                                              t-esc="input_record.compartment_1">
                                                                         </div>
                                                                     </div>
-                                                                    <div class="row">
-                                                                        <div class="col-6 border border-warning px-1">
+                                                                    <div class="row border-bottom ">
+                                                                        <div class="col-6 px-1">
                                                                             compartment_2
                                                                         </div>
-                                                                        <div class="col-6 border border-warning px-1"
+                                                                        <div class="col-6 px-1"
                                                                              t-esc="input_record.compartment_2">
 
                                                                         </div>
                                                                     </div>
-                                                                    <div class="row">
-                                                                        <div class="col-6 border border-warning px-1">
+                                                                    <div class="row  ">
+                                                                        <div class="col-6 px-1">
                                                                             compartment_3
                                                                         </div>
-                                                                        <div class="col-6 border border-warning px-1"
+                                                                        <div class="col-6 px-1"
                                                                              t-esc="input_record.compartment_3">
 
                                                                         </div>
@@ -323,7 +323,7 @@
                                                                         <span>اینجانب</span>
                                                                         <span class="p-1" style="font-weight: bold"
                                                                               t-esc="doc_data['driver']"></span>
-                                                                        <p class="p-1"
+                                                                        <p class="p-1" style="font-size: .5rem;"
                                                                            t-esc="doc_data['driver_promise']"></p>
                                                                     </div>
                                                                     <div class="col-3 text-center p-1 ">

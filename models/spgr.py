@@ -14,7 +14,7 @@ class SdPayanehNaftiSpgr(models.Model):
     active = fields.Boolean(default=True)
     spgr = fields.Float(required=True, digits=[1, 4])
     spgr_date = fields.Date(required=True, default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))) )
-    api_a = fields.Float(digits=[1, 2], store=True)
+    api_a = fields.Float(digits=[1, 2], store=True, required=True,)
     centralized_container = fields.Selection([('a', 'A'),
                                               ('b', 'B'),
                                               ('c', 'C'),
@@ -26,7 +26,7 @@ class SdPayanehNaftiSpgr(models.Model):
                                               ], required=True, default='h', tracking=True)
     vapour_pressure = fields.Float(required=True)
     salt_content = fields.Float(required=True)
-    mercaptans = fields.Float(required=True)
+    mercaptans = fields.Integer(required=True)
     h2s = fields.Selection([('trace', 'TRACE')], default='trace', required=True)
     sulphur = fields.Float(required=True)
     water_content = fields.Selection([('nil', 'NIL')], default='nil', required=True)
