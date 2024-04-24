@@ -221,10 +221,10 @@
                                                         <div class="col px-1">
 
                                                             <div class="col mb-4">
-                                                                SP.GR.-API-Tank No.
+                                                                SP.GR. - API - Tank No.
                                                             </div>
                                                             <div class="col " style="direction:ltr !important"
-                                                                 t-esc="input_record.sp_gr">
+                                                                 t-esc="str(input_record.sp_gr) + ' - ' + str(spgr.api_a) + ' - ' + (spgr.centralized_container).upper()">
 
                                                             </div>
                                                         </div>
@@ -241,7 +241,7 @@
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-2">WATER<br/>CONTENT<br/>(%VOL)
                                                                     </div>
-                                                                    <div t-esc="spgr.water_content"></div>
+                                                                    <div t-esc="(spgr.water_content).upper()"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
 
@@ -250,7 +250,7 @@
                                                                         <br/>
                                                                         <br/>
                                                                     </div>
-                                                                    <div t-esc="spgr.h2s"></div>
+                                                                    <div t-esc="(spgr.h2s).upper()"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
@@ -481,7 +481,7 @@
                                                 <div class="col-4">
                                                     Destination
                                                 </div>
-                                                <div class="col-8 font-weight-bold"
+                                                <div class="col-8 font-weight-bold px-0"
                                                      t-esc="input_record.registration_no.destination.name">
                                                 </div>
                                             </div>
