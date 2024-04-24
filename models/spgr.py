@@ -28,7 +28,7 @@ class SdPayanehNaftiSpgr(models.Model):
     salt_content = fields.Float(required=True)
     mercaptans = fields.Integer(required=True)
     h2s = fields.Selection([('trace', 'TRACE')], default='trace', required=True)
-    sulphur = fields.Float(required=True)
+    sulphur = fields.Float(required=True, digits=[1, 3])
     water_content = fields.Selection([('nil', 'NIL')], default='nil', required=True)
 
     description = fields.Char()
