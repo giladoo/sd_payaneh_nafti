@@ -6,7 +6,7 @@
         <template id="cargo_document_report_data">
             <div class="page">
 
-                <div class="container mt3" style="font-size: .9rem">
+                <div class="container mt5" style="font-size: .8rem">
                     <div class="container iransans_font">
                         <div t-foreach="doc_data_list" t-as="doc_datas">
                             <t t-set="input_record" t-value="doc_datas[0]"/>
@@ -35,23 +35,22 @@
                                         <div class="h2 ">بارنامه</div>
 
 
-                                        <div class="container mx-auto iransans_font "
+                                        <div class="container text-left mx-auto iransans_font "
                                              style="direction:rtl; margin-top: 30px;">
                                             <div class="  ">
                                                 <div class="row mx-0 text-center py-1">
-                                                    <div class="col-5  px-0 ">
+                                                    <div class="col-6 px-0 ">
                                                         <div class="row mx-0 ">
-                                                            <div class="col-3 px-1">Buyer</div>
-                                                            <div class="col-9 px-1">
-                                                                <div class="text-nowrap font-weight-bold"
-                                                                     t-esc="input_record.buyer.name"></div>
+                                                            <div class="col-2 px-1">Buyer</div>
+                                                            <div class="col-10 px-1 text-left py_font_11 font-weight-bold" t-esc="input_record.buyer.name">
+<!--                                                                <div class="text-nowrap font-weight-bold"></div>-->
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-4  px-0 ">
+                                                    <div class="col-3 px-0 ">
                                                         <div class="row mx-0 text-center ">
-                                                            <div class="col-6  px-1">Document No</div>
-                                                            <div class="col-6  px-1 font-weight-bold lead"
+                                                            <div class="col-4  px-1">Document No</div>
+                                                            <div class="col-8 text-left  px-1 py_font_11 font-weight-bold"
                                                                  t-esc="doc_data['document_no']">
                                                             </div>
                                                         </div>
@@ -63,43 +62,43 @@
 
                                                 </div>
                                             </div>
-                                            <div class="border border-dark rounded  ">
+                                            <div class="border border-dark rounded py_border_2 ">
 
-                                                <div class="row mx-0 border-bottom  border-dark py-1">
+                                                <div class="row mx-0 p-1">
                                                     <div class="col-4  px-0 ">
                                                         <div class="row mx-0 ">
-                                                            <div class="col-6  px-1">Issue Date</div>
-                                                            <div class="col-6  px-1"
+                                                            <div class="col-4  px-1">Issue Date</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
                                                                  t-esc="doc_data['issue_date']"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-4  px-0 ">
                                                         <div class="row mx-0 ">
-                                                            <div class="col-6  px-1">Contract No</div>
-                                                            <div class="col-6  px-1"
+                                                            <div class="col-4  px-1">Contract No</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
                                                                  t-esc="doc_data['contract_no']"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-4  px-0 ">
                                                         <div class="row mx-0 ">
-                                                            <div class="col-6  px-1">Tanker No</div>
-                                                            <div class="col-6  px-1">
+                                                            <div class="col-4  px-1">Tanker No</div>
+                                                            <div class="col-8  px-1">
 
                                                                 <div class="row mx-0">
 
-                                                                    <div class="border border-secondary rounded p-1  font-weight-bold"
+                                                                    <div class="border border-secondary rounded px-1 py-0  font-weight-bold"
                                                                          t-esc="doc_data['tanker_no']['plate_1']"></div>
                                                                     <div class="p-0">
                                                                         <div class="row border border-secondary rounded mx-0 px-1">
-                                                                            <div class="p-1 font-weight-bold"
+                                                                            <div class="px-1 py-0 font-weight-bold"
                                                                                  t-esc="doc_data['tanker_no']['plate_2']"></div>
-                                                                            <div class="p-1 font-weight-bold"
+                                                                            <div class="px-1 py-0 font-weight-bold"
                                                                                  t-esc="doc_data['tanker_no']['plate_3']"></div>
-                                                                            <div class="p-1 font-weight-bold"
+                                                                            <div class="px-1 py-0 font-weight-bold"
                                                                                  t-esc="doc_data['tanker_no']['plate_4']"></div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="border rounded bg-primary text-light">
+                                                                    <div class="border rounded bg-primary text-light px-1 py-0 ">
                                                                         IR
                                                                     </div>
                                                                 </div>
@@ -108,65 +107,71 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="border-bottom border-dark mx-1"></div>
 
-                                                <div class="row mx-0 border-bottom  border-dark py-1">
+                                                <div class="row mx-0 p-1">
                                                     <div class="col-4  px-0 ">
                                                         <div class="row mx-0 ">
-                                                            <div class="col-6  px-1">Issue Time</div>
-                                                            <div class="col-6  px-1"
+                                                            <div class="col-4  px-1">Issue Time</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
                                                                  t-esc="doc_data['issue_time']"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-4  px-0 ">
                                                         <div class="row mx-0 ">
-                                                            <div class="col-6  px-1">Contractor</div>
-                                                            <div class="col-6  px-1"
+                                                            <div class="col-4  px-1">Contractor</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
                                                                  t-esc="input_record.contractor.name"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-4  px-0 ">
                                                         <div class="row mx-0 ">
-                                                            <div class="col-6  px-1">Driver</div>
-                                                            <div class="col-6  px-1" t-esc="doc_data['driver']"></div>
+                                                            <div class="col-4  px-1">Driver</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
+                                                                 t-esc="doc_data['driver']"></div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="border-bottom border-dark mx-1"></div>
 
-                                                <div class="row mx-0 border-bottom  border-dark py-1">
+                                                <div class="row mx-0 border-dark p-1">
                                                     <div class="col-4  px-0 ">
                                                         <div class="row mx-0 ">
-                                                            <div class="col-6  px-1">Cargo No.</div>
-                                                            <div class="col-6  px-1"
+                                                            <div class="col-4  px-1">Cargo No.</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
                                                                  t-esc="input_record.loading_no"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-4  px-0 ">
                                                         <div class="row mx-0 ">
-                                                            <div class="col-6  px-1">Destination</div>
-                                                            <div class="col-6  px-1"
+                                                            <div class="col-2  px-1">Destination</div>
+                                                            <div class="col-10 py_font_7 px-0 font-weight-bold"
                                                                  t-esc="input_record.registration_no.destination.name">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-4  px-0 ">
                                                         <div class="row mx-0 ">
-<!--                                                            <div class="col-6  px-1">Card No.</div>-->
-                                                            <div class="col-6 px-1">
+                                                            <!--                                                            <div class="col-6  px-1">Card No.</div>-->
+                                                            <div class="col-4 px-1">
                                                                 Card No.
                                                             </div>
-                                                            <div class="col-6  px-1" t-esc="input_record.card_no"></div>
+                                                            <div class="col-8  px-1 font-weight-bold"
+                                                                 t-esc="input_record.card_no"></div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="border border-dark rounded mt-2 ">
-                                                <div class="row mx-0 border-bottom ">
+
+                                            <div class="border border-dark py_border_2 rounded mt-1 ">
+                                                <div class="row mx-0  ">
                                                     <div class="col-9 mt-1   mx-0 px-0 py-2 text-center">
                                                         <div class="col mx-0 p-0">
                                                             <div class="row  mx-0">
                                                                 <div class="col-2 px-1 mx-0">
                                                                     <div class="mb-4">Cargo Type</div>
-                                                                    <div t-esc="input_record.registration_no.cargo_type.name"></div>
+                                                                    <div class="py_font_11 font-weight-bold"
+                                                                         t-esc="input_record.registration_no.cargo_type.name"></div>
                                                                 </div>
                                                                 <div class="col-2 px-1 mx-0">
                                                                     <div>
@@ -175,7 +180,8 @@
                                                                     <div class="mb-1">
                                                                         (F)
                                                                     </div>
-                                                                    <div t-esc="round(input_record.temperature_f, 1)">
+                                                                    <div class="py_font_11 font-weight-bold"
+                                                                         t-esc="round(input_record.temperature_f, 1)">
 
                                                                     </div>
                                                                 </div>
@@ -187,7 +193,8 @@
                                                                     <div class="mb-1">
                                                                         (Liter)
                                                                     </div>
-                                                                    <div t-esc="doc_data['final_tov_l']">
+                                                                    <div class="py_font_11 font-weight-bold"
+                                                                         t-esc="doc_data['final_tov_l']">
 
                                                                     </div>
                                                                 </div>
@@ -198,7 +205,8 @@
                                                                     <div class="mb-1">
                                                                         (Liter)
                                                                     </div>
-                                                                    <div t-esc="doc_data['final_gsv_l']">
+                                                                    <div class="py_font_11 font-weight-bold"
+                                                                         t-esc="doc_data['final_gsv_l']">
 
                                                                     </div>
                                                                 </div>
@@ -209,7 +217,8 @@
                                                                     <div class="mb-1">
                                                                         (Metric Tone)
                                                                     </div>
-                                                                    <div t-esc="'%.3f' % round(input_record.final_mt,3)">
+                                                                    <div class="py_font_11 font-weight-bold"
+                                                                         t-esc="'%.3f' % round(input_record.final_mt,3)">
 
                                                                     </div>
                                                                 </div>
@@ -217,7 +226,7 @@
                                                         </div>
 
                                                     </div>
-                                                    <div class="border-left my-1"></div>
+                                                    <div class="border-left border-dark my-1"></div>
                                                     <div class="col-3 mt-1   mx-0 px-0 py-2 text-center">
 
                                                         <div class="col px-1">
@@ -225,7 +234,8 @@
                                                             <div class="col mb-4">
                                                                 SP.GR. - API - Tank No.
                                                             </div>
-                                                            <div class="col " style="direction:ltr !important"
+                                                            <div class="col py_font_11 font-weight-bold"
+                                                                 style="direction:ltr !important"
                                                                  t-esc="str(input_record.sp_gr) + ' - ' + str(spgr.api_a) + ' - ' + (spgr.centralized_container).upper()">
 
                                                             </div>
@@ -233,17 +243,19 @@
 
                                                     </div>
                                                 </div>
+                                                <div class="border-bottom border-dark mx-1"></div>
 
 
                                                 <div class="row mx-0 ">
                                                     <div class="col-9 mx-0 mt-1 px-0  ">
                                                         <div class="col mx-0 px-0">
-                                                            <div class="row mx-0 border-bottom text-center"
+                                                            <div class="row mx-0 text-center"
                                                                  style="font-size: .7rem; direction: ltr;">
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-2">WATER<br/>CONTENT<br/>(%VOL)
                                                                     </div>
-                                                                    <div t-esc="(spgr.water_content).upper()"></div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="(spgr.water_content).upper()"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
 
@@ -252,49 +264,56 @@
                                                                         <br/>
                                                                         <br/>
                                                                     </div>
-                                                                    <div t-esc="(spgr.h2s).upper()"></div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="(spgr.h2s).upper()"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-4">SALT CONTENT<br/>(P.T.B)
                                                                     </div>
-                                                                    <div t-esc="spgr.salt_content"></div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="spgr.salt_content"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-4">MERCAPTANCS<br/>CONTENT(PPM)
                                                                     </div>
-                                                                    <div t-esc="spgr.mercaptans"></div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="spgr.mercaptans"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-2">TOTAL<br/>SULPHOR<br/>(%WT)
                                                                     </div>
-                                                                    <div t-esc="spgr.sulphur"></div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="spgr.sulphur"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-4">VAPOUR<br/>PRESURE(PSI)
                                                                     </div>
-                                                                    <div t-esc="spgr.vapour_pressure"></div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="spgr.vapour_pressure"></div>
                                                                 </div>
 
                                                             </div>
+                                                            <div class="border-bottom border-dark mx-1"></div>
+
                                                             <div class="row mx-0 p-1" style="font-size: .8rem">
                                                                 <div class="col-4">
                                                                     <div class="row border-bottom ">
-                                                                        <div class="col-6  px-1">
+                                                                        <div class="col-6 px-1 ">
                                                                             Evacuation Box Seal
                                                                         </div>
-                                                                        <div class="col-6 px-1"
+                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold"
                                                                              t-esc="input_record.evacuation_box_seal">
                                                                         </div>
                                                                     </div>
                                                                     <div class="row border-bottom ">
-                                                                        <div class="col-6 px-1">
+                                                                        <div class="col-6 px-1 ">
                                                                             compartment_1
                                                                         </div>
-                                                                        <div class="col-6 px-1"
+                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold"
                                                                              t-esc="input_record.compartment_1">
                                                                         </div>
                                                                     </div>
@@ -302,7 +321,7 @@
                                                                         <div class="col-6 px-1">
                                                                             compartment_2
                                                                         </div>
-                                                                        <div class="col-6 px-1"
+                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold"
                                                                              t-esc="input_record.compartment_2">
 
                                                                         </div>
@@ -311,7 +330,7 @@
                                                                         <div class="col-6 px-1">
                                                                             compartment_3
                                                                         </div>
-                                                                        <div class="col-6 px-1"
+                                                                        <div class="col-6 px-1  py_font_9 font-weight-bold"
                                                                              t-esc="input_record.compartment_3">
 
                                                                         </div>
@@ -321,19 +340,19 @@
                                                                     <div class="row">
 
 
-                                                                    <div class="col-9">
-                                                                        <span>اینجانب</span>
-                                                                        <span class="p-1" style="font-weight: bold"
-                                                                              t-esc="doc_data['driver']"></span>
-                                                                        <p class="p-1" style="font-size: .5rem;"
-                                                                           t-esc="doc_data['driver_promise']"></p>
-                                                                    </div>
-                                                                    <div class="col-3 text-center p-1 ">
-                                                                        <div class="">
-                                                                            نام و امضاء راننده
+                                                                        <div class="col-9 text-left">
+                                                                            <span>اینجانب</span>
+                                                                            <span class="p-1" style="font-weight: bold"
+                                                                                  t-esc="doc_data['driver']"></span>
+                                                                            <p class="p-1" style="font-size: .5rem;"
+                                                                               t-esc="doc_data['driver_promise']"></p>
                                                                         </div>
-                                                                        <!--                                                <div t-esc="doc_data['driver']"> </div>-->
-                                                                    </div>
+                                                                        <div class="col-3 text-center p-1 ">
+                                                                            <div class="">
+                                                                                نام و امضاء راننده
+                                                                            </div>
+                                                                            <!--                                                <div t-esc="doc_data['driver']"> </div>-->
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -344,7 +363,7 @@
 
 
                                                     </div>
-                                                    <div class="border-left my-2 "></div>
+                                                    <div class="border-left border-dark my-2 "></div>
                                                     <div class="col-3 mx-0 mt-1 px-0  ">
                                                         <div class="col-12 text-center p-1 ">
                                                             <div class="">
@@ -359,6 +378,30 @@
 
 
                                             </div>
+
+
+                                            <div class="row my-1">
+                                        <div class="col-2">
+                                            توزیع نسخ :
+                                        </div>
+                                        <div class="col-10">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    نسخه اصلی : خریدار
+                                                </div>
+                                                <div class="col-3">
+                                                    نسخه مقصد : پیمانکار حمل
+                                                </div>
+                                                <div class="col-3">
+                                                    نسخه مبدأ : بایگانی
+                                                </div>
+                                                <div class="col-3">
+                                                    نسخه حراست
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+
 
                                         </div>
 
@@ -647,23 +690,28 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row my-2">
-
-                                        <div class="col-2">
+                                    <div class="row my-2 border">
+                                        <div class="col-2 border border-info">
                                             توزیع نسخ :
                                         </div>
-                                        <div class="col-2">
-                                            نسخه اصلی : خریدار
+                                        <div class="com-10">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    نسخه اصلی : خریدار
+                                                </div>
+                                                <div class="col-3">
+                                                    نسخه مقصد : پیمانکار حمل
+                                                </div>
+                                                <div class="col-3">
+                                                    نسخه مبدأ : بایگانی
+                                                </div>
+                                                <div class="col-3 border border-danger">
+                                                    نسخه حراست
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-2">
-                                            نسخه مقصد : پیمانکار حمل
-                                        </div>
-                                        <div class="col-2">
-                                            نسخه مبدأ : بایگانی
-                                        </div>
-                                        <div class="col-2">
-                                            نسخه حراست
-                                        </div>
+
+
                                     </div>
 
                                 </div>

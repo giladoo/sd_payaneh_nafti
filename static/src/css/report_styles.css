@@ -1,3 +1,16 @@
+.py_border_2{
+    border-width: 2px !important;
+}
+.py_font_7{
+    font-size: .7rem !important;
+}
+.py_font_9{
+    font-size: .9rem !important;
+}
+.py_font_11{
+    font-size: 1.1rem !important;
+}
+
 .multi_page_report{
     page-break-inside: avoid; page-break-after: always;
 }
