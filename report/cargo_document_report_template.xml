@@ -304,7 +304,7 @@
                                                                         <div class="col-6 px-1 ">
                                                                             Evacuation Box Seal
                                                                         </div>
-                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold"
+                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold text-right"
                                                                              t-esc="input_record.evacuation_box_seal">
                                                                         </div>
                                                                     </div>
@@ -312,7 +312,7 @@
                                                                         <div class="col-6 px-1 ">
                                                                             compartment_1
                                                                         </div>
-                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold"
+                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold text-right"
                                                                              t-esc="input_record.compartment_1">
                                                                         </div>
                                                                     </div>
@@ -320,7 +320,7 @@
                                                                         <div class="col-6 px-1">
                                                                             compartment_2
                                                                         </div>
-                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold"
+                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold text-right"
                                                                              t-esc="input_record.compartment_2">
 
                                                                         </div>
@@ -329,7 +329,7 @@
                                                                         <div class="col-6 px-1">
                                                                             compartment_3
                                                                         </div>
-                                                                        <div class="col-6 px-1  py_font_9 font-weight-bold"
+                                                                        <div class="col-6 px-1  py_font_9 font-weight-bold text-right"
                                                                              t-esc="input_record.compartment_3">
 
                                                                         </div>
