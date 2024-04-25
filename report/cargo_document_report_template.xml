@@ -5,8 +5,7 @@
 
         <template id="cargo_document_report_data">
             <div class="page">
-
-                <div class="container mt5" style="font-size: .8rem">
+                <div class="container " style="font-size: .8rem">
                     <div class="container iransans_font">
                         <div t-foreach="doc_data_list" t-as="doc_datas">
                             <t t-set="input_record" t-value="doc_datas[0]"/>
@@ -35,8 +34,8 @@
                                         <div class="h2 ">بارنامه</div>
 
 
-                                        <div class="container text-left mx-auto iransans_font "
-                                             style="direction:rtl; margin-top: 30px;">
+                                        <div class="container text-left mx-auto mt-1 iransans_font "
+                                             style="direction:rtl; ">
                                             <div class="  ">
                                                 <div class="row mx-0 text-center py-1">
                                                     <div class="col-6 px-0 ">
