@@ -28,7 +28,10 @@
                         <DataCards onClick="viewContracts" name="state.contracts.name" status="state.contracts.status" value="state.contracts.value" />
                     </div>
                     <div class="row">
-                        <InputCards onSubmit="openInputInfo" name="state.openInputInfo.name"  view="state.openInputInfo.view" onKeyDown="openInputInfo" status="state.openInputInfo.status" />
+                        <InputCards onSubmit="toOpenInputInfo" name="state.openInputInfo.name"
+                                    view="state.openInputInfo.view"
+                                    onChange="onChange"
+                                    status="state.openInputInfo.status" />
 
                     </div>
                     <div class="row">

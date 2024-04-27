@@ -1,6 +1,6 @@
 /** @odoo-module **/
-const { Component } = owl
-const { onMounted } = owl.hooks
+const { Component, useRef } = owl
+const { onMounted, onWillUnmount } = owl.hooks
 import core from 'web.core';
 import { useBus } from "@web/core/utils/hooks";
 
@@ -13,13 +13,22 @@ import { DataDashboard } from "../data_dashboard";
 patch(DataDashboard.prototype, 'data_dashboard',{
     setup(){
         this._super()
-        Component.env.bus.on('barcode_scanned', this, this._onBarcodeScanned);
+        onMounted(()=>{
+            Component.env.bus.on('barcode_scanned', this, this._onBarcodeScanned);
+//            console.log('patch(DataDashboard mounted')
+        })
+        onWillUnmount(function(){
+            Component.env.bus.off('barcode_scanned', this, this._onBarcodeScanned);
+//            console.log('patch(DataDashboard unmounted')
+
+        })
+
 
     },
     _onBarcodeScanned(barcode){
         Component.env.bus.off('barcode_scanned', this, this._onBarcodeScanned);
         this._viewInputInfo(barcode)
-//        console.log('_onBarcodeScanned',barcode)
+        console.log('_onBarcodeScanned',barcode)
         Component.env.bus.on('barcode_scanned', this, this._onBarcodeScanned);
 
     },

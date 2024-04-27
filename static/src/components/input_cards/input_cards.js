@@ -1,6 +1,6 @@
 /** @odoo-module */
-    const { Component, useRef, useState } = owl
-const { onMounted } = owl.hooks
+    const { Component, useState } = owl
+const { onMounted, useRef } = owl.hooks
 import core from 'web.core';
 const _t = core._t;
 import { useBus } from "@web/core/utils/hooks";
@@ -40,17 +40,30 @@ patch(DataDashboard.prototype, 'data_dashboard_input',{
                 status: "",
             },
         })
-        console.log('data_dashboard_input', this)
+        this.inputRef = useRef('input_ref');
+        this.toOpenInputInfo = this.toOpenInputInfo.bind(this);
+        this.onChange = this.onChange.bind(this);
+
+//        console.log('data_dashboard_input', this.inputRef.el)
     },
-    async openInputInfo(e){
-//        console.log('openInputInfo', e)
+    onChange(e){
+        console.log('onchange:', e.target.value, e.target.value.split('_'))
+        let value = e.target.value.split('_')
+        value = value.length == 2 ? value[1] : value[0]
+        let ev = {'target':{'value': value, 'tagName': 'BUTTON', 'previousSibling':{'value': value}}}
+        e.target.value = ''
+        console.log('onchange ev:', ev)
+        this.toOpenInputInfo(ev)
+    },
+    async toOpenInputInfo(e){
+        console.log('openInputInfo', e, e.target.value)
         let value = e.target.value;
         if (e.target.tagName == 'BUTTON'){
             value = e.target.previousSibling.value
         }
         if( e.keyCode == 13 || e.target.tagName == 'BUTTON'){
             if(Number.isInteger(Number(value))){
-                this.state.openInputInfo.status = ''
+                this.state.openInputInfo.status = value
                 const document = await this.orm.searchRead("sd_payaneh_nafti.input_info", [['document_no','=', Number(value)]],['id'])
                 if (document.length == 1){
 //                    console.log('document:', Number(value), document)
@@ -65,10 +78,10 @@ patch(DataDashboard.prototype, 'data_dashboard_input',{
                         target: "new",
                     });
                 }else{
-                    this.state.openInputInfo.status = 'Not found'
+                    this.state.openInputInfo.status = `${value} Not found`
                 }
             }else{
-                this.state.openInputInfo.status = 'Not found'
+                this.state.openInputInfo.status = `${value} Not found`
             }
 
 //            console.log('openInputInfo value:', e.target.value, this)

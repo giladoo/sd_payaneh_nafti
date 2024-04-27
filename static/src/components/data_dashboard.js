@@ -116,7 +116,7 @@ export class DataDashboard extends Component {
         })
         onMounted(()=> {
             loadingPlanCard = document.querySelector('.loading_plan_card')
-//            console.log('loadingPlanCard', this, loadingPlanCard)
+//            console.log('class DataDashboard',)
             loadingEvent = loadingPlanCard.addEventListener('click', self._onLoadingPlanCard)
 //            self.loading_plan_detail()
 
@@ -135,7 +135,7 @@ export class DataDashboard extends Component {
         this.viewLoadingPermit = this.viewLoadingPermit.bind(this);
         this.viewLoadingInfo = this.viewLoadingInfo.bind(this);
         this.viewCargoDocument = this.viewCargoDocument.bind(this);
-        this.openInputInfo = this.openInputInfo.bind(this);
+//        this.toOpenInputInfo = this.toOpenInputInfo.bind(this);
         this._onLoadingPlanCard = this._onLoadingPlanCard.bind(this);
         this.viewTodayLoadingPlan = this.viewTodayLoadingPlan.bind(this);
 

@@ -6,12 +6,13 @@
                  t-on-click="props.hasOwnProperty('onClick') ? ()=>props.onClick() : ''"
                  t-attf-style=" {{props.hasOwnProperty('onClick') ? 'cursor: pointer;' : ''}}">
                 <div class="h3 text-justify text-muted" t-esc="props.name"></div>
-                <input t-on-keydown="e=>props.onKeyDown(e)" class="form-control" type="text" value=""/>
+                <input  t-on-change="e=>props.onChange(e)"
+                       class="form-control" type="text" value="" ref="input_ref" placeholder="Document"/>
                 <div class="text-right">
-                    <button class="btn btn-primary my-2" t-on-click="e=>props.onSubmit(e)" t-esc="props.view"></button>
+<!--                    <button class="btn btn-primary my-2" t-on-click="e=>props.onSubmit(e)" t-esc="props.view"></button>-->
 
                 </div>
-<!--                <span class="h3 mx-2 text-muted"><span t-esc="props.status"></span></span>-->
+                <span class="h3 mx-2 text-muted"><span t-esc="props.status"></span></span>
 
             </div>
         </div>
