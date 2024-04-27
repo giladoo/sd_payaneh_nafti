@@ -208,7 +208,7 @@
             <field name="model">sd_payaneh_nafti.input_info</field>
             <field name="priority">10</field>
             <field name="arch" type="xml">
-                <tree create="1" delete="1" decoration-danger="truck_black_list or driver_black_list">
+                <tree create="1" delete="1" expand="1" decoration-danger="truck_black_list or driver_black_list">
                     <header>
 <!--                        <button string="drivers" name="drivers_strip" type="object" />-->
 <!--                        <button string="drivers_create" name="drivers_create" type="object" />-->
