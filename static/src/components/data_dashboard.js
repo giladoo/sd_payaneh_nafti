@@ -8,6 +8,8 @@
     import { DataPlans } from "./data_plans/data_plans"
 //    import { InputCards } from "./input_cards/input_cards"
     const { DateTime, Settings } = luxon;
+    import core from 'web.core';
+    const _t = core._t;
 
     const SERVER_DATE_FORMAT = "yyyy-MM-dd";
 
@@ -19,15 +21,20 @@ export class DataDashboard extends Component {
         console.log('session:', session)
 
         this.state = useState({
+            title: {
+                name: _t('Payaneh Data Dashboard'),
+            },
             username: {
                 value: '',
                 status: session.name
             },
             load_plan: {
+                name: _t('Loading Plan'),
                 value: '',
                 link: '<a href="https://google.com">12/17</a>'
             },
             plan_detail:{
+                name: _t('Plan Detail'),
                 status: ''
             },
             spgr: {
@@ -35,6 +42,7 @@ export class DataDashboard extends Component {
                 status: "1402/10/01",
             },
             contracts: {
+                name: _t('Open Contracts'),
                 value: 0,
                 status: "",
             },
@@ -71,18 +79,22 @@ export class DataDashboard extends Component {
                 status: "",
             },
             new_requests: {
+                name: _t('New Request'),
                 value: 0,
                 status: "",
             },
             loading_permit: {
+                name: _t('Loading Permit'),
                 value: 0,
                 status: "",
             },
             loading_info: {
+                name: _t('Loading Info'),
                 value: 0,
                 status: "",
             },
             cargo_document: {
+                name: _t('Cargo Document'),
                 value: 0,
                 status: "",
             },
@@ -91,7 +103,6 @@ export class DataDashboard extends Component {
 //                status: "",
 //            },
         })
-
         this.orm = useService("orm")
         this.actionService = useService("action")
         let getRequestsInterval;
@@ -188,9 +199,9 @@ export class DataDashboard extends Component {
             link += `
             <div class="col">
                 <div class="row small border-bottom">
-                    <div class="col-6  px-1">Date</div>
-                    <div class="col-3  px-1">Total</div>
-                    <div class="col-3  px-1">Plan</div>
+                    <div class="col-6  px-1">${_t('Date')}</div>
+                    <div class="col-3  px-1">${_t('Total')}</div>
+                    <div class="col-3  px-1">${_t('Plan')}</div>
                 </div>
             </div>
             `;

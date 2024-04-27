@@ -94,7 +94,7 @@ class SdPayanehNaftiInputInfo(models.Model):
 
     loading_no = fields.Char(copy=False, readonly=False, tracking=True, )
     # todo: timezone
-    loading_date = fields.Date(copy=False, readonly=False, default=lambda self: self.request_date, tracking=True)
+    loading_date = fields.Date(copy=False, string='Loading Date', readonly=False, default=lambda self: self.request_date, tracking=True)
     loading_info_date = fields.Date(copy=False, tracking=True,
                                     default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))))
     # driver = fields.Char(required=True,)
