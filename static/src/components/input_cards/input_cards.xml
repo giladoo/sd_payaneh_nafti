@@ -5,13 +5,14 @@
             <div class="shadow border m-2 p-4 bg-white sd_payaneh_input_cards "
                  t-on-click="props.hasOwnProperty('onClick') ? ()=>props.onClick() : ''"
                  t-attf-style=" {{props.hasOwnProperty('onClick') ? 'cursor: pointer;' : ''}}">
-                <div class="text-justify text-muted">Search:</div>
+                <div class="h3 text-justify text-muted" t-esc="props.name"></div>
                 <input t-on-keydown="e=>props.onKeyDown(e)" class="form-control" type="text" value=""/>
-                <button class="btn btn-primary mt-3" t-on-click="e=>props.onSubmit(e)">Open</button>
-                <span class="h3 mx-2 text-muted"><span t-esc="props.status"></span></span>
+                <div class="text-right">
+                    <button class="btn btn-primary my-2" t-on-click="e=>props.onSubmit(e)" t-esc="props.view"></button>
 
-                <div class="h1 fw-bold text-dark"><span t-esc="props.value"></span></div>
-                <div class="h3 text-muted"><span t-esc="props.name"></span></div>
+                </div>
+<!--                <span class="h3 mx-2 text-muted"><span t-esc="props.status"></span></span>-->
+
             </div>
         </div>
 

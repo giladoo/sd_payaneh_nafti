@@ -2,14 +2,15 @@
     const { Component, useRef, useState } = owl
 const { onMounted } = owl.hooks
 import core from 'web.core';
+const _t = core._t;
 import { useBus } from "@web/core/utils/hooks";
 import { browser } from "@web/core/browser/browser";
 import { registry } from "@web/core/registry";
 import { patch } from "@web/core/utils/patch";
 import { session } from "@web/session";
-    import { useService } from "@web/core/utils/hooks"
-
+import { useService } from "@web/core/utils/hooks"
 import { DataDashboard } from "../data_dashboard";
+
 
 export class InputCards extends Component {
     setup(){
@@ -33,6 +34,8 @@ patch(DataDashboard.prototype, 'data_dashboard_input',{
         this.state = useState({
             ...this.state,
             openInputInfo: {
+                name: _t('Search'),
+                view: _t('View'),
                 value: 0,
                 status: "",
             },
