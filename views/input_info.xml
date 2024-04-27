@@ -259,7 +259,7 @@
                         <button name="print_cargo_document" states="cargo_document,done" string="Print Cargo Document" type="object"
                                 class="oe_highlight" />
                         <button name="set_spgr" states="cargo_document,loading_info" string="Update SPGR" type="object"
-                                class="oe_highlight" />
+                                class="oe_highlight" groups="sd_payaneh_nafti.group_sd_payaneh_nafti_admins" />
                         <button name="input_done" states="cargo_document,finished" string="Done" type="object"
                                 class="oe_highlight"  />
                         <button name="input_finished"  string="Finished" type="object"

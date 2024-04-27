@@ -475,6 +475,8 @@ class SdPayanehNaftiInputInfo(models.Model):
         # doc_no = vals.get('document_no', 0)
         # if doc_no == 0 or doc_no < 10000 or doc_no > 99999:
         #     raise ValidationError(_('Document No'))
+
+        # It helps to not generate new loading no if there is already exists.
         if vals.get('loading_no', '') == '':
             loading_no = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.loading_no') or 0
             vals['loading_no'] = str(jdatetime.date.today().year) + f"/{int(loading_no):07d}"
