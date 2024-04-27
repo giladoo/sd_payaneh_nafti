@@ -18,7 +18,7 @@ export class DataDashboard extends Component {
         let self = this;
         let loadingEvent;
         let loadingPlanCard;
-        console.log('session:', session)
+//        console.log('session:', session)
 
         this.state = useState({
             title: {

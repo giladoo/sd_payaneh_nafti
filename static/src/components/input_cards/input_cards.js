@@ -40,6 +40,7 @@ patch(DataDashboard.prototype, 'data_dashboard_input',{
                 status: "",
             },
         })
+        console.log('data_dashboard_input', this)
     },
     async openInputInfo(e){
 //        console.log('openInputInfo', e)
