@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-27 06:36+0000\n"
-"PO-Revision-Date: 2024-04-27 10:19+0330\n"
+"POT-Creation-Date: 2024-04-27 07:38+0000\n"
+"PO-Revision-Date: 2024-04-27 11:09+0330\n"
 "Last-Translator: Arash Homayounfar <homayounfar@msn.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1974,43 +1974,43 @@ msgstr "قراردادهای فعال"
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_loading_plan_list
 #, python-format
 msgid "Load"
-msgstr "بارگیری"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__load_1
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_loading_plan_list
 msgid "Load 1"
-msgstr "بارگیری 1"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__load_2
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_loading_plan_list
 msgid "Load 2"
-msgstr "بارگیری 2"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__load_3
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_loading_plan_list
 msgid "Load 3"
-msgstr "بارگیری 3"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__load_4
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_loading_plan_list
 msgid "Load 4"
-msgstr "بارگیری 4"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__load_5
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_loading_plan_list
 msgid "Load 5"
-msgstr "بارگیری 5"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__load_6
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_loading_plan_list
 msgid "Load 6"
-msgstr "بارگیری 6"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_input_info_form_1
@@ -2636,13 +2636,6 @@ msgstr "در جریان"
 
 #. module: sd_payaneh_nafti
 #. openerp-web
-#: code:addons/sd_payaneh_nafti/static/src/components/input_cards/input_cards.xml:0
-#, python-format
-msgid "Open"
-msgstr ""
-
-#. module: sd_payaneh_nafti
-#. openerp-web
 #: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
 #: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_contract_registration_open
 #: model:ir.ui.menu,name:sd_payaneh_nafti.contract_registration_menu_open
@@ -2779,7 +2772,7 @@ msgstr ""
 #: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
 #, python-format
 msgid "Payaneh Data Dashboard"
-msgstr "داشبورد اطلاعات پایانه"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.res_config_settings_view_form
@@ -2922,7 +2915,7 @@ msgstr ""
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__record_date
 msgid "Record Date"
-msgstr "تاریخ"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #. openerp-web
@@ -3081,9 +3074,9 @@ msgstr ""
 
 #. module: sd_payaneh_nafti
 #. openerp-web
-#: code:addons/sd_payaneh_nafti/static/src/components/input_cards/input_cards.xml:0
+#: code:addons/sd_payaneh_nafti/static/src/components/input_cards/input_cards.js:0
 #, python-format
-msgid "Search:"
+msgid "Search"
 msgstr ""
 
 #. module: sd_payaneh_nafti
@@ -3495,6 +3488,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_spgr__vapour_pressure
 msgid "Vapour Pressure"
 msgstr ""
+
+#. module: sd_payaneh_nafti
+#. openerp-web
+#: code:addons/sd_payaneh_nafti/static/src/components/input_cards/input_cards.js:0
+#, python-format
+msgid "View"
+msgstr "نمایش"
 
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data
