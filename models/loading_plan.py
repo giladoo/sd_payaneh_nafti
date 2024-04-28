@@ -22,7 +22,8 @@ class SdPayanehNaftiLoadingPlan(models.Model):
     contract_unit = fields.Selection(related='registration_no.unit')
     contract_amount = fields.Integer(related='registration_no.amount')
     contract_remain_amount = fields.Integer(related='registration_no.remain_amount')
-    remain_tankers = fields.Integer(compute="_remain_tankers", store=False)
+    remain_tankers = fields.Integer(compute="_remain_tankers", string="Tankers", store=False)
+    days = fields.Integer(compute="_remain_days", store=False)
     plan_1 = fields.Integer()
     plan_2 = fields.Integer()
     plan_3 = fields.Integer()
@@ -55,6 +56,24 @@ class SdPayanehNaftiLoadingPlan(models.Model):
             rec.load_5 = len(list([r for r in inputs if r.registration_no == rec.registration_no and  r.shift == 'shift_5']))
             rec.load_6 = len(list([r for r in inputs if r.registration_no == rec.registration_no and  r.shift == 'shift_6']))
             rec.load = len(list([r for r in inputs if r.registration_no == rec.registration_no]))
+
+
+    @api.depends('record_date')
+    def _remain_days(self):
+        for rec in self:
+            if rec.registration_no.second_extend_end_date:
+                end_date = rec.registration_no.second_extend_end_date
+            elif rec.registration_no.first_extend_end_date:
+                end_date = rec.registration_no.first_extend_end_date
+            else:
+                end_date = rec.registration_no.end_date
+            # print(f'======> {rec.registration_no.registration_no}    {(end_date - rec.record_date).days} ')
+
+
+
+            rec.days = (end_date - rec.record_date).days
+
+
     @api.depends('record_date')
     def _remain_tankers(self):
         for rec in self:

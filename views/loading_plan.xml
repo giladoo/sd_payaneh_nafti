@@ -7,16 +7,17 @@
             <field name="name">Loading Plan List</field>
             <field name="model">sd_payaneh_nafti.loading_plan</field>
             <field name="arch" type="xml">
-                <tree editable="bottom" create="0" multi_edit="1" >
-                    <field name="record_date" readonly="1" />
-                    <field name="buyer" width="300px"/>
-                    <field name="destination" width="300px"/>
+                <tree editable="bottom" create="0" multi_edit="1" class="text-center">
+                    <field name="record_date" string="Date" readonly="1" />
+                    <field name="buyer" string="Buyer" width="300px" />
+                    <field name="destination" string="Destination" width="300px"/>
                     <field name="registration_no" readonly="1"/>
-                    <field name="contract_no" readonly="1"/>
+                    <field name="contract_no" string="Contract" readonly="1"/>
                     <field name="contract_unit" />
                     <field name="contract_amount" />
-                    <field name="contract_remain_amount" />
-                    <field name="remain_tankers" sum="Tanks"/>
+                    <field name="contract_remain_amount" string="Remain" />
+                    <field name="days" string="Days" />
+                    <field name="remain_tankers"  class="text-center" sum="Tanks"/>
                     <field name="plan" sum="Plan" />
                     <field name="load" sum="Load" decoration-danger="load &gt; plan" decoration-bf="load &gt; plan"/>
                     <field name="plan_1" sum="Plan 1" />
@@ -35,6 +36,7 @@
                 </tree>
             </field>
         </record>
+
         <record model="ir.ui.view" id="sd_payaneh_nafti_loading_plan_form">
             <field name="name">Loading Plan Form</field>
             <field name="model">sd_payaneh_nafti.loading_plan</field>
@@ -59,15 +61,12 @@
                 <search string="loading_plan">
                     <field name="record_date" />
 <!--                    <field name="description" />-->
-
                     <filter string="Tomorrow" name="tomorrow" domain="[('record_date', '=', (context_today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
                     <filter string="Today" name="today" domain="[('record_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
                     <filter string="Yesterday" name="yesterday" domain="[('record_date', '=', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
-
                 </search>
             </field>
         </record>
-
 
         <!-- ==================================================  Action Window ====================-->
 
