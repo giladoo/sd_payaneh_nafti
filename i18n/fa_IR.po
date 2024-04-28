@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-27 07:38+0000\n"
-"PO-Revision-Date: 2024-04-27 11:09+0330\n"
+"POT-Creation-Date: 2024-04-28 06:20+0000\n"
+"PO-Revision-Date: 2024-04-28 09:53+0330\n"
 "Last-Translator: Arash Homayounfar <homayounfar@msn.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1048,7 +1048,7 @@ msgstr ""
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.contract_monthly_report_table_header_export
 msgid "DATE"
-msgstr ""
+msgstr "تاریخ"
 
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.contract_monthly_report_data_export
@@ -1101,9 +1101,10 @@ msgid "Date Validation"
 msgstr "تاریخ معتبر"
 
 #. module: sd_payaneh_nafti
+#: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__days
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_report_contract_monthly_report__days
 msgid "Days"
-msgstr ""
+msgstr "روزها"
 
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_base_info_list_search
@@ -1222,6 +1223,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_trucks__display_name
 msgid "Display Name"
 msgstr "نمام نمایسی"
+
+#. module: sd_payaneh_nafti
+#. openerp-web
+#: code:addons/sd_payaneh_nafti/static/src/components/input_cards/input_cards.xml:0
+#, python-format
+msgid "Document"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_input_info_1_cargo
@@ -2961,11 +2969,6 @@ msgid "Remain Amount Approx"
 msgstr "مانده حدودی"
 
 #. module: sd_payaneh_nafti
-#: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__remain_tankers
-msgid "Remain Tankers"
-msgstr ""
-
-#. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.contract_daily_report_page_header
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.contract_daily_report_page_header_export
 msgid "Remained"
@@ -3307,6 +3310,11 @@ msgid "Tanker no."
 msgstr ""
 
 #. module: sd_payaneh_nafti
+#: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__remain_tankers
+msgid "Tankers"
+msgstr "تانکرها"
+
+#. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_loading_plan_list
 msgid "Tanks"
 msgstr ""
@@ -3494,7 +3502,7 @@ msgstr ""
 #: code:addons/sd_payaneh_nafti/static/src/components/input_cards/input_cards.js:0
 #, python-format
 msgid "View"
-msgstr "نمایش"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data
