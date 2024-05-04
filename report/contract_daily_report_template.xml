@@ -147,24 +147,27 @@
                     <p>P</p>
                     <p>(PSI)</p>
                 </th>
-                <th>نوع بارگیری</th>
+                <th>
+                    <div class="px-0 mx-0 small ">نوع</div>
+                    <div class="px-0 mx-0 small ">بارگیری</div>
+                </th>
                 <th>
                     <div class="th_rotate">میتر</div>
                 </th>
                 <th>
-                    <p>توالایزر آغازین</p>
-                    <p>وزن خالی نفتکش</p>
+                    <div class="px-0 mx-0 small">توالایزر آغازین</div>
+                    <div class="px-0 mx-0 small">وزن خالی نفتکش</div>
                 </th>
                 <th>
-                    <p>توالایزر پایانی</p>
-                    <p>وزن پر نفتکش</p>
+                    <div class="px-0 mx-0 small">توالایزر پایانی</div>
+                    <div class="px-0 mx-0 small">وزن پر نفتکش</div>
                 </th>
                 <th>
-                    <p>اختلاف توتالایزر</p>
-                    <p>وزن خالص</p>
+                    <div class="px-0 mx-0 small">اختلاف توتالایزر</div>
+                    <div class="px-0 mx-0 small">وزن خالص</div>
                 </th>
                 <th>
-                    <div class="th_rotate">K-FACTOR</div>
+                    <div class="th_rotate small">K-FACTOR</div>
                 </th>
 
                 <th>C.T.L 6A</th>
@@ -193,18 +196,25 @@
             <tr class="tr_bottom_dark">
                 <td class="px-1" t-esc="row_index"></td>
                 <td class="px-0 plate_data">
-                    <div class="row mx-0">
-                        <span class="col px-0"
-                              t-esc="row_data_line.plate_1"></span>
-                        <span class="col px-0">-</span>
-                        <span class="col px-0"
-                              t-esc="row_data_line.plate_2"></span>
-                        <span class="col px-0"
-                              t-esc="row_data_line.plate_3"></span>
-                        <span class="col px-0"
-                              t-esc="row_data_line.plate_4"></span>
-
+                    <div class="row mx-0 p-0 text-center">
+                        <div class="col-3 px-0" t-esc="row_data_line.plate_1"></div>
+                        <div class="border-left my-1"></div>
+                        <div class="border-left my-1"></div>
+                        <div class="col-4 px-0" t-esc="row_data_line.plate_2"></div>
+                        <div class="col-2 px-0" t-esc="row_data_line.plate_3"></div>
+                        <div class="col-3 px-0" t-esc="row_data_line.plate_4"></div>
                     </div>
+<!--                    <div class="row mx-0">-->
+<!--                        <span class="col px-0"-->
+<!--                              t-esc="row_data_line.plate_1"></span>-->
+<!--                        <span class="col px-0">-</span>-->
+<!--                        <span class="col px-0"-->
+<!--                              t-esc="row_data_line.plate_2"></span>-->
+<!--                        <span class="col px-0"-->
+<!--                              t-esc="row_data_line.plate_3"></span>-->
+<!--                        <span class="col px-0"-->
+<!--                              t-esc="row_data_line.plate_4"></span>-->
+<!--                    </div>-->
                 </td>
                 <td class="px-1"
                     t-esc="(row_data_line.centralized_container).upper()"></td>
