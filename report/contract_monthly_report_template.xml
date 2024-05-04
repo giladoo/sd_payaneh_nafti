@@ -76,7 +76,7 @@
         </template>
 
         <template id="contract_monthly_report_table_body">
-            <tr>
+            <tr class="tr_bottom_dark">
 <!--                <t t-foreach="row_data_line" t-as="row_data">-->
 <!--                    <td t-esc="row_data"></td>-->
 <!--                </t>-->
@@ -132,7 +132,7 @@
 
         <template id="contract_monthly_report_data">
             <div class="page">
-                <div class="container " style="font-size: .9rem">
+                <div class="container " >
                     <div class="container mt-2">
 <!--                        <div class="container iransans_font">-->
 <!--                            <div style="direction:rtl">-->

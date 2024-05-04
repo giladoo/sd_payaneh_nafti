@@ -20,7 +20,7 @@
         </template>
 
         <template id="monthly_report_table_body">
-            <tr>
+            <tr class="tr_bottom_dark">
                 <t t-set="data_index" t-value="0"/>
                 <t t-foreach="row_data_line" t-as="row_data">
                     <td t-if="data_index == 10" t-esc="'%.2f' % row_data"></td>
@@ -103,7 +103,7 @@
 <!--                <t t-call="web.basic_layout">-->
 <!--                <t t-call="web.internal_layout">-->
                     <div class="page">
-                        <div class="container iransans_font" style="font-size: .9rem">
+                        <div class="container iransans_font">
                                 <div class="container mt-2" style="page-break-inside: avoid; page-break-after: always;">
                                          <div class="container iransans_font">
                                             <div style="direction:rtl">

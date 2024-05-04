@@ -53,7 +53,7 @@
                 <div class="col-4 row">
                     <div class="col-4"></div>
 
-                    <div class="col-8" style="font-size: 10px;">
+                    <div class="col-8" style="font-size: .9rem;">
                         <div class="row border border-dark">
                             <div class="col-6 px-1 ">
                                 Letter No
@@ -190,9 +190,9 @@
         </template>
 
         <template id="contract_daily_report_table_body">
-            <tr>
+            <tr class="tr_bottom_dark">
                 <td class="px-1" t-esc="row_index"></td>
-                <td class="px-1 plate_data">
+                <td class="px-0 plate_data">
                     <div class="row mx-0">
                         <span class="col px-0"
                               t-esc="row_data_line.plate_1"></span>
@@ -207,7 +207,7 @@
                     </div>
                 </td>
                 <td class="px-1"
-                    t-esc="row_data_line.centralized_container"></td>
+                    t-esc="(row_data_line.centralized_container).upper()"></td>
                 <td class="px-1" t-esc="row_data_line.sp_gr"></td>
                 <td class="px-1" t-esc="row_data_line.api_a"></td>
                 <td class="px-1" t-esc="row_data_line.temperature"></td>
@@ -256,7 +256,7 @@
         </template>
 
         <template id="contract_daily_report_table_footer">
-            <tr>
+            <tr style="font-size: 1rem;">
                 <td class="border-0" colspan="6"></td>
                 <td class="border-dark" colspan="7">
                     <div class="row m-0 justify-content-center">
@@ -286,7 +286,7 @@
         </template>
 
         <template id="contract_daily_report_table_footer_total">
-            <tr>
+            <tr style="font-size: 1rem;">
                 <td class="border-0" colspan="6"></td>
                 <td class="border-dark" colspan="7">
                     <span>جمع كل اختلاف توتالایزر از بارگیری میتر</span>
@@ -338,9 +338,17 @@
                                  style="page-break-inside: avoid; page-break-after: always;">
                                 <t t-set="contract_record" t-value="doc_data[0]"/>
                                 <t t-set="doc_data" t-value="doc_data[1]"/>
+                                <div  t-if="len(doc_data['inputs'][0]) == 0" class=" mt-2">
+                                    <t t-set="page_index" t-value="1"/>
+                                    <t t-call="sd_payaneh_nafti.contract_daily_report_page_header"/>
+                                    <div class="container text-center mt-5 border border-warning">
+                                        بارگیری وجود ندارد
+                                    </div>
+                                </div>
                                 <div class=" mt-2">
                                         <t t-set="page_index" t-value="0"/>
                                         <t t-set="row_index" t-value="0"/>
+
                                         <t t-foreach="doc_data['inputs']" t-as="row_data_lines">
                                             <t t-if="len(row_data_lines) > 0">
                                                 <t t-set="page_index" t-value="page_index + 1"/>

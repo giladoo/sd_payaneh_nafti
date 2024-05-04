@@ -137,7 +137,8 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
             total['final_mt_sum'] += final_mt_sum
             inputs_list.append(inputs)
             pages.append(page)
-
+        # errors = [f'No inputs'] if len(inputs_list[0]) == 0 else errors
+        # inputs_list = [f'No inputs'] if len(inputs_list[0]) == 0 else inputs_list
         doc_data = {
                     'page_lines': PAGE_LINES,
                     'inputs': inputs_list,
@@ -159,12 +160,14 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
 
 contract_record:
 {contract_record}
-          
+        
+doc_data_list:
+{doc_data_list}  
 errors:
 {errors}
 
-g_start_date:
-{g_start_date}  {type(g_start_date)}
+# g_start_date:
+# {g_start_date}  {type(g_start_date)}
 
 ''')
 
