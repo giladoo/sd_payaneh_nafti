@@ -34,8 +34,8 @@
     <record id="monthly_report" model="ir.actions.report">
         <field name="name">Monthly Report</field>
         <field name="model">sd_payaneh_nafti.input_info</field>
-<!--        <field name="report_type">qweb-html</field>-->
 <!--        <field name="report_type">xlsx</field>-->
+<!--        <field name="report_type">qweb-html</field>-->
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">sd_payaneh_nafti.monthly_report_template</field>
         <field name="report_file">sd_payaneh_nafti.monthly_report_template</field>

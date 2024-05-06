@@ -21,6 +21,7 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
         doc_data_list = []
         row_data_lines_all = []
         row_data_lines_all_temp = []
+        PAGE_LINES = 40
         calendar = self.env.context.get('lang')
         form_data = data.get('form_data')
         year = form_data.get('year')
@@ -61,8 +62,8 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
 
 
 
-        print(f'===========\n'
-              f'{input_dict[0]}\n')
+        # print(f'===========\n'
+        #       f'{input_dict[0]}\n')
 
         if len(input_records) == 0:
             return{
@@ -160,7 +161,7 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
                                             })
 
         final_gsv_l_stock_1 = [rec[9] for rec in row_data_lines_all if rec[8] == 'stock']
-        row_data_lines_split = [row_data_lines_all[x:x + 50] for x in range(0, len(row_data_lines_all), 50)]
+        row_data_lines_split = [row_data_lines_all[x:x + PAGE_LINES] for x in range(0, len(row_data_lines_all), PAGE_LINES)]
         # row_data_lines_all_temp_split = [row_data_lines_all_temp[x:x + 50] for x in range(0, len(row_data_lines_all_temp), 50)]
 
         row_data_lines  = row_data_lines_split[0]
@@ -232,7 +233,7 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
         company_logo = f'/web/image/res.partner/{1}/image_128/'
         doc_data_list = [('', '')]
         # errors = ['test error']
-        all_page_date = list([[rec, footer_data] for rec in  row_data_lines_split])
+        all_page_date = list([[rec, footer_data] for rec in row_data_lines_split])
         return {
             'docs': input_records[0] if input_records else '',
             'doc_ids': docids,

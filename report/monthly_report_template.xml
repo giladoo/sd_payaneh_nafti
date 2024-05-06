@@ -20,7 +20,7 @@
         </template>
 
         <template id="monthly_report_table_body">
-            <tr class="tr_bottom_dark">
+            <tr class="tr_bottom_dark ">
                 <t t-set="data_index" t-value="0"/>
                 <t t-foreach="row_data_line" t-as="row_data">
                     <td t-if="data_index == 10" t-esc="'%.2f' % row_data"></td>
@@ -98,6 +98,21 @@
 
         </template>
 
+        <template id="sign_area">
+            <div class="row mt-4 text-center">
+                <div class="col-4">
+                    پایانه میعانات گازی پارس جنوبی
+                </div>
+                <div class="col-3">
+
+                </div>
+                <div class="col-5">
+                    اداره نظارت بر صادرات، واردات و مبادلات مواد نفتي
+                </div>
+            </div>
+
+        </template>
+
         <template id="monthly_report_data">
 <!--            <t t-call="web.html_container">-->
 <!--                <t t-call="web.basic_layout">-->
@@ -141,10 +156,10 @@
                                                         <tfoot>
                                                             <t t-if="page_index == page_count" t-call="sd_payaneh_nafti.monthly_report_table_footer"/>
                                                         </tfoot>
+
                                                     </table>
-
-
                                                 </div>
+                                                    <t t-call="sd_payaneh_nafti.sign_area"/>
                                             </div>
                                         </div>
                                     <div class="mb-5"></div>
