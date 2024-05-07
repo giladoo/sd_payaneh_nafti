@@ -16,7 +16,7 @@
                         <field name="mercaptans" />
                         <field name="h2s" />
                         <field name="sulphur" />
-<!--                        <field name="water_content" />-->
+                        <field name="water_content" />
                         <field name="spgr_date" />
                     <field name="description" />
 
