@@ -30,9 +30,12 @@ class SdPayanehNaftiSpgr(models.Model):
     vapour_pressure = fields.Float(required=True, default=lambda self: self._spgr_default('vapour_pressure'))
     salt_content = fields.Float(required=True, default=lambda self: self._spgr_default('salt_content'))
     mercaptans = fields.Integer(required=True, default=lambda self: self._spgr_default('mercaptans'))
-    h2s = fields.Selection([('trace', 'TRACE')], required=True, default=lambda self: self._spgr_default('h2s'))
     sulphur = fields.Float(required=True, digits=[1, 3], default=lambda self: self._spgr_default('sulphur'))
-    water_content = fields.Selection([('nil', 'NIL')], required=True, default=lambda self: self._spgr_default('water_content'))
+
+    h2s = fields.Selection([], required=False, default=lambda self: self._spgr_default('h2s'))
+    # h2s = fields.Char(required=True, default=lambda self: self._spgr_default('h2s'))
+    water_content = fields.Selection([], required=False, default=lambda self: self._spgr_default('water_content'))
+    # water_content = fields.Char(required=True, default=lambda self: self._spgr_default('water_content'))
 
     description = fields.Char()
 

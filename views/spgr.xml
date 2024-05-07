@@ -16,7 +16,7 @@
                         <field name="mercaptans" />
                         <field name="h2s" />
                         <field name="sulphur" />
-                        <field name="water_content" />
+<!--                        <field name="water_content" />-->
                         <field name="spgr_date" />
                     <field name="description" />
 
@@ -34,12 +34,12 @@
                                 <field name="spgr" />
                                 <field name="centralized_container" />
                                 <field name="api_a" />
-                        <field name="vapour_pressure" />
-                        <field name="salt_content" />
-                        <field name="mercaptans" />
-                        <field name="h2s" />
-                        <field name="sulphur" />
-                        <field name="water_content" />
+                                <field name="vapour_pressure" />
+                                <field name="salt_content" />
+                                <field name="mercaptans" />
+                                <field name="h2s" />
+                                <field name="sulphur" />
+                                <field name="water_content" />
                                 <field name="spgr_date" readonly="1"/>
                                 <field name="description" />
 
