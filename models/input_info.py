@@ -464,33 +464,42 @@ class SdPayanehNaftiInputInfo(models.Model):
 
     @api.model
     def create(self, vals):
+        try:
+            # todo: timezone, last ours of 29'th of Esfand might show a wrong date, maybe first of next year
+            # vals['loading_no'] = str(jdatetime.date.today().year) + f"/{int(vals['document_no']):07d}"
+            # doc_no = vals.get('document_no', 0)
+            # if doc_no == 0 or doc_no < 10000 or doc_no > 99999:
+            #     raise ValidationError(_('Document No'))
 
+            # It helps to not generate new loading no if there is already exists.
+            if vals.get('loading_no', '') == '':
+                loading_no = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.loading_no') or 0
+                vals['loading_no'] = str(jdatetime.date.today().year) + f"/{int(loading_no):07d}"
 
-        # todo: it is disabled for parallel data entry of excel and this system.
+            spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
+            if len(spgr) == 1:
+                vals['sp_gr'] = spgr.spgr
+                vals['centralized_container'] = spgr.centralized_container
+            else:
+                raise ValidationError(_('Add a "SP.GR." from the main menu'))
+
+            if vals.get('meter_no') and type(vals.get('meter_no')) == str and vals.get('meter_no').lower() == 'master':
+                vals['meter_no'] = '0'
+                # todo: it is disabled for parallel data entry of excel and this system.
+        except Exception as er:
+            res = super(SdPayanehNaftiInputInfo, self).create(vals)
+            logging.info(f'[INPUT_INOF Create] User:[{self.env.user.id}] ID:[{res.id}] ER:{er}')
+            raise ValidationError(f'[INPUT_INOF Create] {er}')
+
         if vals.get('document_no', 0) == 0:
             vals['document_no'] = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.input_info') or 0
 
-            # todo: timezone, last ours of 29'th of Esfand might show a wrong date, maybe first of next year
-            # vals['loading_no'] = str(jdatetime.date.today().year) + f"/{int(vals['document_no']):07d}"
-        # doc_no = vals.get('document_no', 0)
-        # if doc_no == 0 or doc_no < 10000 or doc_no > 99999:
-        #     raise ValidationError(_('Document No'))
+        res = super(SdPayanehNaftiInputInfo, self).create(vals)
 
-        # It helps to not generate new loading no if there is already exists.
-        if vals.get('loading_no', '') == '':
-            loading_no = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.loading_no') or 0
-            vals['loading_no'] = str(jdatetime.date.today().year) + f"/{int(loading_no):07d}"
+        logging.info(f'[INPUT_INOF Create] User:[{self.env.user.id}] Doc_No:[{vals["document_no"]}] ID:[{res.id}]')
+        # print(f'\n --------res 2 \n {res}  ')
 
-        spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
-        if len(spgr) == 1:
-            vals['sp_gr'] = spgr.spgr
-            vals['centralized_container'] = spgr.centralized_container
-        else:
-            raise ValidationError(_('Add a "SP.GR." from the main menu'))
-
-        if vals.get('meter_no') and type(vals.get('meter_no')) == str and vals.get('meter_no').lower() == 'master':
-            vals['meter_no'] = '0'
-        return super(SdPayanehNaftiInputInfo, self).create(vals)
+        return res
 
     def write(self, vals):
         # Changing the compartment_1 means that there are loading info entry. So, it moves the state to cargo_document.
@@ -505,6 +514,11 @@ class SdPayanehNaftiInputInfo(models.Model):
             raise ValidationError(_('Document No'))
 
         return super(SdPayanehNaftiInputInfo, self).write(vals)
+
+    def unlink(self):
+        for rec in self:
+            logging.warning(f'[INPUT_INOF Unlink] User:[{self.env.user.id}] Doc_No:[{rec.document_no}] ID:[{rec.id}]')
+        return super(SdPayanehNaftiInputInfo, self).unlink()
 
     def get_contract_registration(self):
         # On the input_info form, there is a button named "Contract" which it shows the related contract of this input
