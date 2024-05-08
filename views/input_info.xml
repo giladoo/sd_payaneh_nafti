@@ -50,7 +50,7 @@
 
 <!--                    <field name="create_date" />-->
 <!--                    <field name="write_date" />-->
-                    <field name="document_no" />
+                    <field name="document_no" readonly="0" />
                     <field name="loading_no" />
                     <field name="request_date" />
                     <field name="loading_date" />
