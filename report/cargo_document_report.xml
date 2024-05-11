@@ -46,7 +46,7 @@
     </record>
 
     <record id="cargo_document_html_report" model="ir.actions.report">
-        <field name="name">Cargo Document</field>
+        <field name="name">Cargo Document html</field>
         <field name="model">sd_payaneh_nafti.input_info</field>
         <field name="report_type">qweb-html</field>
 <!--        <field name="report_type">qweb-pdf</field>-->

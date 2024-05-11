@@ -158,20 +158,20 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
         doc_data_list.append((contract_record, doc_data))
 
 
-        print(f'''
-
-contract_record:
-{contract_record}
-        
-doc_data_list:
-{doc_data_list}  
-errors:
-{errors}
-
-# g_start_date:
-# {g_start_date}  {type(g_start_date)}
-
-''')
+#         print(f'''
+#
+# contract_record:
+# {contract_record}
+#
+# doc_data_list:
+# {doc_data_list}
+# errors:
+# {errors}
+#
+# # g_start_date:
+# # {g_start_date}  {type(g_start_date)}
+#
+# ''')
 
         company_logo = f'/web/image/res.partner/{1}/image_128/'
         return {

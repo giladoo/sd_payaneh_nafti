@@ -7,6 +7,7 @@
             <div class="page">
                 <div class="container " style="font-size: .8rem">
                     <div class="container iransans_font">
+
                         <div t-foreach="doc_data_list" t-as="doc_datas">
                             <t t-set="input_record" t-value="doc_datas[0]"/>
                             <t t-set="doc_data" t-value="doc_datas[1]"/>
@@ -727,7 +728,7 @@
         <template id="cargo_document_report_template">
 
             <t t-call="web.basic_layout" t-lang="lang">
-                <t t-foreach="docs" t-as="o">
+                <t t-foreach="docs[0]" t-as="o">
                     <div t-if="errors != []" class="mx-auto text-center mt-5">
                         <div style="direction: ltr" t-esc="errors[0]"></div>
                     </div>
