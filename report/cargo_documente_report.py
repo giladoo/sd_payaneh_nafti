@@ -21,23 +21,23 @@ class ReportSdPayanehNaftiCargoDocument(models.AbstractModel):
         time_z = pytz.timezone(context.get('tz'))
         date_time = datetime.now(time_z)
         date_time = self.date_converter(date_time, context.get('lang'))
-        print(f'>>>>  TOP  >> {data}  >>> {docids}')
+        print(f'>>>>  TOP  >>\n data: {data}  >>> docids: {docids}')
 
-        # if docids:
-        #     input_records = self.env['sd_payaneh_nafti.input_info'].browse(docids)
-        #     calendar = context.get('lang')
-        #     print(f'>>>   docids >>> {docids}  >>> {input_records}')
-        #
-        # else:
+        if docids:
+            input_records = self.env['sd_payaneh_nafti.input_info'].browse(docids)
+            calendar = context.get('lang')
+            # print(f'>>>   docids >>> {docids}  >>> {input_records}')
 
-        form_data = data.get('form_data')
-        document_no = form_data.get('document_no')[1]
-        input_records = self.env['sd_payaneh_nafti.input_info'].search([('document_no', '=', document_no)])
+        else:
+
+            form_data = data.get('form_data')
+            calendar = form_data.get('calendar')
+            document_no = form_data.get('document_no')[1]
+            input_records = self.env['sd_payaneh_nafti.input_info'].search([('document_no', '=', document_no)])
 
         spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
-        calendar = form_data.get('calendar')
-        docids = [input_records.id]
-        print(f'>>>>  no docids  >> {docids}  >>> {input_records}')
+        docids = list([rec.id for rec in input_records])
+        # print(f'>>>>  no docids  >> {docids}  >>> {input_records}')
         for input_record in input_records:
             if not input_record.loading_date:
                 errors = [_(f'There is no Loading Data for {input_record.registration_no.registration_no} on {date_time.get("date", "")}')]

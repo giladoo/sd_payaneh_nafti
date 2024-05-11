@@ -24,29 +24,31 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
         errors = []
         doc_data_list = []
         PAGE_LINES = 25
+        date_format = '%Y-%m-%d'
         context = self.env.context
         time_z = pytz.timezone(context.get('tz'))
         date_time = datetime.now(time_z)
         calendar = context.get('lang')
         date_time = self.date_converter(date_time, context.get('lang'))
-        form_data = data.get('form_data')
-        loading_type = form_data.get('loading_type')
 
         if docids:
-            contract_record = self.env['sd_payaneh_nafti.contract_registration'].browse(docids)
+            contract_record = self.env['sd_payaneh_nafti.contract_registration'].browse(docids[0])
+            registration_no = contract_record.registration_no
+            loading_type = contract_record.loading_type
             # contract_no = input_record.contract_no
-            calendar = context.get('lang')
+            report_date = date.today()
+
         else:
+            form_data = data.get('form_data')
+            loading_type = form_data.get('loading_type')
             registration_no = form_data.get('registration_no')[1]
             contract_record = self.env['sd_payaneh_nafti.contract_registration'].search([
                 ('registration_no', '=', registration_no)])
             # calendar = form_data.get('calendar')
             docids = [contract_record.id]
+            report_date = form_data.get('report_date') if 'report_date' in form_data.keys() else False
+            report_date = datetime.strptime(report_date, date_format).date()
         # REPORT DATE
-        calendar = context.get('lang')
-        report_date = form_data.get('report_date') if 'report_date' in form_data.keys() else False
-        date_format = '%Y-%m-%d'
-        report_date = datetime.strptime(report_date, date_format).date()
         g_start_date = report_date.strftime("%Y%m%d")
 
         if calendar == 'fa_IR':
@@ -67,13 +69,13 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
 
         input_records = self.env['sd_payaneh_nafti.input_info'].search([('registration_no', '=', registration_no)], order='id')
         if len(input_records) == 0:
-            print(f'''
-            No record have found for contract {registration_no} on selected date: {s_start_date}
-''')
             return {
                 'errors': [_(f'No record have found for contract {registration_no} on selected date: {s_start_date} ')],
             }
-        print(f'            =========== report_day  {report_day}')
+
+        # for contract in contract_record:
+        # todo: you need to create a reprot dataset for  multi record selection
+
         input_records_behind_date = tuple(filter(lambda rec: rec.request_date <= report_day, input_records))
         registration = input_records[0].registration_no
         if loading_type == 'internal':
@@ -149,9 +151,9 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
                     'total': total,
                     'page_count': page_count,
                     'input_records_day': input_records_day,
-                    'payaneh_agent': form_data.get('payaneh_agent'),
-                    'observe_agent': form_data.get('observe_agent'),
-                    'buyer_agent': form_data.get('buyer_agent')
+                    # 'payaneh_agent': form_data.get('payaneh_agent'),
+                    # 'observe_agent': form_data.get('observe_agent'),
+                    # 'buyer_agent': form_data.get('buyer_agent')
                     }
         doc_data_list.append((contract_record, doc_data))
 

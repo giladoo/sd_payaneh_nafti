@@ -34,15 +34,15 @@
 </record>
     <record id="contract_daily_report" model="ir.actions.report">
         <field name="name">Contract Daily Report</field>
-        <field name="model">sd_payaneh_nafti.input_info</field>
+        <field name="model">sd_payaneh_nafti.contract_registration</field>
 <!--        <field name="report_type">qweb-html</field>-->
 <!--        <field name="report_type">xlsx</field>-->
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">sd_payaneh_nafti.contract_daily_report_template</field>
         <field name="report_file">sd_payaneh_nafti.contract_daily_report_template</field>
-        <field name="print_report_name">'LoadingPermit-%s' % object.document_no </field>
+        <field name="print_report_name">'ContractDailyReport-%s' % object.registration_no </field>
         <field name="paperformat_id" ref="contract_daily_report_a4"/>
-        <field name="binding_model_id" ref="model_sd_payaneh_nafti_input_info"/>
+        <field name="binding_model_id" ref="model_sd_payaneh_nafti_contract_registration"/>
         <field name="binding_type">report</field>
     </record>
 
