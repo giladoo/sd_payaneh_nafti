@@ -26,7 +26,7 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
         form_data = data.get('form_data')
         year = form_data.get('year')
         month = form_data.get('month')
-
+        print(f'============>\n {year} / {month} ')
         if calendar == 'fa_IR':
             first_day = jdatetime.date(int(year), int(month), 1)
             next_month = first_day.replace(day=28) + timedelta(days=5)

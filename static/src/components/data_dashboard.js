@@ -6,11 +6,10 @@
     import { useService } from "@web/core/utils/hooks"
     import { DataCards } from "./data_cards/data_cards"
     import { DataPlans } from "./data_plans/data_plans"
-//    import { InputCards } from "./input_cards/input_cards"
+    import Bus from 'web.Bus';
     const { DateTime, Settings } = luxon;
     import core from 'web.core';
     const _t = core._t;
-
     const SERVER_DATE_FORMAT = "yyyy-MM-dd";
 
 export class DataDashboard extends Component {
@@ -18,8 +17,7 @@ export class DataDashboard extends Component {
         let self = this;
         let loadingEvent;
         let loadingPlanCard;
-//        console.log('session:', session)
-
+        this.legacyEnv = Component.env;
         this.state = useState({
             title: {
                 name: _t('Payaneh Data Dashboard'),
@@ -111,20 +109,23 @@ export class DataDashboard extends Component {
             await this.loadPlan()
             await this.getContracts()
             await this.getRequests()
-            getRequestsInterval = setInterval(this.getRequests, 30000)
-//            console.log('onWillStart', getRequestsInterval)
+//            getRequestsInterval = setInterval(this.getRequests, 30000)
         })
         onMounted(()=> {
             loadingPlanCard = document.querySelector('.loading_plan_card')
-//            console.log('class DataDashboard',)
             loadingEvent = loadingPlanCard.addEventListener('click', self._onLoadingPlanCard)
-//            self.loading_plan_detail()
-
+            self.legacyEnv.services.bus_service.call( 'bus_service', 'addChannel', 'payaneh_operation_channel');
+            self.legacyEnv.services.bus_service
+                .on('notification', 'payaneh_operation' , notifications => self._onNotif(notifications));
         })
         onWillUnmount(function(){
-//            console.log('onWillUnmount', getRequestsInterval)
-            clearInterval(getRequestsInterval)
+//            console.log('onWillUnmount self.legacyEnv:', self.legacyEnv)
+//            clearInterval(getRequestsInterval)
             loadingPlanCard.removeEventListener('click', loadingEvent)
+            self.legacyEnv.services.bus_service.call( 'bus_service', 'deleteChannel', 'payaneh_operation_channel');
+            self.legacyEnv.services.bus_service.off('notification', self._onNotif);
+
+
         })
         this.viewSpgr = this.viewSpgr.bind(this);
         this.loadPlan = this.loadPlan.bind(this);
@@ -155,7 +156,7 @@ export class DataDashboard extends Component {
         let plans = await this.orm.call("sd_payaneh_nafti.loading_plan", "loading_plans_detail", [],{})
     }
     viewTodayLoadingPlan(theDate){
-    let today = moment().locale('en').format('YYYY/MM/DD')
+        let today = moment().locale('en').format('YYYY/MM/DD')
         let domain = [['record_date', '=', today]]
         this.actionService.doAction({
             name: "Loading Plan",
@@ -230,12 +231,9 @@ export class DataDashboard extends Component {
         this.state.remain_amount.value = contracts.remain_amount;
     }
     async getRequests(){
-//            console.log('getRequests:',  )
-
+        let dateFormat = session.user_context.lang == 'fa_IR' ? "jYYYY/jMM/jDD" : "YYYY-MM-DD"
         let requests = await this.orm.call("sd_payaneh_nafti.input_info", "get_requests", [],{})
         requests = JSON.parse(requests)
-//        console.log('requests:', requests,  )
-//        this.state.spgr.status = moment(spgr[0].spgr_date).format("jYYYY/jMM/jDD");
         this.state.open_requests.value = requests.open_requests;
         this.state.this_day_requests_count.value = requests.this_day_requests_count;
         this.state.one_day_ago_count.value = requests.one_day_ago_count;
@@ -246,17 +244,23 @@ export class DataDashboard extends Component {
         this.state.loading_permit.value = requests.loading_permit;
         this.state.loading_info.value = requests.loading_info;
         this.state.cargo_document.value = requests.cargo_document;
-        this.state.this_day_requests_count.status = moment().format("jYYYY/jMM/jDD");
-        this.state.one_day_ago_count.status = moment().subtract(1, 'days').format("jYYYY/jMM/jDD");
-        this.state.two_days_ago_count.status = moment().subtract(2, 'days').format("jYYYY/jMM/jDD");
-        this.state.three_days_ago_count.status = moment().subtract(3, 'days').format("jYYYY/jMM/jDD");
-
+        this.state.this_day_requests_count.status = moment().format(dateFormat);
+        this.state.one_day_ago_count.status = moment().subtract(1, 'days').format(dateFormat);
+        this.state.two_days_ago_count.status = moment().subtract(2, 'days').format(dateFormat);
+        this.state.three_days_ago_count.status = moment().subtract(3, 'days').format(dateFormat);
         this.loadPlan()
     }
+    _onNotif(notifications){
+        let self = this;
+        let payaneh = notifications.filter(({payload, type}) => type == "payaneh_operation" )
+        if (payaneh.length > 0){
+            setTimeout(() =>{
+                self.legacyEnv.services.bus_service._channels.includes('payaneh_operation_channel')
+                    ? self.getRequests() : '';
+            } , 100);
+        }
+    }
     viewSpgr(){
-//        console.log('viewSpgr', this)
-//            this.actionService = useService("action")
-
         this.actionService.doAction({
             name: "SPGR",
             res_model: "sd_payaneh_nafti.spgr",
@@ -267,7 +271,7 @@ export class DataDashboard extends Component {
 //            domain: domain,
             target: "current",
         });
-        }
+    }
     viewContracts(){
 //        this.actionService = useService("action")
         let today = moment().locale('en').format('YYYY/MM/DD')

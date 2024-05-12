@@ -498,7 +498,7 @@ class SdPayanehNaftiInputInfo(models.Model):
 
         logging.info(f'[INPUT_INOF Create] User:[{self.env.user.id}] Doc_No:[{vals["document_no"]}] ID:[{res.id}]')
         # print(f'\n --------res 2 \n {res}  ')
-
+        self.send_message()
         return res
 
     def write(self, vals):
@@ -512,7 +512,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         doc_no = vals.get('document_no', None)
         if doc_no is not None and (doc_no == 0 or doc_no > 99999):
             raise ValidationError(_('Document No'))
-
+        self.send_message()
         return super(SdPayanehNaftiInputInfo, self).write(vals)
 
     def unlink(self):
@@ -622,32 +622,12 @@ class SdPayanehNaftiInputInfo(models.Model):
         }
         return json.dumps(data)
 
-
-
-class SdPayanehNaftiPlate1(models.Model):
-    _name = 'sd_payaneh_nafti.plate1'
-    _description = 'sd_payaneh_nafti.plate1'
-
-    name = fields.Char(translate=True)
-
-
-class SdPayanehNaftiPlate2(models.Model):
-    _name = 'sd_payaneh_nafti.plate2'
-    _description = 'sd_payaneh_nafti.plate2'
-
-    name = fields.Char(translate=True)
-
-
-class SdPayanehNaftiPlate3(models.Model):
-    _name = 'sd_payaneh_nafti.plate3'
-    _description = 'sd_payaneh_nafti.plate3'
-
-    name = fields.Char(translate=True)
-
-class SdPayanehNaftiPlate4(models.Model):
-    _name = 'sd_payaneh_nafti.plate4'
-    _description = 'sd_payaneh_nafti.plate4'
-
-    name = fields.Char(translate=True)
-
-
+    # ########################################################################################
+    @api.model
+    def send_message(self, data={}):
+        # channel = 'restaurant_gate_device_' + str(self.id)
+        channel = 'payaneh_operation_channel'
+        message = {'data': data}
+        bus_type = 'payaneh_operation'
+        # print(f'=========\nchannel {channel} bus_type {bus_type}')
+        self.env['bus.bus'].sudo()._sendone(channel, bus_type, message)
