@@ -248,13 +248,11 @@ export class DataDashboard extends Component {
         this.state.loading_info.value = requests.loading_info;
         this.state.cargo_document.value = requests.cargo_document;
         this.state.meter_data.value = requests.meter_data;
-
         this.state.this_day_requests_count.status = moment().format(dateFormat);
         this.state.one_day_ago_count.status = moment().subtract(1, 'days').format(dateFormat);
         this.state.two_days_ago_count.status = moment().subtract(2, 'days').format(dateFormat);
         this.state.three_days_ago_count.status = moment().subtract(3, 'days').format(dateFormat);
         this.loadPlan()
-        console.log('meter_data:', this.state.meter_data.value)
     }
     _onNotif(notifications){
         let self = this;
