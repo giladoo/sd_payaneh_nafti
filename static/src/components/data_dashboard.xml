@@ -54,8 +54,13 @@
 
                 </div>
                 <div class="col-lg-4">
-                        <DataPlans onClick="viewTodayLoadingPlan" name="state.plan_detail.name" status="state.plan_detail.status"  />
-
+                    <div class="col m-0 p-0">
+                        <div class="shadow border m-2 p-4 bg-white sd_payaneh_input_plans ">
+                            <div t-raw="state.meter_data.value.meter_data"></div>
+<!--                            <div t-raw="state.meter_data.value.mismatch_data"></div>-->
+                        </div>
+                    </div>
+                    <DataPlans onClick="viewTodayLoadingPlan" name="state.plan_detail.name" status="state.plan_detail.status"  />
 
                 </div>
             </div>
