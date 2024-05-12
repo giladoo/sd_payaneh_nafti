@@ -143,9 +143,9 @@ export class DataDashboard extends Component {
 
     }
     async getSpgr(){
+        let dateFormat = session.user_context.lang == 'fa_IR' ? "jYYYY/jMM/jDD" : "YYYY-MM-DD"
         const spgr = await this.orm.searchRead("sd_payaneh_nafti.spgr", [['active', '=', 'True']],['spgr', 'spgr_date'])
-//        console.log('spgr:', spgr, spgr[0].spgr, spgr[0].spgr_date)
-        this.state.spgr.status = moment(spgr[0].spgr_date).format("jYYYY/jMM/jDD");
+        this.state.spgr.status = moment(spgr[0].spgr_date).format(dateFormat);
         this.state.spgr.value = spgr[0].spgr;
     }
     loadingPlan(e){
