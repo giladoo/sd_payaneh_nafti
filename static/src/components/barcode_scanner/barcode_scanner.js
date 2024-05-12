@@ -34,15 +34,21 @@ patch(DataDashboard.prototype, 'data_dashboard',{
     },
     async _viewInputInfo(barcode){
         const INPUT_INFO = 200;
-        const CONTRACT_REGISTRATION = 210;
+        const INPUT_INFO_CARGO = 210;
+        const CONTRACT_REGISTRATION = 220;
         let prefix = barcode.slice(0, 3)
         let code_no = barcode.slice(4)
         let today = moment().locale('en').format('YYYY/MM/DD')
         let res_id;
         let domain;
 //        console.log('_viewInputInfo', document_no, prefix)
-        if (prefix == INPUT_INFO){
+        if (prefix == INPUT_INFO || prefix == INPUT_INFO_CARGO){
             res_id = await this.orm.searchRead("sd_payaneh_nafti.input_info", [['document_no', '=', code_no]],['id'])
+            console.log('res_id:', res_id)
+            if (res_id.length == 0){
+                this.state.openInputInfo.status = `${code_no} Not found`;
+                return
+            }
 //            domain = [['document_no', '=', document_no]]
             this.actionService.doAction({
                 name: "",
