@@ -32,6 +32,7 @@
                                     view="state.openInputInfo.view"
                                     onChange="onChange"
                                     status="state.openInputInfo.status" />
+                        <DataCards onClick="()=>newRequestCreation()"   status="state.newRequest.status"   />
 
                     </div>
                     <div class="row">

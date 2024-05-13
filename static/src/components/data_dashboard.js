@@ -52,6 +52,9 @@ export class DataDashboard extends Component {
                 value: 0,
                 status: "",
             },
+            newRequest: {
+                status: "Create",
+            },
             this_day_requests_count: {
                 value: 0,
                 status: "",
@@ -136,6 +139,7 @@ export class DataDashboard extends Component {
         this.viewContracts = this.viewContracts.bind(this);
         this.viewThisDayRequests = this.viewThisDayRequests.bind(this);
         this.viewNewRequests = this.viewNewRequests.bind(this);
+        this.newRequestCreation = this.newRequestCreation.bind(this);
         this.viewLoadingPermit = this.viewLoadingPermit.bind(this);
         this.viewLoadingInfo = this.viewLoadingInfo.bind(this);
         this.viewCargoDocument = this.viewCargoDocument.bind(this);
@@ -295,6 +299,17 @@ export class DataDashboard extends Component {
             view_mode: "list",
             domain: domain,
             target: "current",
+        });
+    }
+    newRequestCreation(){
+        console.log('newRequestCreation', this)
+        this.actionService.doAction({
+            res_model: "sd_payaneh_nafti.input_info",
+//            res_id: document[0].id,
+            views: [[false, "form"]],
+            type: "ir.actions.act_window",
+            view_mode: "form",
+            target: "new",
         });
     }
     viewThisDayRequests(day=0){
