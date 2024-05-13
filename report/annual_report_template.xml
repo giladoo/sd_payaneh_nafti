@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="annual_report_header">
+            <div class="text-center">
+                <!--                        <div style="display:block; position:absolute;padding:0; margin:0px; padding-top:10px; padding-bottom:10px; text-align:center;">-->
+                <!--                            <img t-att-src="'/report/barcode/Code128/'+contract_record['contract_no']" style="width:250px;height:25px" t-att-alt="contract_record['contract_no']"/>-->
+                <!--                        </div>-->
+                <div>
+                    <img alt="Logo" t-att-src="'/logo?company=1'" t-att-alt="''"
+                         style=" height: 50px;" height="50"/>
+                </div>
+                <div>شرکت ملی نفت ایران</div>
+                <div>شرکت پایانه های نفتی ایران</div>
+                <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
+                <div class="h4 mt-2 mb-4">گزارش سالانه</div>
+            </div>
+            <div class="row my-3">
+
+                <div class="col-3">
+                    <span>تاریخ شروع :</span>
+                    <span t-esc="dates[0]"></span>
+                </div>
+                <div class="col-3">
+                    <span>تاریخ پایان :</span>
+                    <span t-esc="dates[1]"></span>
+                </div>
+            </div>
+        </template>
+
+        <template id="annual_report_body">
+            <div class="row border-bottom bg-300 py-2">
+                    <div class="col-3">ماه</div>
+                    <div class="col-3">
+                        <div class="row">
+                            <div>مقدار </div> <div>(بشکه)</div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="row">
+                            <div>مقدار </div> <div>(تن)</div>
+                        </div>
+                    </div>
+                    <div class="col-3">تعداد تانکر</div>
+                </div>
+            <t t-foreach="table_data" t-as="record">
+                <div class="row border-bottom mt-2">
+                    <div class="col-3" t-esc="record['month']"></div>
+                    <div class="col-3" t-esc="record['final_gsv_b']"></div>
+                    <div class="col-3" t-esc="record['final_mt']"></div>
+                    <div class="col-3" t-esc="record['trucks']"></div>
+                </div>
+            </t>
+            <div class="row border-top border-dark"> </div>
+            <div class="row font-weight-bold mt-2">
+                    <div class="col-3" >مجموع</div>
+                    <div class="col-3" t-esc="final_gsv_b_total"></div>
+                    <div class="col-3" t-esc="final_mt_total"></div>
+                    <div class="col-3" t-esc="trucks_total"></div>
+
+                </div>
+
+        </template>
+
+        <template id="annual_report_footer">
+
+        </template>
+
+        <template id="annual_report_data">
+            <div class="page">
+                <div class="container iransans_font" style="font-size: 1.1rem">
+                    <div class="container mt-2">
+                        <div class="container iransans_font">
+                            <div style="direction:rtl">
+                                <t t-call="sd_payaneh_nafti.annual_report_header"/>
+                                <t t-call="sd_payaneh_nafti.annual_report_body"/>
+                                <t t-call="sd_payaneh_nafti.annual_report_footer"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </template>
+
+
+        <template id="annual_report_data1">
+            <!--            <t t-call="web.html_container">-->
+            <!--                <t t-call="web.basic_layout">-->
+            <!--                <t t-call="web.internal_layout">-->
+            <div class="page">
+                <div class="container iransans_font" style="font-size: .9rem">
+                    <div class="container mt-2">
+                        <div class="container iransans_font">
+                            <div style="direction:rtl">
+                                <div class="text-center">
+                                    <!--                        <div style="display:block; position:absolute;padding:0; margin:0px; padding-top:10px; padding-bottom:10px; text-align:center;">-->
+                                    <!--                            <img t-att-src="'/report/barcode/Code128/'+contract_record['contract_no']" style="width:250px;height:25px" t-att-alt="contract_record['contract_no']"/>-->
+                                    <!--                        </div>-->
+                                    <div>
+                                        <img alt="Logo" t-att-src="'/logo?company=1'" t-att-alt="''"
+                                             style=" height: 50px;" height="50"/>
+                                    </div>
+                                    <div>شرکت ملی نفت ایران</div>
+                                    <div>شرکت پایانه های نفتی ایران</div>
+                                    <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
+                                    <div class="h5 mt-2 mb-4">گزارش ماهیانه قراردادهای بارگیری نفتکش های زمینی میعانات
+                                        گازی
+                                    </div>
+                                </div>
+
+                                <div class="row my-1">
+                                    <div class="col-6"></div>
+                                    <div class="col-3">
+                                        <span>تاریخ شروع :</span>
+                                        <span t-esc="dates[0]"></span>
+                                    </div>
+                                    <div class="col-3">
+                                        <span>تاریخ پایان :</span>
+                                        <span t-esc="dates[1]"></span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <table class="table table-bordered border-0 text-center annual_report_table">
+                                        <thead class=" text-center">
+                                            <t t-call="sd_payaneh_nafti.annual_report_table_header"/>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="row_data_lines" t-as="row_data_line">
+                                                <!--                                                                <t t-set="row_index" t-value="row_index + 1"/>-->
+                                                <t t-call="sd_payaneh_nafti.annual_report_table_body"/>
+                                            </t>
+                                        </tbody>
+                                        <tfoot>
+                                            <t t-call="sd_payaneh_nafti.annual_report_table_footer"/>
+                                        </tfoot>
+                                    </table>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-5"></div>
+                        <div class="mb-5"></div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <!--                </t>-->
+            <!--            </t>-->
+        </template>
+
+        <template id="annual_report_template">
+            <t t-call="web.basic_layout" t-lang="lang">
+                <div t-if="errors != []">
+                    <div class="container mt-2 text-center">
+                        <div class="border border-danger rounded p-3" style="direction: ltr" t-esc="errors[0]"></div>
+                    </div>
+                </div>
+                <div t-if="errors == []">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-call="sd_payaneh_nafti.annual_report_data"/>
+                    </t>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

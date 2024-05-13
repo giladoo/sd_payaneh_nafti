@@ -55,6 +55,10 @@
         # 'report/yearly_report.xml',
         # 'wizard/yearly_report_wizard.xml',
 
+        'report/annual_report_template.xml',
+        'report/annual_report.xml',
+        'wizard/annual_report_wizard.xml',
+
         'report/contract_monthly_report_template_export.xml',
         'report/contract_monthly_report_template.xml',
         'report/contract_monthly_report.xml',
