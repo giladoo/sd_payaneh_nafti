@@ -15,9 +15,14 @@
                     <div class="col-2">Load</div>
                 </div>
                 <t t-foreach="props.status" t-as="row_data" t-key="row_data">
-                    <div class="row mx-1 border-bottom">
+                    <div t-if="row_data.total == 'total'" class="row mx-1 border-top border-dark font-weight-bold">
+                        <div class="col-6" ></div>
+                        <div class="col-2" ></div>
+                        <div class="col-2" t-esc="row_data.plan"></div>
+                        <div class="col-2" t-esc="row_data.load"></div>
+                    </div>
+                    <div t-else="" class="row mx-1 border-bottom">
                         <div class="col-6" t-esc="row_data.destination"></div>
-<!--                        <div class="col-6" t-esc="row_data.buyer"></div>-->
                         <div class="col-2" t-esc="row_data.reg_no"></div>
                         <div class="col-2" t-esc="row_data.plan"></div>
                         <div class="col-2" t-esc="row_data.load"></div>

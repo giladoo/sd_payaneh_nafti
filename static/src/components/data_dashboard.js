@@ -151,13 +151,13 @@ export class DataDashboard extends Component {
         this.state.spgr.status = moment(spgr[0].spgr_date).format(dateFormat);
         this.state.spgr.value = spgr[0].spgr;
     }
-    loadingPlan(e){
-        console.log('date:', e);
-    }
-    async loading_plan_detail(){
-        let loadingPlanDetail = document.querySelector('.loading_plan_detail')
-        let plans = await this.orm.call("sd_payaneh_nafti.loading_plan", "loading_plans_detail", [],{})
-    }
+//    loadingPlan(e){
+//        console.log('date:', e);
+//    }
+//    async loading_plan_detail(){
+//        let loadingPlanDetail = document.querySelector('.loading_plan_detail')
+//        let plans = await this.orm.call("sd_payaneh_nafti.loading_plan", "loading_plans_detail", [],{})
+//    }
     viewTodayLoadingPlan(theDate){
         let today = moment().locale('en').format('YYYY/MM/DD')
         let domain = [['record_date', '=', today]]
@@ -210,8 +210,6 @@ export class DataDashboard extends Component {
             </div>
             `;
         plans.data.forEach( r => {
-//        console.log('plans:', r)
-
             link += `
             <div class="col" style="cursor: pointer;">
                 <div class="row small border-bottom plans_row loading_plan" data-date="${r.date}"  >

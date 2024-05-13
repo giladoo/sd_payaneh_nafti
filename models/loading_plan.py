@@ -145,7 +145,7 @@ class SdPayanehNaftiLoadingPlan(models.Model):
                               for rec in the_day_rec  ])
         plan_total = sum(list([rec.plan for rec in the_day_rec]))
         load_total = sum(list([rec.load for rec in the_day_rec]))
-        plan_detail.append({'buyer': '', 'reg_no': '', 'plan': plan_total, 'load': load_total })
+        plan_detail.append({'total': 'total', 'reg_no': '', 'plan': plan_total, 'load': load_total })
 #         print(f'''
 #         plan_detail: {plan_detail}
 # ''')
