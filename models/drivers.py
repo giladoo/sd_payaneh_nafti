@@ -21,10 +21,10 @@ class SdPayanehNaftiDrivers(models.Model):
         image_path = get_module_resource('lunch', 'static/img', 'lunch.png')
         return base64.b64encode(open(image_path, 'rb').read())
 
-    name = fields.Char(required=True,)
+    name = fields.Char(required=True, tracking=True,)
     description = fields.Char()
-    melli_code = fields.Char(required=False,)
-    card_no = fields.Char(required=True,)
+    melli_code = fields.Char(required=False, tracking=True,)
+    card_no = fields.Char(required=True, tracking=True,)
     # image_1920 = fields.Image(default=_default_image)
     image_1920 = fields.Image()
 
