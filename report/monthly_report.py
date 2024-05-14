@@ -57,13 +57,7 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
             'loading_date': rec.loading_date or '',
             'final_gsv_l': rec.final_gsv_l,
             'final_mt': rec.final_mt,
-
                             } for rec in input_records])
-
-
-
-        # print(f'===========\n'
-        #       f'{input_dict[0]}\n')
 
         if len(input_records) == 0:
             return{

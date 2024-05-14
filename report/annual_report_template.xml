@@ -46,17 +46,17 @@
             <t t-foreach="table_data" t-as="record">
                 <div class="row border-bottom mt-2">
                     <div class="col-3" t-esc="record['month']"></div>
-                    <div class="col-3" t-esc="record['final_gsv_b']"></div>
-                    <div class="col-3" t-esc="record['final_mt']"></div>
-                    <div class="col-3" t-esc="record['trucks']"></div>
+                    <div class="col-3" t-esc="'{:,d}'.format(record['final_gsv_b'])"></div>
+                    <div class="col-3" t-esc="'{:,d}'.format(record['final_mt'])"></div>
+                    <div class="col-3" t-esc="'{:,d}'.format(record['trucks'])"></div>
                 </div>
             </t>
             <div class="row border-top border-dark"> </div>
             <div class="row font-weight-bold mt-2">
                     <div class="col-3" >مجموع</div>
-                    <div class="col-3" t-esc="final_gsv_b_total"></div>
-                    <div class="col-3" t-esc="final_mt_total"></div>
-                    <div class="col-3" t-esc="trucks_total"></div>
+                    <div class="col-3" t-esc="'{:,d}'.format(final_gsv_b_total)"></div>
+                    <div class="col-3" t-esc="'{:,d}'.format(final_mt_total)"></div>
+                    <div class="col-3" t-esc="'{:,d}'.format(trucks_total)"></div>
 
                 </div>
 

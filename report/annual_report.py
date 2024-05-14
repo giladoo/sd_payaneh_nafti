@@ -102,28 +102,36 @@ class ReportSdPayanehNaftiannual(models.AbstractModel):
                                 if rec.loading_date >= month_s_11 and rec.loading_date <= month_e_11])
         input_records_12 = list([rec for rec in input_records
                                 if rec.loading_date >= month_s_12 and rec.loading_date <= month_e_12])
-        input_records_months = [(month_list_names[0], input_records_1),
-                                (month_list_names[1], input_records_2),
-                                (month_list_names[2], input_records_3),
-                                (month_list_names[3], input_records_4),
-                                (month_list_names[4], input_records_5),
-                                (month_list_names[5], input_records_6),
-                                (month_list_names[6], input_records_7),
-                                (month_list_names[7], input_records_8),
-                                (month_list_names[8], input_records_9),
-                                (month_list_names[9], input_records_10),
-                                (month_list_names[10], input_records_11),
-                                (month_list_names[11], input_records_12),
+        input_records_months = [(month_s_1, month_e_1, month_list_names[0], input_records_1),
+                                (month_s_2, month_e_2, month_list_names[1], input_records_2),
+                                (month_s_3, month_e_3, month_list_names[2], input_records_3),
+                                (month_s_4, month_e_4, month_list_names[3], input_records_4),
+                                (month_s_5, month_e_5, month_list_names[4], input_records_5),
+                                (month_s_6, month_e_6, month_list_names[5], input_records_6),
+                                (month_s_7, month_e_7, month_list_names[6], input_records_7),
+                                (month_s_8, month_e_8, month_list_names[7], input_records_8),
+                                (month_s_9, month_e_9, month_list_names[8], input_records_9),
+                                (month_s_10, month_e_10, month_list_names[9], input_records_10),
+                                (month_s_11, month_e_11, month_list_names[10], input_records_11),
+                                (month_s_12, month_e_12, month_list_names[11], input_records_12),
                                 ]
         table_data = []
-        for month, input_record in input_records_months:
-            final_mt = round(sum([int(rec.final_mt) for rec in input_record]))
-            final_gsv_b = round(sum([int(rec.final_gsv_b) for rec in input_record]))
+        for month_s, month_e, month, input_record in input_records_months:
+            final_gsv_b_list = []
+            for day_date in self._daterange(month_s, month_e + timedelta(days=1)):
+                # print(day_date.strftime("%Y-%m-%d"))
+                final_gsv_b_list.append(round(sum(list([rec.final_gsv_l for rec in input_record
+                                         if rec.loading_date == day_date])) / 158.987, 2))
+
+
+
+            final_mt = list([rec.final_mt for rec in input_record])
+            # final_gsv_b = round(sum([int(rec.final_gsv_b) for rec in input_record]))
 
 
             table_data.append({'month': month,
-                               'final_gsv_b': final_gsv_b,
-                               'final_mt': final_mt,
+                               'final_gsv_b': round(sum(final_gsv_b_list)),
+                               'final_mt': round(sum(final_mt)),
                                 'trucks': len(input_record),
                                 })
 
@@ -290,3 +298,6 @@ class ReportSdPayanehNaftiannual(models.AbstractModel):
         return (first_day, last_day)
 
 
+    def _daterange(self, start_date, end_date):
+        for n in range(int((end_date - start_date).days)):
+            yield start_date + timedelta(n)
