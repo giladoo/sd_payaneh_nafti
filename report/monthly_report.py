@@ -21,7 +21,7 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
         doc_data_list = []
         row_data_lines_all = []
         row_data_lines_all_temp = []
-        PAGE_LINES = 40
+        PAGE_LINES = 35
         calendar = self.env.context.get('lang')
         form_data = data.get('form_data')
         year = form_data.get('year')
