@@ -70,7 +70,7 @@
             </tr>
 
             <tr>
-                <td colspan="13" style="height: 20px;"></td>
+                <td colspan="13" class="bg-300" style="height: 20px;"></td>
             </tr>
              <tr>
                 <td rowspan="2" colspan="4">بر اساس نوع ارسال</td>
@@ -87,6 +87,9 @@
                 <td t-esc="'%.3f' % footer_data['final_mt_export']"></td>
                 <td t-esc="footer_data['tank_count_export']"></td>
 
+            </tr>
+                        <tr>
+                <td colspan="13" class="bg-300" style="height: 20px;"></td>
             </tr>
             <tr class="monthly_report_table_total mt-3">
                 <td colspan="9">جمع کل ماه جاری</td>
