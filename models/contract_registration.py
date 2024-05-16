@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-from datetime import  datetime, timedelta
+import logging
+from datetime import date, datetime, timedelta
+import pytz
 import json
+
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
-from datetime import date
+# from datetime import date
 from colorama import Fore
 
 class SdPayanehNaftiContractInfo(models.Model):
@@ -27,8 +30,8 @@ class SdPayanehNaftiContractInfo(models.Model):
     contract_type = fields.Selection([('stock', _('Stock')), ('general', _('General'))], default='general', tracking=True, required=True)
     loading_type = fields.Selection([('internal', _('Internal')), ('export', _('Export'))], default='internal', tracking=True, required=True)
     cargo_type = fields.Many2one('sd_payaneh_nafti.cargo_types', required=True, tracking=True, default=lambda self: self.env['sd_payaneh_nafti.cargo_types'].search([], limit=1,).id)
-    start_date = fields.Date(default=lambda self: date.today(), required=True, tracking=True)
-    end_date = fields.Date(default=lambda self: date.today() + timedelta(days=20), required=True, tracking=True)
+    start_date = fields.Date(default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))).date(), required=True, tracking=True)
+    end_date = fields.Date(default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))).date() + timedelta(days=20), required=True, tracking=True)
     destination = fields.Many2one('sd_payaneh_nafti.destinations', required=True, tracking=True)
     contractors = fields.Many2many('sd_payaneh_nafti.contractors', 'registration_contractors_rel', required=True, tracking=True)
 
@@ -53,14 +56,15 @@ class SdPayanehNaftiContractInfo(models.Model):
     @api.depends('registration_no')
     def _date_validation(self):
         for rec in self:
-            today = date.today()
-            if (rec.end_date and rec.end_date > today) \
-                    or (rec.first_extend_end_date and rec.first_extend_end_date > today) \
-                    or (rec.second_extend_end_date and rec.second_extend_end_date > today):
+            today = datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))).date()
+            if (rec.end_date and rec.end_date >= today) \
+                    or (rec.first_extend_end_date and rec.first_extend_end_date >= today) \
+                    or (rec.second_extend_end_date and rec.second_extend_end_date >= today):
                 rec.date_validation = True
             else:
                 rec.date_validation = False
-            # print(f'\n---------->   registration_no: {rec.registration_no} date_validation: {rec.date_validation} ')
+
+            logging.error(f'\n---------->   registration_no: {rec.registration_no} date_validation: {rec.date_validation}')
 
     def compute_count(self):
         for rec in self:
@@ -130,7 +134,8 @@ class SdPayanehNaftiContractInfo(models.Model):
 
     @api.model
     def get_contracts(self):
-        today_date = date.today()
+        # today_date = date.today()
+        today_date = datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))).date()
         open_contracts = self.search(['|', '|', ('end_date', '>=', today_date),
                                         ('first_extend_end_date', '>=', today_date),
                                         ('second_extend_end_date', '>=', today_date),
