@@ -54,9 +54,9 @@ class SdPayanehNaftiContractInfo(models.Model):
     def _date_validation(self):
         for rec in self:
             today = date.today()
-            if rec.end_date and rec.end_date > today \
-                    or rec.first_extend_end_date and rec.first_extend_end_date > today \
-                    or rec.second_extend_end_date and rec.second_extend_end_date > today:
+            if (rec.end_date and rec.end_date > today) \
+                    or (rec.first_extend_end_date and rec.first_extend_end_date > today) \
+                    or (rec.second_extend_end_date and rec.second_extend_end_date > today):
                 rec.date_validation = True
             else:
                 rec.date_validation = False
