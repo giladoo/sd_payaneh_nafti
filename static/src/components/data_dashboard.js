@@ -267,6 +267,9 @@ export class DataDashboard extends Component {
         }
     }
     viewSpgr(){
+        let domain = ['|',['active', '=', true], ['active', '=', false], ]
+        let context = {'search_default_show_active': 1}
+
         this.actionService.doAction({
             name: "SPGR",
             res_model: "sd_payaneh_nafti.spgr",
@@ -274,7 +277,8 @@ export class DataDashboard extends Component {
             views: [[false, "list"], [false, "form"]],
             type: "ir.actions.act_window",
             view_mode: "list",
-//            domain: domain,
+            domain: domain,
+            context: context,
             target: "current",
         });
     }

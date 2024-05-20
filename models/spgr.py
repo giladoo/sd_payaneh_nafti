@@ -10,6 +10,7 @@ class SdPayanehNaftiSpgr(models.Model):
     _description = 'sd_payaneh_nafti.spgr'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'spgr'
+    _order = 'id desc'
 
     def _spgr_default(self, param):
         return self.search([], order="id desc", limit=1)[param]
