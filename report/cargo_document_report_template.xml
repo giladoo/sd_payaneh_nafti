@@ -255,7 +255,7 @@
                                                                     <div class="mb-2">WATER<br/>CONTENT<br/>(%VOL)
                                                                     </div>
                                                                     <div class="py_font_9 font-weight-bold"
-                                                                         t-esc="(input_record.cqq.water_content).upper()"></div>
+                                                                         t-esc="(input_record.cqq.water_content).upper() if input_record.cqq else ''"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
 
@@ -265,35 +265,35 @@
                                                                         <br/>
                                                                     </div>
                                                                     <div class="py_font_9 font-weight-bold"
-                                                                         t-esc="(input_record.cqq.h2s).upper()"></div>
+                                                                         t-esc="(input_record.cqq.h2s).upper() if input_record.cqq else ''"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-4">SALT CONTENT<br/>(P.T.B)
                                                                     </div>
                                                                     <div class="py_font_9 font-weight-bold"
-                                                                         t-esc="input_record.cqq.salt_content"></div>
+                                                                         t-esc="input_record.cqq.salt_content if input_record.cqq else ''"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-4">MERCAPTANCS<br/>CONTENT(PPM)
                                                                     </div>
                                                                     <div class="py_font_9 font-weight-bold"
-                                                                         t-esc="input_record.cqq.mercaptans"></div>
+                                                                         t-esc="input_record.cqq.mercaptans if input_record.cqq else ''"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-2">TOTAL<br/>SULPHOR<br/>(%WT)
                                                                     </div>
                                                                     <div class="py_font_9 font-weight-bold"
-                                                                         t-esc="input_record.cqq.sulphur"></div>
+                                                                         t-esc="input_record.cqq.sulphur if input_record.cqq else ''"></div>
                                                                 </div>
                                                                 <div class="border-left"></div>
                                                                 <div class="col-2 p-1 ">
                                                                     <div class="mb-4">VAPOUR<br/>PRESURE(PSI)
                                                                     </div>
                                                                     <div class="py_font_9 font-weight-bold"
-                                                                         t-esc="input_record.cqq.vapour_pressure"></div>
+                                                                         t-esc="input_record.cqq.vapour_pressure if input_record.cqq else ''"></div>
                                                                 </div>
 
                                                             </div>
