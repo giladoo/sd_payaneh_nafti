@@ -62,7 +62,7 @@
                     <field name="temperature"/>
                     <field name="sp_gr" digits="[4,4]" readonly="0"/>
                     <field name="centralized_container"/>
-                    <field name="cqq"/>
+                    <field name="cqq" domain="['|', ('active', '=', False), ('active', '=', True), ]"/>
                     <field name="temperature_f"/>
                     <field name="pressure" />
                     <field name="pressure_psi" />
