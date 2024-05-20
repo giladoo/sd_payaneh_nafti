@@ -90,7 +90,7 @@ class SdPayanehNaftiInputInfo(models.Model):
                                               ('f', 'F'),
                                               ('g', 'G'),
                                               ('h', 'H'),
-                                              ], required=True, tracking=True, )
+                                              ], required=False, tracking=True, )
 
     loading_no = fields.Char(copy=False, readonly=False, tracking=True, )
     # todo: timezone
@@ -99,7 +99,7 @@ class SdPayanehNaftiInputInfo(models.Model):
                                     default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))))
     # driver = fields.Char(required=True,)
 
-    sp_gr = fields.Float( string='SP. GR.', required=True, default=0.3, store=True, readonly=True, tracking=True)
+    sp_gr = fields.Float(string='SP. GR.', required=False, store=True, readonly=False, tracking=True)
     # sp_gr = fields.Many2one('sd_payaneh_nafti.spgr', string='SP. GR.', required=True, default=0.7252)
     temperature = fields.Float(string='Temp. (C)', required=True, default=30, tracking=True, digits=(12, 1))
     temperature_f = fields.Float(string='Temp. (F)', compute='_temperature_f', digits=(12, 1))
@@ -214,9 +214,9 @@ class SdPayanehNaftiInputInfo(models.Model):
             self.totalizer_lasts = ''.join(totalizer_lasts)
             self.totalizer_lasts = f'<div class="sd_ltr" style="font-family: sarif">{self.totalizer_lasts}<div>'
 
-    @api.onchange('document_no')
-    def onchange_document_no(self):
-        self.set_spgr()
+    # @api.onchange('document_no')
+    # def onchange_document_no(self):
+    #     self.set_spgr()
 
     @api.depends('registration_no',)
     @api.onchange('registration_no', 'front_container', 'middle_container', 'back_container')
@@ -476,12 +476,12 @@ class SdPayanehNaftiInputInfo(models.Model):
                 loading_no = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.loading_no') or 0
                 vals['loading_no'] = str(jdatetime.date.today().year) + f"/{int(loading_no):07d}"
 
-            spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
-            if len(spgr) == 1:
-                vals['sp_gr'] = spgr.spgr
-                vals['centralized_container'] = spgr.centralized_container
-            else:
-                raise ValidationError(_('Add a "SP.GR." from the main menu'))
+            # spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
+            # if len(spgr) == 1:
+            #     vals['sp_gr'] = spgr.spgr
+            #     vals['centralized_container'] = spgr.centralized_container
+            # else:
+            #     raise ValidationError(_('Add a "SP.GR." from the main menu'))
 
             if vals.get('meter_no') and type(vals.get('meter_no')) == str and vals.get('meter_no').lower() == 'master':
                 vals['meter_no'] = '0'
@@ -553,6 +553,9 @@ class SdPayanehNaftiInputInfo(models.Model):
 
     def loading_info(self):
         data = {'form_data': {'document_no': (0, self.document_no)}}
+        if self.sp_gr == 0:
+            self.set_spgr()
+
         loading_info_form = self.env.ref('sd_payaneh_nafti.sd_payaneh_nafti_input_info_form_loading_info')
         # print(f'\n loading info: self: {self} loading_info_form: {loading_info_form}')
         return {

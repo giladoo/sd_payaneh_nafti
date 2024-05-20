@@ -21,7 +21,7 @@ class ReportSdPayanehNaftiCargoDocument(models.AbstractModel):
         time_z = pytz.timezone(context.get('tz'))
         date_time = datetime.now(time_z)
         date_time = self.date_converter(date_time, context.get('lang'))
-        print(f'>>>>  TOP  >>\n data: {data}  >>> docids: {docids}')
+        # print(f'>>>>  TOP  >>\n data: {data}  >>> docids: {docids}')
 
         if docids:
             input_records = self.env['sd_payaneh_nafti.input_info'].browse(docids)
