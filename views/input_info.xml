@@ -41,7 +41,7 @@
             <field name="model">sd_payaneh_nafti.input_info</field>
             <field name="priority">20</field>
             <field name="arch" type="xml">
-                <tree editable="top">
+                <tree editable="top" multi_edit="1">
                     <header>
 <!--                        <button string="drivers" name="drivers_strip" type="object" />-->
 <!--                        <button string="drivers_create" name="drivers_create" type="object" />-->
