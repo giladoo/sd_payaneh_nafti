@@ -217,7 +217,7 @@
 <!--                    </div>-->
                 </td>
                 <td class="px-1"
-                    t-esc="(row_data_line.centralized_container).upper()"></td>
+                    t-esc="(row_data_line.centralized_container).upper() if row_data_line.centralized_container else ''"></td>
                 <td class="px-1" t-esc="row_data_line.sp_gr"></td>
                 <td class="px-1" t-esc="row_data_line.api_a"></td>
                 <td class="px-1" t-esc="row_data_line.temperature"></td>
