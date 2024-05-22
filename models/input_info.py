@@ -30,6 +30,8 @@ class SdPayanehNaftiInputInfo(models.Model):
         ('loading_info', 'Loading Info'),
         ('cargo_document', 'Cargo Doc'),
         ('done', 'Done'),
+        ('canceled', 'Canceled'),
+        ('unloaded', 'Unloaded'),
         ('driver_block_list', 'Driver'),
         ('truck_black_list', 'Truck'),
         ('out_of_date', 'Out of Date'),
@@ -506,7 +508,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         if vals.get('meter_no') or vals.get('compartment_locker_1'):
             vals['state'] = 'cargo_document'
 
-        if not self.env.is_admin() and self.state == 'finished':
+        if not self.env.is_admin() and self.state in ['finished', 'canceled', 'unloaded']:
             raise ValidationError(_('Finished record is not editable!'))
 
         doc_no = vals.get('document_no', None)
@@ -575,12 +577,31 @@ class SdPayanehNaftiInputInfo(models.Model):
 
     def input_done(self):
         for rec in self:
-            rec.write({'state': 'done'})
+            if rec.state not in ['canceled', 'unloaded']:
+                rec.write({'state': 'done'})
+
+    def input_canceled(self):
+        for rec in self:
+            rec.write({'state': 'canceled'})
+
+    def input_unloaded(self):
+        for rec in self:
+            rec.write({'state': 'unloaded'})
+
+    def input_back(self):
+        for rec in self:
+            if rec.loading_date == False:
+                rec.write({'state': 'loading_permit'})
+            elif rec.loading_info_date == False:
+                rec.write({'state': 'loading_info'})
+            else:
+                rec.write({'state': 'done'})
 
 
     def input_finished(self):
         for rec in self:
-            rec.write({'state': 'finished'})
+            if rec.state not in ['canceled', 'unloaded']:
+                rec.write({'state': 'finished'})
 
     @api.model
     def get_requests(self):

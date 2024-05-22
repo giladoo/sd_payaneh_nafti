@@ -122,7 +122,7 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
             totalizer_diff_sum = sum([_input.totalizer_difference for _input in inputs if _input.weighbridge == 'no'])
             final_tov_l_sum = sum([_input.final_tov_l for _input in inputs])
             final_gsv_l_sum = sum([_input.final_gsv_l for _input in inputs])
-            final_gsv_b_sum = sum([round(_input.final_gsv_l / 158.987, 3) for _input in inputs])
+            final_gsv_b_sum = sum([round(_input.final_gsv_l / 158.987, 7) for _input in inputs])
             # print(list([round(_input.final_gsv_l / 158.987, 3) for _input in inputs]))
             final_mt_sum = sum([_input.final_mt for _input in inputs])
             page = {
