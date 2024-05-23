@@ -2,308 +2,326 @@
 <odoo>
     <data>
         <template id="meter_report_data">
-<!--            <t t-call="web.html_container">-->
-<!--                <t t-call="web.basic_layout">-->
-<!--                <t t-call="web.internal_layout">-->
-                        <div class="container iransans_font" style="font-size: .9rem">
-                                <div class="container mt-1">
-                                    <div t-if="errors != []">
-                                        <div style="direction: ltr" t-esc="errors[0]"></div>
+            <!--            <t t-call="web.html_container">-->
+            <!--                <t t-call="web.basic_layout">-->
+            <!--                <t t-call="web.internal_layout">-->
+            <div class="container iransans_font" style="font-size: 1rem">
+                <div class="container mt-1">
+                    <div t-if="errors != []">
+                        <div style="direction: ltr" t-esc="errors[0]"></div>
+                    </div>
+                    <div t-if="errors == []">
+                        <div class="container iransans_font">
+                            <div style="direction:rtl">
+                                <div class="text-center">
+                                    <!--                        <div style="display:block; position:absolute;padding:0; margin:0px; padding-top:10px; padding-bottom:10px; text-align:center;">-->
+                                    <!--                            <img t-att-src="'/report/barcode/Code128/'+contract_record['contract_no']" style="width:250px;height:25px" t-att-alt="contract_record['contract_no']"/>-->
+                                    <!--                        </div>-->
+                                    <div>
+                                        <img alt="Logo" t-att-src="'/logo?company=1'" t-att-alt="''"
+                                             style=" height: 50px;" height="50"/>
                                     </div>
-                                    <div t-if="errors == []">
-                                        <div class="container iransans_font">
-                                            <div style="direction:rtl">
-                                                <div class="text-center">
-                                                    <!--                        <div style="display:block; position:absolute;padding:0; margin:0px; padding-top:10px; padding-bottom:10px; text-align:center;">-->
-<!--                            <img t-att-src="'/report/barcode/Code128/'+contract_record['contract_no']" style="width:250px;height:25px" t-att-alt="contract_record['contract_no']"/>-->
-<!--                        </div>-->
-                                                    <div>
-                                                        <img alt="Logo" t-att-src="'/logo?company=1'" t-att-alt="''"
-                                                             style=" height: 50px;" height="50"/>
-                                                    </div>
-                                                    <div>شرکت ملی نفت ایران</div>
-                                                    <div>شرکت پایانه های نفتی ایران</div>
-                                                    <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
-                                                    <div class="h4 mt-2 mb-4">گزارش روزانه بارگیری میتر</div>
+                                    <div>شرکت ملی نفت ایران</div>
+                                    <div>شرکت پایانه های نفتی ایران</div>
+                                    <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
+                                    <div class="h4 mt-2 mb-4">گزارش روزانه بارگیری میتر</div>
 
+                                </div>
+                                <div class="row ">
+                                    <div class="col-9"></div>
+                                    <div class="col-1">
+                                        Date
+                                    </div>
+                                    <div class="col-2 lead" t-esc="report_date_show">
+                                    </div>
+                                </div>
+                                <div class="border border-dark rounded">
+                                    <div class="row font-weight-bold mx-0  py-2">
+                                        <div class="row col-7 mx-0 px-0">
+                                            <div class="col-2 px-0 text-center">Meter</div>
+                                            <div class="col-3 px-0">First Totalizer</div>
+                                            <div class="col-3 px-0">Last Totalizer</div>
+                                            <div class="col-2 px-0">Meter Amount</div>
+                                            <div class="col-2 px-0 ">Trucks</div>
+                                        </div>
+                                        <div class="col-5 text-center">
+                                            <div>Description</div>
+                                        </div>
+                                    </div>
+                                    <div class="border-bottom border-secondary mx-2"></div>
+
+                                    <div class="row">
+                                        <div class="col-7">
+                                            <t t-foreach="meter_data" t-as="data" t-key="data">
+                                                <div class="row mx-0">
+                                                    <div t-if="data['meter_no'] > 0" class="col-2 text-center"
+                                                         t-esc="data['meter_no']"></div>
+                                                    <div t-if="data['meter_no'] == 0" class="col-2 text-center"
+                                                         t-esc="'Master'"></div>
+                                                    <div class="col-3"
+                                                         t-esc="'{:,d}'.format(data['first_totalizer'])"></div>
+                                                    <div class="col-3"
+                                                         t-esc="'{:,d}'.format(data['last_totalizer'])"></div>
+                                                    <div class="col-2"
+                                                         t-esc="'{:,d}'.format(data['meter_amounts'])"></div>
+                                                    <div class="col-2" t-esc="data['truck_count']"></div>
                                                 </div>
-                                                <div class="row ">
-                                                    <div class="col-8"></div>
-                                                    <div class="col-2">
-                                                        Date
-                                                    </div>
-                                                    <div class="col-2 lead" t-esc="report_date_show">
+                                                <div class="border-bottom border-secondary mx-2"></div>
+                                            </t>
+                                                <div class="border-top border-dark mx-2"></div>
 
-                                                    </div>
+                                            <div class="font-weight-bold">
+                                                <div class="row mx-0 pt-2">
+                                                    <div class="col-8 text-right">جمع خالص بارگیری شده از میتر</div>
+                                                    <div class="col-2" t-esc="'{:,d}'.format(meter_amount_sum)"></div>
+                                                    <div class="col-2" t-esc="truck_count_sum"></div>
                                                 </div>
-                                                <div class="border border-secondary">
+                                                <div class="border-bottom border-secondary mx-2"></div>
 
-
-                                                <div class="row border border-secondary text-center font-weight-bold mx-0  py-1" style="font-size: 1rem;">
-                                                    <div class="row col-8">
-                                                        <div class="col-2">Meter</div>
-                                                        <div class="col-3">First Totalizer</div>
-                                                        <div class="col-3">Last Totalizer</div>
-                                                        <div class="col-2">Meter Amount</div>
-                                                        <div class="col-2 ">Count</div>
+                                                <div class="row mx-0 pt-1">
+                                                    <div class="col-8 text-right">جمع خالص میتر در بارگیری از باسکول
                                                     </div>
-                                                    <div class="col-4">
-                                                        <div >Description</div>
-                                                    </div>
+                                                    <div class="col-2"
+                                                         t-esc="'{:,d}'.format(totalizer_weighbridge_sum)"></div>
+                                                    <div class="col-2" t-esc="totalizer_weighbridge_count"></div>
                                                 </div>
-                                                    <div class="row">
-                                                    <div class="col-8">
-                                                        <t t-foreach="meter_data" t-as="data" t-key="data">
-                                                                <div  class="row border-bottom mx-0">
-                                                                    <div t-if="data['meter_no'] > 0" class="col-2 text-center" t-esc="data['meter_no']"></div>
-                                                                    <div t-if="data['meter_no'] == 0" class="col-2 text-center" t-esc="'Master'"></div>
-                                                                    <div class="col-3" t-esc="'{:,d}'.format(data['first_totalizer'])"></div>
-                                                                    <div class="col-3" t-esc="'{:,d}'.format(data['last_totalizer'])"></div>
-                                                                    <div class="col-2" t-esc="'{:,d}'.format(data['meter_amounts'])"></div>
-                                                                    <div class="col-2" t-esc="data['truck_count']"></div>
-                                                                </div>
-                                                        </t>
+                                                <div class="border-bottom border-secondary mx-2"></div>
 
-                                                        <div class="font-weight-bold">
-                                                            <div  class="row border-top border-bottom border-secondary mx-0 pt-1">
-                                                                <div class="col-8 text-right" >جمع خالص بارگیری شده از میتر</div>
-                                                                <div class="col-2" t-esc="'{:,d}'.format(meter_amount_sum)"></div>
-                                                                <div class="col-2" t-esc="truck_count_sum"></div>
-                                                            </div>
-                                                            <div  class="row border-bottom border-secondary mx-0 pt-1">
-                                                                <div class="col-8 text-right" >جمع خالص میتر در بارگیری از باسکول </div>
-                                                                <div class="col-2" t-esc="'{:,d}'.format(totalizer_weighbridge_sum)"></div>
-                                                                <div class="col-2" t-esc="totalizer_weighbridge_count"></div>
-                                                            </div>
-                                                            <div  class="row border-bottom border-secondary mx-0 pt-1">
-                                                                <div class="col-8 text-right" >مقدار اسناد بارگیری توسط میتر و باسکول</div>
-                                                                <div class="col-2" t-esc="'{:,d}'.format(totalizer_sum)"></div>
-                                                            </div>
-                                                            <div  class="row  mx-0 pt-1">
-                                                                <div class="col-8 text-right" >اختلاف بارگیری میتر و باسکول با اسناد صادر شده</div>
-                                                                <div class="col-2" t-esc="'{:,d}'.format(metre_weighbridget_deff)"></div>
-                                                            </div>
-                                                        </div>
-
+                                                <div class="row mx-0 pt-1">
+                                                    <div class="col-8 text-right">مقدار اسناد بارگیری توسط میتر و
+                                                        باسکول
                                                     </div>
-                                                    <div class="col-4 py-3">
-                                                <div class="border-0 h-100 w-100" >
-                                                            <t t-raw="meter_comment"></t>
+                                                    <div class="col-2" t-esc="'{:,d}'.format(totalizer_sum)"></div>
                                                 </div>
-<!--                                                        <textarea rows="12" cols="6" readonly="" class="border-0 h-100 w-100" >-->
-<!--                                                            <t t-out="meter_comment"></t>-->
-<!--                                                        </textarea>-->
+                                                <div class="border-bottom border-secondary mx-2"></div>
+                                                <div class="row  mx-0 pt-1">
+                                                    <div class="col-8 text-right">اختلاف بارگیری میتر و باسکول با اسناد
+                                                        صادر شده
                                                     </div>
-                                                    </div>
+                                                    <div class="col-2"
+                                                         t-esc="'{:,d}'.format(metre_weighbridget_deff)"></div>
                                                 </div>
-
-                                                <div class="row mt-5 text-center">
-                                                    <div class="col-6">
-                                                        پایانه میعانات گازی پارس جنوبی
-                                                    </div>
-                                                    <div class="col-6">
-                                                        اداره نظارت بر صادرات، واردات و مبادلات مواد نفتي
-                                                    </div>
-                                                </div>
-
-
-<!--                                                <div class="row border border-primary py-2 text-left">-->
-<!--                                                    <div class="col-8">-->
-<!--                                                        <div class="row">-->
-<!--                                                            <div class="col-4">-->
-<!--                                                                Buyer-->
-<!--                                                            </div>-->
-<!--                                                            <div class="text-nowrap" t-esc="input_record.buyer.name"></div>-->
-
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                    <div class="col-4 ">-->
-<!--                                                        <div class="row">-->
-<!--                                                            <div class="col-6">-->
-<!--                                                                Document No-->
-<!--                                                            </div>-->
-<!--                                                            <div class="col-6 lead" t-esc="doc_data['document_no']">-->
-
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-
-<!--                                                <div class="row border border-dark border-top-0 text-left">-->
-<!--                                                    <div class="col-4  px-0">-->
-<!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
-<!--                                                            <div class="col-4">-->
-<!--                                                                contractor name-->
-<!--                                                            </div>-->
-<!--                                                            <div class="col-8" t-esc="input_record.contractor.name">-->
-
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="row border-bottom border-info   mx-0 py-1">-->
-<!--                                                            <div class="col-4 text-nowrap">-->
-<!--                                                                Tanker No-->
-<!--                                                            </div>-->
-<!--                                                            <div class="col-8 p-0">-->
-<!--                                                                <div class="row mx-3">-->
-
-<!--                                                                    <div class="border border-secondary rounded p-1"-->
-<!--                                                                         t-esc="doc_data['tanker_no']['plate_1']"></div>-->
-<!--                                                                    <div class="p-0">-->
-<!--                                                                        <div class="row border border-secondary rounded mx-0 px-1">-->
-<!--                                                                            <div class="p-1"-->
-<!--                                                                                 t-esc="doc_data['tanker_no']['plate_2']"></div>-->
-<!--                                                                            <div class="p-1"-->
-<!--                                                                                 t-esc="doc_data['tanker_no']['plate_3']"></div>-->
-<!--                                                                            <div class="p-1"-->
-<!--                                                                                 t-esc="doc_data['tanker_no']['plate_4']"></div>-->
-<!--                                                                        </div>-->
-<!--                                                                    </div>-->
-<!--                                                                    <div class="border rounded bg-primary text-light">-->
-<!--                                                                        IR-->
-<!--                                                                    </div>-->
-<!--                                                                </div>-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
-<!--                                                            <div class="col-4">-->
-<!--                                                                Cargo Type-->
-<!--                                                            </div>-->
-<!--                                                            <div class="col-8" t-esc="doc_data['cargo_type']">-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="col-12 text-center ">-->
-<!--                                                            <div class="h6">-->
-<!--                                                                نام و امضاء تهیه کننده-->
-<!--                                                            </div>-->
-<!--                                                            <div t-esc="doc_data['user_name']">-->
-
-<!--                                                            </div>-->
-<!--                                                            <div>-->
-
-<!--                                                            </div>-->
-
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-
-<!--                                                    <div class="col-4 border-left border-right border-dark p-0 ">-->
-<!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
-<!--                                                            <div class="col-4 text-nowrap">-->
-<!--                                                                Contract No-->
-<!--                                                            </div>-->
-<!--                                                            <div class="col-8" t-esc="doc_data['contract_no']">-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
-<!--                                                            <div class="col-4">-->
-<!--                                                                Driver-->
-<!--                                                            </div>-->
-<!--                                                            <div class="col-8" t-esc="doc_data['driver']">-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
-<!--                                                            <div class="col-4">-->
-<!--                                                                contract Type-->
-<!--                                                            </div>-->
-<!--                                                            <div class="col-8" t-esc="doc_data['contract_type']">-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="row mx-0">-->
-<!--                                                            <div class="col-3 align-self-center">-->
-<!--                                                                contract Type-->
-<!--                                                            </div>-->
-<!--                                                            <div class="col-9">-->
-<!--                                                                <div class="row border-bottom border-info  py-2">-->
-<!--                                                                    <div class="col-6">-->
-<!--                                                                        Front Container-->
-<!--                                                                    </div>-->
-<!--                                                                    <div class="col-6"-->
-<!--                                                                         t-esc="doc_data['front_container']">-->
-<!--                                                                    </div>-->
-<!--                                                                </div>-->
-<!--                                                                <div class="row border-bottom border-info  py-2">-->
-<!--                                                                    <div class="col-6">-->
-<!--                                                                        Middle Container-->
-<!--                                                                    </div>-->
-<!--                                                                    <div class="col-6"-->
-<!--                                                                         t-esc="doc_data['middle_container']">-->
-<!--                                                                    </div>-->
-<!--                                                                </div>-->
-<!--                                                                <div class="row border-bottom border-info  py-2">-->
-<!--                                                                    <div class="col-6">-->
-<!--                                                                        Back Container-->
-<!--                                                                    </div>-->
-<!--                                                                    <div class="col-6 "-->
-<!--                                                                         t-esc="doc_data['back_container']">-->
-<!--                                                                    </div>-->
-<!--                                                                </div>-->
-<!--                                                                <div class="row py-2">-->
-<!--                                                                    <div class="col-6">-->
-<!--                                                                        Total-->
-<!--                                                                    </div>-->
-<!--                                                                    <div class="col-6 bg-dark text-light h6 m-0"-->
-<!--                                                                         t-esc="doc_data['total']">-->
-<!--                                                                    </div>-->
-<!--                                                                </div>-->
-<!--                                                            </div>-->
-
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-
-<!--                                                    <div class="col-4  p-0 ">-->
-<!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
-<!--                                                            <div class="col-6">-->
-<!--                                                                Issue Date-->
-<!--                                                            </div>-->
-<!--                                                            <div class="col-6" t-esc="doc_data['issue_date']">-->
-
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
-<!--                                                            <div class="col-6">-->
-<!--                                                                Loading No-->
-<!--                                                            </div>-->
-<!--                                                            <div class="col-6" t-esc="doc_data['loading_no']">-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="col-12 text-center ">-->
-<!--                                                            <div class="h6">-->
-<!--                                                                تایید حراست ورودی-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
                                             </div>
 
                                         </div>
+                                        <div class="col-5 py-3">
+                                            <div class="border-0 h-100 w-100">
+                                                <t t-raw="meter_comment"></t>
+                                            </div>
+                                            <!--                                                        <textarea rows="12" cols="6" readonly="" class="border-0 h-100 w-100" >-->
+                                            <!--                                                            <t t-out="meter_comment"></t>-->
+                                            <!--                                                        </textarea>-->
+                                        </div>
                                     </div>
+                                </div>
+
+                                <div class="row mt-5 text-center">
+                                    <div class="col-6">
+                                        پایانه میعانات گازی پارس جنوبی
+                                    </div>
+                                    <div class="col-6">
+                                        اداره نظارت بر صادرات، واردات و مبادلات مواد نفتي
+                                    </div>
+                                </div>
+
+
+                                <!--                                                <div class="row border border-primary py-2 text-left">-->
+                                <!--                                                    <div class="col-8">-->
+                                <!--                                                        <div class="row">-->
+                                <!--                                                            <div class="col-4">-->
+                                <!--                                                                Buyer-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div class="text-nowrap" t-esc="input_record.buyer.name"></div>-->
+
+                                <!--                                                        </div>-->
+                                <!--                                                    </div>-->
+                                <!--                                                    <div class="col-4 ">-->
+                                <!--                                                        <div class="row">-->
+                                <!--                                                            <div class="col-6">-->
+                                <!--                                                                Document No-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div class="col-6 lead" t-esc="doc_data['document_no']">-->
+
+                                <!--                                                            </div>-->
+                                <!--                                                        </div>-->
+                                <!--                                                    </div>-->
+                                <!--                                                </div>-->
+
+                                <!--                                                <div class="row border border-dark border-top-0 text-left">-->
+                                <!--                                                    <div class="col-4  px-0">-->
+                                <!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
+                                <!--                                                            <div class="col-4">-->
+                                <!--                                                                contractor name-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div class="col-8" t-esc="input_record.contractor.name">-->
+
+                                <!--                                                            </div>-->
+                                <!--                                                        </div>-->
+                                <!--                                                        <div class="row border-bottom border-info   mx-0 py-1">-->
+                                <!--                                                            <div class="col-4 text-nowrap">-->
+                                <!--                                                                Tanker No-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div class="col-8 p-0">-->
+                                <!--                                                                <div class="row mx-3">-->
+
+                                <!--                                                                    <div class="border border-secondary rounded p-1"-->
+                                <!--                                                                         t-esc="doc_data['tanker_no']['plate_1']"></div>-->
+                                <!--                                                                    <div class="p-0">-->
+                                <!--                                                                        <div class="row border border-secondary rounded mx-0 px-1">-->
+                                <!--                                                                            <div class="p-1"-->
+                                <!--                                                                                 t-esc="doc_data['tanker_no']['plate_2']"></div>-->
+                                <!--                                                                            <div class="p-1"-->
+                                <!--                                                                                 t-esc="doc_data['tanker_no']['plate_3']"></div>-->
+                                <!--                                                                            <div class="p-1"-->
+                                <!--                                                                                 t-esc="doc_data['tanker_no']['plate_4']"></div>-->
+                                <!--                                                                        </div>-->
+                                <!--                                                                    </div>-->
+                                <!--                                                                    <div class="border rounded bg-primary text-light">-->
+                                <!--                                                                        IR-->
+                                <!--                                                                    </div>-->
+                                <!--                                                                </div>-->
+                                <!--                                                            </div>-->
+                                <!--                                                        </div>-->
+                                <!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
+                                <!--                                                            <div class="col-4">-->
+                                <!--                                                                Cargo Type-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div class="col-8" t-esc="doc_data['cargo_type']">-->
+                                <!--                                                            </div>-->
+                                <!--                                                        </div>-->
+                                <!--                                                        <div class="col-12 text-center ">-->
+                                <!--                                                            <div class="h6">-->
+                                <!--                                                                نام و امضاء تهیه کننده-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div t-esc="doc_data['user_name']">-->
+
+                                <!--                                                            </div>-->
+                                <!--                                                            <div>-->
+
+                                <!--                                                            </div>-->
+
+                                <!--                                                        </div>-->
+                                <!--                                                    </div>-->
+
+                                <!--                                                    <div class="col-4 border-left border-right border-dark p-0 ">-->
+                                <!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
+                                <!--                                                            <div class="col-4 text-nowrap">-->
+                                <!--                                                                Contract No-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div class="col-8" t-esc="doc_data['contract_no']">-->
+                                <!--                                                            </div>-->
+                                <!--                                                        </div>-->
+                                <!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
+                                <!--                                                            <div class="col-4">-->
+                                <!--                                                                Driver-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div class="col-8" t-esc="doc_data['driver']">-->
+                                <!--                                                            </div>-->
+                                <!--                                                        </div>-->
+                                <!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
+                                <!--                                                            <div class="col-4">-->
+                                <!--                                                                contract Type-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div class="col-8" t-esc="doc_data['contract_type']">-->
+                                <!--                                                            </div>-->
+                                <!--                                                        </div>-->
+                                <!--                                                        <div class="row mx-0">-->
+                                <!--                                                            <div class="col-3 align-self-center">-->
+                                <!--                                                                contract Type-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div class="col-9">-->
+                                <!--                                                                <div class="row border-bottom border-info  py-2">-->
+                                <!--                                                                    <div class="col-6">-->
+                                <!--                                                                        Front Container-->
+                                <!--                                                                    </div>-->
+                                <!--                                                                    <div class="col-6"-->
+                                <!--                                                                         t-esc="doc_data['front_container']">-->
+                                <!--                                                                    </div>-->
+                                <!--                                                                </div>-->
+                                <!--                                                                <div class="row border-bottom border-info  py-2">-->
+                                <!--                                                                    <div class="col-6">-->
+                                <!--                                                                        Middle Container-->
+                                <!--                                                                    </div>-->
+                                <!--                                                                    <div class="col-6"-->
+                                <!--                                                                         t-esc="doc_data['middle_container']">-->
+                                <!--                                                                    </div>-->
+                                <!--                                                                </div>-->
+                                <!--                                                                <div class="row border-bottom border-info  py-2">-->
+                                <!--                                                                    <div class="col-6">-->
+                                <!--                                                                        Back Container-->
+                                <!--                                                                    </div>-->
+                                <!--                                                                    <div class="col-6 "-->
+                                <!--                                                                         t-esc="doc_data['back_container']">-->
+                                <!--                                                                    </div>-->
+                                <!--                                                                </div>-->
+                                <!--                                                                <div class="row py-2">-->
+                                <!--                                                                    <div class="col-6">-->
+                                <!--                                                                        Total-->
+                                <!--                                                                    </div>-->
+                                <!--                                                                    <div class="col-6 bg-dark text-light h6 m-0"-->
+                                <!--                                                                         t-esc="doc_data['total']">-->
+                                <!--                                                                    </div>-->
+                                <!--                                                                </div>-->
+                                <!--                                                            </div>-->
+
+                                <!--                                                        </div>-->
+                                <!--                                                    </div>-->
+
+                                <!--                                                    <div class="col-4  p-0 ">-->
+                                <!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
+                                <!--                                                            <div class="col-6">-->
+                                <!--                                                                Issue Date-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div class="col-6" t-esc="doc_data['issue_date']">-->
+
+                                <!--                                                            </div>-->
+                                <!--                                                        </div>-->
+                                <!--                                                        <div class="row border-bottom border-info   mx-0 py-2">-->
+                                <!--                                                            <div class="col-6">-->
+                                <!--                                                                Loading No-->
+                                <!--                                                            </div>-->
+                                <!--                                                            <div class="col-6" t-esc="doc_data['loading_no']">-->
+                                <!--                                                            </div>-->
+                                <!--                                                        </div>-->
+                                <!--                                                        <div class="col-12 text-center ">-->
+                                <!--                                                            <div class="h6">-->
+                                <!--                                                                تایید حراست ورودی-->
+                                <!--                                                            </div>-->
+                                <!--                                                        </div>-->
+                                <!--                                                    </div>-->
+                                <!--                                                </div>-->
+                            </div>
 
                         </div>
-
                     </div>
 
-<!--                </t>-->
-<!--            </t>-->
+                </div>
+
+            </div>
+
+            <!--                </t>-->
+            <!--            </t>-->
         </template>
 
-<!--        <template id="meter_report_template">-->
-<!--            <t t-call="web.basic_layout">-->
-<!--                <t t-foreach="docs" t-as="o">-->
-<!--                    <t t-call="sd_payaneh_nafti.meter_report_data" t-lang="lang"/>-->
-<!--                </t>-->
-<!--            </t>-->
-<!--        </template>-->
+        <!--        <template id="meter_report_template">-->
+        <!--            <t t-call="web.basic_layout">-->
+        <!--                <t t-foreach="docs" t-as="o">-->
+        <!--                    <t t-call="sd_payaneh_nafti.meter_report_data" t-lang="lang"/>-->
+        <!--                </t>-->
+        <!--            </t>-->
+        <!--        </template>-->
 
         <template id="meter_report_template">
             <t t-call="web.basic_layout" t-lang="lang">
-<!--            <t t-call="web.report_layout">-->
+                <!--            <t t-call="web.report_layout">-->
                 <div t-if="errors != []">
                     <div class="container mt-2 text-center">
                         <div class="border border-danger rounded p-3" style="direction: ltr" t-esc="errors[0]"></div>
                     </div>
                 </div>
-                <div t-if="errors == []" class="container" >
+                <div t-if="errors == []" class="container">
                     <t t-foreach="docs" t-as="o">
-                        <t t-call="sd_payaneh_nafti.meter_report_data" />
+                        <t t-call="sd_payaneh_nafti.meter_report_data"/>
                     </t>
                 </div>
             </t>
