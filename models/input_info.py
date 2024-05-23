@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import  datetime, timedelta
+from datetime import datetime, timedelta
 import json
 
 from odoo import models, fields, api, _
@@ -11,12 +11,15 @@ import math
 import logging
 import pytz
 
-
 cpl_counter = 0
+
+
 def _cpl_counter():
     global cpl_counter
     cpl_counter += 1
     return cpl_counter
+
+
 class SdPayanehNaftiInputInfo(models.Model):
     _name = 'sd_payaneh_nafti.input_info'
     _description = 'sd_payaneh_nafti.input_info'
@@ -37,7 +40,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         ('out_of_date', 'Out of Date'),
         ('amount_limit', 'Amount Limit'),
         ('finished', 'Finished'),
-        ],
+    ],
         string='Status', index=True, readonly=True, tracking=True,
         copy=False, default='draft', required=True, )
     shift = fields.Selection([
@@ -48,7 +51,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         ('shift_5', 'Shift 5'),
         ('shift_6', 'Shift 6'),
 
-        ],
+    ],
         string='Shift', index=True, tracking=True,
         copy=False, default=lambda self: self.shift_selector(), required=True, )
     remain_amount = fields.Float(compute='_remain_amount')
@@ -58,31 +61,32 @@ class SdPayanehNaftiInputInfo(models.Model):
                                  default=lambda self: 0)
     # document_no = fields.Integer(required=True, copy=False, readonly=False, tracking=True,
     #                              default=lambda self: self.search([], order='document_no desc', limit=1).document_no + 1)
-    request_date = fields.Date(default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))),
-                               required=True, tracking=True)
+    request_date = fields.Date(
+        default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))),
+        required=True, tracking=True)
     registration_no = fields.Many2one('sd_payaneh_nafti.contract_registration', required=True, tracking=True,
                                       default=lambda self: self.env.context.get('registration_no', False))
     date_validation = fields.Boolean(related='registration_no.date_validation', store=False)
-    contract_no = fields.Char(related='registration_no.contract_no', tracking=True,)
+    contract_no = fields.Char(related='registration_no.contract_no', tracking=True, )
     order_no = fields.Char(related='registration_no.order_no')
     buyer = fields.Many2one(related='registration_no.buyer')
     contractors = fields.Many2many(related='registration_no.contractors')
-    contractor = fields.Many2one('sd_payaneh_nafti.contractors', required=True, tracking=True,)
-    driver = fields.Many2one('sd_payaneh_nafti.drivers', required=True, tracking=True,)
+    contractor = fields.Many2one('sd_payaneh_nafti.contractors', required=True, tracking=True, )
+    driver = fields.Many2one('sd_payaneh_nafti.drivers', required=True, tracking=True, )
     driver_black_list = fields.Boolean(related='driver.black_list')
     card_no = fields.Char(related='driver.card_no')
-    truck_no = fields.Many2one('sd_payaneh_nafti.trucks', required=True, tracking=True,)
+    truck_no = fields.Many2one('sd_payaneh_nafti.trucks', required=True, tracking=True, )
     truck_black_list = fields.Boolean(related='truck_no.black_list')
-    plate_1 = fields.Char(related='truck_no.plate_1',)
-    plate_2 = fields.Char(related='truck_no.plate_2',)
-    plate_3 = fields.Char(related='truck_no.plate_3',)
-    plate_4 = fields.Char(related='truck_no.plate_4',)
+    plate_1 = fields.Char(related='truck_no.plate_1', )
+    plate_2 = fields.Char(related='truck_no.plate_2', )
+    plate_3 = fields.Char(related='truck_no.plate_3', )
+    plate_4 = fields.Char(related='truck_no.plate_4', )
     # front_container = fields.Integer(related='truck_no.front_container')
     # middle_container = fields.Integer(related='truck_no.middle_container')
     # back_container = fields.Integer(related='truck_no.back_container')
-    front_container = fields.Integer(required=True, tracking=True,)
-    middle_container = fields.Integer(required=True, tracking=True,)
-    back_container = fields.Integer(required=True, tracking=True,)
+    front_container = fields.Integer(required=True, tracking=True, )
+    middle_container = fields.Integer(required=True, tracking=True, )
+    back_container = fields.Integer(required=True, tracking=True, )
     total = fields.Integer(compute='_total')
     centralized_container = fields.Selection([('a', 'A'),
                                               ('b', 'B'),
@@ -96,9 +100,11 @@ class SdPayanehNaftiInputInfo(models.Model):
 
     loading_no = fields.Char(copy=False, readonly=False, tracking=True, )
     # todo: timezone
-    loading_date = fields.Date(copy=False, string='Loading Date', readonly=False, default=lambda self: self.request_date, tracking=True)
+    loading_date = fields.Date(copy=False, string='Loading Date', readonly=False,
+                               default=lambda self: self.request_date, tracking=True)
     loading_info_date = fields.Date(copy=False, tracking=True,
-                                    default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))))
+                                    default=lambda self: datetime.now(
+                                        pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))))
     # driver = fields.Char(required=True,)
 
     sp_gr = fields.Float(string='SP. GR.', required=False, store=True, readonly=False, tracking=True)
@@ -107,27 +113,27 @@ class SdPayanehNaftiInputInfo(models.Model):
     temperature_f = fields.Float(string='Temp. (F)', compute='_temperature_f', digits=(12, 1))
     pressure = fields.Float(string='Pressure (bar)', required=True, default=2.5, tracking=True)
     pressure_psi = fields.Integer(compute='_pressure_psi', digits=(2, 0))
-    meter_no = fields.Selection([ ('1', '1'),
-                                  ('2', '2'),
-                                  ('3', '3'),
-                                  ('4', '4'),
-                                  ('5', '5'),
-                                  ('6', '6'),
-                                  ('7', '7'),
-                                  ('8', '8'),
-                                  ('0', 'Master'),
-                                  ], required=False, tracking=True,)
+    meter_no = fields.Selection([('1', '1'),
+                                 ('2', '2'),
+                                 ('3', '3'),
+                                 ('4', '4'),
+                                 ('5', '5'),
+                                 ('6', '6'),
+                                 ('7', '7'),
+                                 ('8', '8'),
+                                 ('0', 'Master'),
+                                 ], required=False, tracking=True, )
     totalizer_lasts = fields.Html(required=False, readonly=True)
-    totalizer_start = fields.Integer(required=False, tracking=True,)
+    totalizer_start = fields.Integer(required=False, tracking=True, )
     totalizer_end = fields.Integer(required=False, tracking=True, help="The last Totalizer End as start")
     totalizer_difference = fields.Integer(required=False, compute='_totalizer_difference')
     weighbridge = fields.Selection([('no', 'No'), ('yes', 'Yes')], default='no', tracking=True)
-    tanker_empty_weight = fields.Integer(required=False, tracking=True,)
-    tanker_full_weight = fields.Integer(required=False, tracking=True,)
+    tanker_empty_weight = fields.Integer(required=False, tracking=True, )
+    tanker_full_weight = fields.Integer(required=False, tracking=True, )
     tanker_pure_weight = fields.Integer(required=False, compute='_tanker_pure_weight')
-    evacuation_box_seal = fields.Char(required=False,  tracking=True)
-    compartment_1 = fields.Char(required=False,  tracking=True)
-    compartment_2 = fields.Char(required=False,  tracking=True)
+    evacuation_box_seal = fields.Char(required=False, tracking=True)
+    compartment_1 = fields.Char(required=False, tracking=True)
+    compartment_2 = fields.Char(required=False, tracking=True)
     compartment_3 = fields.Char(required=False, tracking=True)
     correction_factor = fields.Float(digits=(12, 5), required=True, default=1.0, tracking=True)
     # api_box_locker = fields.Many2one('sd_payaneh_nafti.lockers')
@@ -156,7 +162,8 @@ class SdPayanehNaftiInputInfo(models.Model):
     cpl_counter = fields.Integer(default=0)
 
     cqq = fields.Many2one('sd_payaneh_nafti.spgr')
-
+    truck_in_30_record = fields.Boolean(default=False)
+    driver_in_30_record = fields.Boolean(default=False)
 
     def shift_selector(self):
         shift = 1
@@ -175,11 +182,21 @@ class SdPayanehNaftiInputInfo(models.Model):
             shift = 6
 
         return f'shift_{shift}'
+
     @api.onchange('truck_no')
     def _truck_changed(self):
         self.front_container = self.truck_no.front_container
         self.middle_container = self.truck_no.middle_container
         self.back_container = self.truck_no.back_container
+        inputs_same_truck = self.search([],limit=30)
+        inputs_same_truck = list([rec for rec in inputs_same_truck if rec.truck_no == self.truck_no])
+        self.truck_in_30_record = True if len(inputs_same_truck) > 0 else False
+
+    @api.onchange('driver')
+    def _driver_changed(self):
+        inputs_same_driver = self.search([],limit=30)
+        inputs_same_driver = list([rec for rec in inputs_same_driver if rec.driver == self.driver])
+        self.driver_in_30_record = True if len(inputs_same_driver) > 0 else False
 
     @api.onchange('evacuation_box_seal')
     def onchange_evacuation_box_seal(self):
@@ -202,6 +219,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         last_input = self.search([('meter_no', '=', self.meter_no),
                                   ('totalizer_end', '>', 0)],
                                  order='document_no desc,totalizer_end desc', limit=5)
+        last_input = sorted(last_input, key=lambda x: x.totalizer_end, reverse=True)
         if last_input:
             self.totalizer_start = last_input[0].totalizer_end
             totalizer_lasts = []
@@ -221,7 +239,7 @@ class SdPayanehNaftiInputInfo(models.Model):
     # def onchange_document_no(self):
     #     self.set_spgr()
 
-    @api.depends('registration_no',)
+    @api.depends('registration_no', )
     @api.onchange('registration_no', 'front_container', 'middle_container', 'back_container')
     def _on_registration_change(self):
         self._remain_amount()
@@ -278,16 +296,17 @@ class SdPayanehNaftiInputInfo(models.Model):
             # In case of new record creation
             if rec.id and str(rec.id).isdigit():
                 # inputs = self.search([('id', '!=', False), ('id', '<=', rec.id), ('registration_no', '=', rec.registration_no.id), ])
-                inputs = list([re for re in all_inputs if re.id != False and re.id <= rec.id and re.registration_no.id == rec.registration_no.id])
+                inputs = list([re for re in all_inputs if
+                               re.id != False and re.id <= rec.id and re.registration_no.id == rec.registration_no.id])
             else:
                 # inputs = self.search([('registration_no', '=', rec.registration_no.id),])
-                inputs = list([re for re in all_inputs if re.registration_no.id == rec.registration_no.id ])
+                inputs = list([re for re in all_inputs if re.registration_no.id == rec.registration_no.id])
 
             #  if there is no loading info, calculate based on sum of the containers amount
             if not rec.final_mt:
                 total = rec.front_container + rec.middle_container + rec.back_container
                 # final_tov_l = round((rec.cpl * total * rec.correction_factor), 0 )
-                final_gsv_l = round((rec.cpl * rec.ctl * total * rec.correction_factor), 0 )
+                final_gsv_l = round((rec.cpl * rec.ctl * total * rec.correction_factor), 0)
                 final_gsv_b = final_gsv_l / 158.987
                 final_mt = round(final_gsv_b * rec.tab_13, 3)
 
@@ -301,14 +320,11 @@ class SdPayanehNaftiInputInfo(models.Model):
             else:
                 used_amounts = 0
 
-
             amount = rec.registration_no.amount if rec.registration_no.init_amount == 0 else rec.registration_no.init_amount
             rec.remain_amount = amount - used_amounts
             rec.remain_amount_approx = amount - used_amounts - requested_approx_amount
             if rec.state != 'finished':
                 rec.amount = rec.final_gsv_b if rec.registration_no.unit == 'barrel' else rec.final_mt
-
-
 
     def _finals(self):
         # calculate the final amounts based on the totalizer or the tanker weight
@@ -326,8 +342,8 @@ class SdPayanehNaftiInputInfo(models.Model):
                 final_gsv_b = final_gsv_l / 158.987
                 final_tov_l = round((final_gsv_l / rec.ctl) / rec.cpl, 0)
             else:
-                final_tov_l = round((rec.cpl * rec.totalizer_difference * rec.correction_factor), 0 )
-                final_gsv_l = round((rec.cpl * rec.ctl * rec.totalizer_difference * rec.correction_factor), 0 )
+                final_tov_l = round((rec.cpl * rec.totalizer_difference * rec.correction_factor), 0)
+                final_gsv_l = round((rec.cpl * rec.ctl * rec.totalizer_difference * rec.correction_factor), 0)
                 final_gsv_b = final_gsv_l / 158.987
                 final_mt = round(final_gsv_b * rec.tab_13, 3)
 
@@ -346,13 +362,14 @@ class SdPayanehNaftiInputInfo(models.Model):
         for rec in self:
             api_a = 141.5 / rec.sp_gr - 131.5 if rec.sp_gr else 0
             # The api calculation had changed on 1401 mehr Excel file. The document 3215 is the first one on 1401 mehr.
-            rec.api_a = round(api_a, 2) if rec.registration_no.loading_type == 'internal' or rec.document_no < 3215 else round(api_a, 1)
+            r = 2 if rec.registration_no.loading_type == 'internal' or rec.document_no < 3215 else 1
+            rec.api_a = round(api_a, r)
+
 
     def _tab_13(self):
         # Calculates the TAB.13
         for rec in self:
             rec.tab_13 = ((141.3819577 / (rec.api_a + 131.5)) - 0.001199407795) * 0.1589872949
-
 
     def _pressure_psi(self):
         # Calculates the pressure based on PSI
@@ -389,38 +406,50 @@ class SdPayanehNaftiInputInfo(models.Model):
                 rec_pi = (141.5 / (rec.api_a + 131.5)) * 999.016
                 rec_a = (delta_60 / 2) * (((k_0 / rec_pi) + k_1) * (1 / rec_pi) + k_2)
                 rec_b = ((2 * k_0) + (k_1 * rec_pi)) / ((k_0 + ((k_2 * rec_pi) + k_1) * rec_pi))
-                rec_pi_star = rec_pi * (1 + ((math.exp((rec_a * (1 + (0.8 * rec_a)))) - 1) / (1 + rec_a * (1 + (0.6 * rec_a)) * rec_b)))
+                rec_pi_star = rec_pi * (1 + (
+                        (math.exp((rec_a * (1 + (0.8 * rec_a)))) - 1) / (1 + rec_a * (1 + (0.6 * rec_a)) * rec_b)))
                 alpha_60 = (((k_0 / rec_pi_star) + k_1) * (1 / rec_pi_star)) + k_2
-                t_star_prime = ((temperature_f-32)/1.8)/630
-                t_star_zegond = (param_ai1+((param_ai2+((param_ai3+((param_ai4+((param_ai5+((param_ai6+((param_ai7+(param_ai8*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime
-                # t_star = ((temperature-((param_ai1+(param_ai2+(param_ai3+(param_ai4+(param_ai5+(param_ai6+(param_ai7+param_ai8*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630))*(temperature/630)))*1.8)+32
+                t_star_prime = ((temperature_f - 32) / 1.8) / 630
+                t_star_zegond = (param_ai1 +
+                                 ((param_ai2 +
+                                   ((param_ai3 +
+                                     ((param_ai4 +
+                                       ((param_ai5 +
+                                         ((param_ai6 +
+                                           ((param_ai7 +
+                                             (param_ai8 *
+                                              t_star_prime)) *
+                                            t_star_prime)) *
+                                          t_star_prime)) *
+                                        t_star_prime)) *
+                                      t_star_prime)) *
+                                    t_star_prime)) *
+                                  t_star_prime)) * t_star_prime
                 # caculation sheet, T* column
-                t_star = ((((
-                                   (temperature_f-32) / 1.8) -
-                           ((param_ai1+(param_ai2+(param_ai3+(param_ai4+(param_ai5+(param_ai6+
-                                                                                    (param_ai7+param_ai8 * (((temperature_f-32) / 1.8) / 630)) *
-                                                                                    (((temperature_f-32) / 1.8) / 630)
-                                                                                    ) * (((temperature_f-32) / 1.8) / 630)
-                                                                         ) *
-                                                              (((temperature_f-32) / 1.8) / 630)
-                                                              ) * (((temperature_f-32) / 1.8) / 630)
-                                                   ) *(((temperature_f-32) / 1.8) / 630))*(((temperature_f-32) / 1.8) / 630)
-                             ) * (((temperature_f-32) / 1.8) / 630)) ) *1.8)+32)
-                
+                t_star = (((((temperature_f - 32) / 1.8) -
+                            ((param_ai1 +
+                              (param_ai2 +
+                               (param_ai3 +
+                                (param_ai4 +
+                                 (param_ai5 +
+                                  (param_ai6 +
+                                   (param_ai7 + param_ai8 *
+                                    (((temperature_f - 32) / 1.8) / 630)) *
+                                   (((temperature_f - 32) / 1.8) / 630)) *
+                                  (((temperature_f - 32) / 1.8) / 630)) *
+                                 (((temperature_f - 32) / 1.8) / 630)) *
+                                (((temperature_f - 32) / 1.8) / 630)) *
+                               (((temperature_f - 32) / 1.8) / 630)) *
+                              (((temperature_f - 32) / 1.8) / 630)) *
+                             (((temperature_f - 32) / 1.8) / 630))) *
+                           1.8) +
+                          32)
+
                 delta_t = t_star - tref
-                fp = math.exp((param_a+param_b*t_star+((param_c+param_d*t_star)/(rec_pi_star**2))))
+                fp = math.exp((param_a + param_b * t_star + ((param_c + param_d * t_star) / (rec_pi_star ** 2))))
                 rec.ctl = round(math.exp((-(alpha_60 * delta_t)) * (1 + ((0.8 * alpha_60) * (delta_t + delta_60)))), 15)
-                rec.cpl = round(1 / (1-((10 ** -5) * (fp * rec.pressure_psi))), 13)
-                # print(f'\n'
-                #       f'rec no: {rec.document_no}\n'
-                #       f'rec_pi: {rec_pi}\n'
-                #       f'rec_a: {rec_a}\n'
-                #       f'rec_b: {rec_b}\n'
-                #       f'rec_pi_star: {rec_pi_star}\n'
-                #       f't_star: {t_star}\n'
-                #       f'rec.ctl: {rec.ctl}\n'
-                #       f'rec.cpl: {rec.cpl}\n'
-                #       f'')
+                rec.cpl = round(1 / (1 - ((10 ** -5) * (fp * rec.pressure_psi))), 13)
+
             except Exception as e:
                 logging.error(f'_ctl_cpl : {e}')
                 logging.error(f'_ctl_cpl : You might needed to save system parameters')
@@ -505,11 +534,13 @@ class SdPayanehNaftiInputInfo(models.Model):
         return res
 
     def write(self, vals):
+        # print(f'===============> {self.document_no}:\n {vals}')
         # Changing the compartment_1 means that there are loading info entry. So, it moves the state to cargo_document.
         if vals.get('meter_no') or vals.get('compartment_locker_1'):
             vals['state'] = 'cargo_document'
 
-        if not self.env.is_admin() and self.state in ['finished', 'canceled', 'unloaded']:
+        if not (len(vals) == 1 and 'amount' in vals.keys()) and self.state in ['finished', 'canceled', 'unloaded'] and\
+                not self.env.user.has_group('sd_payaneh_nafti.group_sd_payaneh_nafti_admins'):
             raise ValidationError(_('Finished record is not editable!'))
 
         doc_no = vals.get('document_no', None)
@@ -531,7 +562,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'Inputs',
-            'views': [ [form_id, 'form']],
+            'views': [[form_id, 'form']],
             'view_mode': 'form',
             'res_id': self.registration_no.id,
             'res_model': 'sd_payaneh_nafti.contract_registration',
@@ -545,7 +576,7 @@ class SdPayanehNaftiInputInfo(models.Model):
             #
             # loading_no = str(jdatetime.date.today().year) + f"/{int(loading_no):07d}"
             loading_date = datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))).date()
-            rec.write({'state': 'loading_permit', 'loading_date': loading_date })
+            rec.write({'state': 'loading_permit', 'loading_date': loading_date})
 
     def print_loading_permit(self):
 
@@ -598,7 +629,6 @@ class SdPayanehNaftiInputInfo(models.Model):
             else:
                 rec.write({'state': 'done'})
 
-
     def input_finished(self):
         for rec in self:
             if rec.state not in ['canceled', 'unloaded']:
@@ -619,9 +649,9 @@ class SdPayanehNaftiInputInfo(models.Model):
         #   so the remain amount of this two type of contracts should not be sum up.
         this_day_loaded = self.search([('loading_info_date', '=', today_date)])
         one_day_ago_loaded = self.search([('loading_info_date', '=', today_date - timedelta(days=1))])
-        two_days_ago_loaded = self.search([('loading_info_date', '=', today_date- timedelta(days=2))])
-        three_days_ago_loaded = self.search([('loading_info_date', '=', today_date- timedelta(days=3))])
-        this_day_requests_amount = round(sum([rec.amount for rec in this_day_loaded ]), 2)
+        two_days_ago_loaded = self.search([('loading_info_date', '=', today_date - timedelta(days=2))])
+        three_days_ago_loaded = self.search([('loading_info_date', '=', today_date - timedelta(days=3))])
+        this_day_requests_amount = round(sum([rec.amount for rec in this_day_loaded]), 2)
         this_day_requests_amount = 0
 
         this_day_requests_count = len(this_day_requests)
@@ -629,9 +659,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         loading_permit = len([rec for rec in open_requests if rec.state == 'loading_permit'])
         loading_info = len([rec for rec in open_requests if rec.state == 'loading_info'])
 
-
         cargo_document = len([rec for rec in open_requests if rec.state == 'cargo_document'])
-
 
         data = {
             'open_requests': len(open_requests),
@@ -737,11 +765,12 @@ class SdPayanehNaftiInputInfo(models.Model):
                                            if rec.meter_no == meter_no]),
                                      key=lambda r: r[1])
             for index in range(len(mismatch_record) - 1):
-                if abs(mismatch_record[index][2] - mismatch_record[index + 1][1] ) > 1:
+                if abs(mismatch_record[index][2] - mismatch_record[index + 1][1]) > 1:
                     r1 = mismatch_record[index]
                     r2 = mismatch_record[index + 1]
                     r_12 = self.env['sd_payaneh_nafti.input_info'].search(
-                        [('meter_no', '=', meter_no), ('totalizer_start', '>', r1[2]), ('totalizer_end', '<', r2[1])], order='totalizer_start')
+                        [('meter_no', '=', meter_no), ('totalizer_start', '>', r1[2]), ('totalizer_end', '<', r2[1])],
+                        order='totalizer_start')
                     mismatch = mismatch + f'''
                                         <div class="row border-bottom"> 
                                             <div class="col-3">  {r1[0]} </div>
