@@ -39,7 +39,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         ('finished', 'Finished'),
         ],
         string='Status', index=True, readonly=True, tracking=True,
-        copy=False, default='draft', required=True, group_expand='_expand_groups', )
+        copy=False, default='draft', required=True, )
     shift = fields.Selection([
         ('shift_1', 'Shift 1'),
         ('shift_2', 'Shift 2'),
@@ -156,6 +156,7 @@ class SdPayanehNaftiInputInfo(models.Model):
     cpl_counter = fields.Integer(default=0)
 
     cqq = fields.Many2one('sd_payaneh_nafti.spgr')
+
 
     def shift_selector(self):
         shift = 1
