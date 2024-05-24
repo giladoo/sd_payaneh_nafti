@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import time
 from datetime import datetime, timedelta
 import json
 
@@ -457,6 +458,7 @@ class SdPayanehNaftiInputInfo(models.Model):
                 rec.cpl = 1
                 raise ValidationError(_('You might needed to save system parameters.'
                                         '\n They get default values but you have to save them to res.config.system.'))
+
 
     def _weighbridge_change(self):
         # It makes sure the tanker weight or the totalizer amount would be zero whenever the weighbridge has changed.

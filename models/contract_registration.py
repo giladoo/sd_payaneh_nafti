@@ -64,7 +64,7 @@ class SdPayanehNaftiContractInfo(models.Model):
             else:
                 rec.date_validation = False
 
-            logging.error(f'\n---------->   registration_no: {rec.registration_no} date_validation: {rec.date_validation}')
+            logging.info(f'\n---------->   registration_no: {rec.registration_no} date_validation: {rec.date_validation}')
 
     def compute_count(self):
         for rec in self:
@@ -89,7 +89,9 @@ class SdPayanehNaftiContractInfo(models.Model):
             vals['registration_no'] = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.contract_registration') or _('New')
         # if vals.get('registration_no') == 0:
         #     raise ValidationError(_('Registration No'))
-        return super(SdPayanehNaftiContractInfo, self).create(vals)
+        res = super(SdPayanehNaftiContractInfo, self).create(vals)
+        logging.info(f'[CONTRACT_REGISTRATION Create] User:[{self.env.user.id}] Doc_No:[{vals["registration_no"]}] ID:[{res.id}]')
+        return res
 
     def write(self, vals):
         # todo: it is disabled for parallel data entry of excel and this system.

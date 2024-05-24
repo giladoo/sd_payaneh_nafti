@@ -103,7 +103,7 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
             final_mt = [rec.final_mt for rec in input_records if rec.loading_date == rec_date]
             d = data[0] if len(data) > 0 else 0
             total_gsv_l = int(sum(final_gsv_l))
-            final_gsv_b = round(total_gsv_l / 158.987, 7)
+            final_gsv_b = round(total_gsv_l / 158.987, 2)
             # total_gsv_b = round(sum(final_gsv_b), 2)
             total_gsv_b = final_gsv_b
             total_mt = round(sum(final_mt), 3)
