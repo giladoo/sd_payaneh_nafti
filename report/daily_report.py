@@ -36,6 +36,10 @@ class ReportSdPayanehNaftiDaily(models.AbstractModel):
 
         input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '=', start_date),
                                                                         ('state', 'in', ['done', 'finished']),])
+        # input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '=', start_date),])
+
+        # print(f'++++++++++++++>>> {start_date} \n  len(input_records) {len(input_records)}\n')
+
         calendar = context.get('lang')
         if calendar == 'fa_IR':
             s_start_date = jdatetime.date.fromgregorian(date=start_date).strftime("%Y/%m/%d")

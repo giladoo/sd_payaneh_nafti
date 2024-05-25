@@ -163,8 +163,8 @@ class SdPayanehNaftiInputInfo(models.Model):
     cpl_counter = fields.Integer(default=0)
 
     cqq = fields.Many2one('sd_payaneh_nafti.spgr')
-    truck_in_30_record = fields.Boolean(default=False)
-    driver_in_30_record = fields.Boolean(default=False)
+    truck_in_30_record = fields.Boolean(default=False, compute='_truck_in_30_record')
+    driver_in_30_record = fields.Boolean(default=False, compute='_driver_in_30_record')
 
     def shift_selector(self):
         shift = 1
@@ -189,14 +189,19 @@ class SdPayanehNaftiInputInfo(models.Model):
         self.front_container = self.truck_no.front_container
         self.middle_container = self.truck_no.middle_container
         self.back_container = self.truck_no.back_container
-        inputs_same_truck = self.search([],limit=30)
-        inputs_same_truck = list([rec for rec in inputs_same_truck if rec.truck_no == self.truck_no])
+        self._truck_in_30_record()
+
+    def _truck_in_30_record(self):
+        inputs_same_truck = self.search([], order='id desc', limit=30)
+        inputs_same_truck = list([rec for rec in inputs_same_truck
+                                  if rec.truck_no == self.truck_no and rec.document_no != self.document_no])
         self.truck_in_30_record = True if len(inputs_same_truck) > 0 else False
 
     @api.onchange('driver')
-    def _driver_changed(self):
-        inputs_same_driver = self.search([],limit=30)
-        inputs_same_driver = list([rec for rec in inputs_same_driver if rec.driver == self.driver])
+    def _driver_in_30_record(self):
+        inputs_same_driver = self.search([], order='id desc', limit=30)
+        inputs_same_driver = list([rec for rec in inputs_same_driver
+                                   if rec.driver == self.driver and rec.document_no != self.document_no])
         self.driver_in_30_record = True if len(inputs_same_driver) > 0 else False
 
     @api.onchange('evacuation_box_seal')
@@ -279,7 +284,6 @@ class SdPayanehNaftiInputInfo(models.Model):
 
     @api.depends('shift')
     def _remain_amount(self):
-        # print('============   _remain_amount  =============')
         # select registration_no of this records
         registration_list = []
         for rec in self:
@@ -330,7 +334,6 @@ class SdPayanehNaftiInputInfo(models.Model):
     def _finals(self):
         # calculate the final amounts based on the totalizer or the tanker weight
         for rec in self:
-            # print(f'=======> {rec.document_no} rec.cpl:{rec.cpl}  rec.ctl:{rec.ctl} ')
             if rec.weighbridge == 'yes':
                 # final_mt = round(rec.tanker_pure_weight / 1000, 3)
                 # final_gsv_b = final_mt / rec.tab_13
@@ -531,12 +534,10 @@ class SdPayanehNaftiInputInfo(models.Model):
         res = super(SdPayanehNaftiInputInfo, self).create(vals)
 
         logging.info(f'[INPUT_INOF Create] User:[{self.env.user.id}] Doc_No:[{vals["document_no"]}] ID:[{res.id}]')
-        # print(f'\n --------res 2 \n {res}  ')
         self.send_message()
         return res
 
     def write(self, vals):
-        # print(f'===============> {self.document_no}:\n {vals}')
         # Changing the compartment_1 means that there are loading info entry. So, it moves the state to cargo_document.
         if vals.get('meter_no') or vals.get('compartment_locker_1'):
             vals['state'] = 'cargo_document'
@@ -581,7 +582,6 @@ class SdPayanehNaftiInputInfo(models.Model):
             rec.write({'state': 'loading_permit', 'loading_date': loading_date})
 
     def print_loading_permit(self):
-
         if self.state == 'loading_permit':
             self.write({'state': 'loading_info'})
         data = {'form_data': {'document_no': (0, self.document_no)}}
@@ -593,7 +593,6 @@ class SdPayanehNaftiInputInfo(models.Model):
             self.set_spgr()
 
         loading_info_form = self.env.ref('sd_payaneh_nafti.sd_payaneh_nafti_input_info_form_loading_info')
-        # print(f'\n loading info: self: {self} loading_info_form: {loading_info_form}')
         return {
             'type': 'ir.actions.act_window',
             'name': 'Loading Info',
@@ -640,7 +639,6 @@ class SdPayanehNaftiInputInfo(models.Model):
     def get_requests(self):
         # today_date = date.today()
         today_date = datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))).date()
-        # print(f'------------> today_date: {today_date}')
 
         open_requests = self.search([('state', 'not in', ['done', 'finished'])])
         this_day_requests = self.search([('request_date', '=', today_date)])
@@ -685,7 +683,6 @@ class SdPayanehNaftiInputInfo(models.Model):
         channel = 'payaneh_operation_channel'
         message = {'data': data}
         bus_type = 'payaneh_operation'
-        # print(f'=========\nchannel {channel} bus_type {bus_type}')
         self.env['bus.bus'].sudo()._sendone(channel, bus_type, message)
 
     # ########################################################################################
