@@ -102,9 +102,9 @@
                                     </div>
 
                                 </div>
-                                <div>
-                                    <table class="table table-bordered border-0 text-center daily_report_table">
-                                        <thead class=" text-center">
+                                <div class="border border-dark ">
+                                    <table class="table table-bordered1 border-0 text-center m-0 daily_report_table">
+                                        <thead class=" text-center rounded">
                                             <t t-call="sd_payaneh_nafti.daily_report_table_header"/>
                                         </thead>
                                         <tbody>

@@ -108,6 +108,8 @@
    padding-left: 0.25rem !important;
    padding-top: 0.15rem !important;
    padding-bottom: 0.15rem !important;
+       border-left: 1px solid #adb5bd;
+
 }
  .daily_report_table tbody td{
     vertical-align: middle;
@@ -116,6 +118,8 @@
    padding-left: 0.25rem !important;
    padding-top: 0.05rem !important;
    padding-bottom: 0.05rem !important;
+       border-left: 1px solid #adb5bd;
+
 
 }
 .daily_report_table tbody{
@@ -123,7 +127,7 @@
     border-bottom: solid;
 }
 .daily_report_table tfoot tr{
-    border-bottom: outset;
+    //border-bottom: outset;
 }
 
 .outgate_daily_report_table thead th, .outgate_daily_report_table tfoot td{

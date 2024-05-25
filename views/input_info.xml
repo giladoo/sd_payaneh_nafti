@@ -662,6 +662,7 @@
                         <filter string="Driver" name="driver_group" context="{'group_by': 'driver'}"/>
                         <filter string="Truck" name="truck_no_group" context="{'group_by': 'truck_no'}"/>
                         <filter string="Meter No" name="meter_no_group" context="{'group_by': 'meter_no'}"/>
+                        <filter string="Status" name="state_group" context="{'group_by': 'state'}"/>
                         <filter string="Request Date" name="request_date_group" context="{'group_by': 'request_date'}"/>
                     </group>
                 </search>

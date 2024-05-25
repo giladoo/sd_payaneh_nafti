@@ -61,7 +61,8 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
 
         input_records = self.env['sd_payaneh_nafti.input_info'].search([('request_date', '>=', first_day),
                                                                         ('request_date', '<=', last_day),
-                                                                        ('registration_no', '=', registration_no)],)
+                                                                        ('registration_no', '=', registration_no),
+                                                                        ('state', 'in', ['done', 'finished']),],)
         # r_1674 = list([(rec, rec.registration_no, rec.document_no) for rec in input_records if registration_no == 1674])
         # print('+++++++++++++++++++++')
         # for r in r_1674:
@@ -127,7 +128,8 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
         footer_data['total_gsv_b'] = round(footer_data['total_gsv_b'], 2)
         footer_data['total_mt'] = round(footer_data['total_mt'], 3)
         input_records_past = self.env['sd_payaneh_nafti.input_info'].search([('registration_no', '=', registration_no),
-                                                                             ('loading_date', '<', first_day)],)
+                                                                             ('loading_date', '<', first_day),
+                                                                             ('state', 'in', ['done', 'finished']),],)
         final_gsv_l_past = [rec.final_gsv_l for rec in input_records_past]
         # final_gsv_b_past = [rec.final_gsv_b for rec in input_records_past]
         final_gsv_b_past = [rec.final_gsv_b for rec in input_records_past]

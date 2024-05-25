@@ -34,7 +34,8 @@ class ReportSdPayanehNaftiDaily(models.AbstractModel):
         date_format = '%Y-%m-%d'
         start_date = datetime.strptime(start_date, date_format).date()
 
-        input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '=', start_date)])
+        input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '=', start_date),
+                                                                        ('state', 'in', ['done', 'finished']),])
         calendar = context.get('lang')
         if calendar == 'fa_IR':
             s_start_date = jdatetime.date.fromgregorian(date=start_date).strftime("%Y/%m/%d")
@@ -67,7 +68,8 @@ class ReportSdPayanehNaftiDaily(models.AbstractModel):
                 d_end_date = d.registration_no.end_date.strftime("%Y/%m/%d")
 
             reg_inputs_all = self.env['sd_payaneh_nafti.input_info'].search([('registration_no', '=', d.registration_no.id),
-                                                                             ('loading_date', '<=', start_date)])
+                                                                             ('loading_date', '<=', start_date),
+                                                                             ('state', 'in', ['done', 'finished']),])
 
             final_gsv_b_all = [rec.final_gsv_b for rec in reg_inputs_all ]
             sum_final_gsv_b = round(sum(final_gsv_b))

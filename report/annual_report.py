@@ -71,7 +71,9 @@ class ReportSdPayanehNaftiannual(models.AbstractModel):
         month_list_names = list([rec[1] for rec in self.month_list])
 
         input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '>=', first_day),
-                                                                        ('loading_date', '<=', last_day)])
+                                                                        ('loading_date', '<=', last_day),
+                                                                        ('state', 'in', ['done', 'finished']),
+                                                                        ])
         if len(input_records) == 0:
             return{
                 'errors': [_(f'No record have found for selected time duration: {s_first_day} to {s_last_day}')],

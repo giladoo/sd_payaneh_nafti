@@ -44,7 +44,8 @@ class ReportSdPayanehNaftiMonthly(models.AbstractModel):
             s_first_day = first_day.strftime("%Y-%m-%d")
             s_last_day = last_day.strftime("%Y-%m-%d")
         input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '>=', first_day),
-                                                                        ('loading_date', '<=', last_day)])
+                                                                        ('loading_date', '<=', last_day),
+                                                                        ('state', 'in', ['done', 'finished']),])
         input_dict = list([{
             'registration_no': rec.registration_no.registration_no,
             'contract_type': rec.registration_no.contract_type or '',

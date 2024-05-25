@@ -67,7 +67,9 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
             report_day = report_date
             s_start_date = report_date.strftime("%Y/%m/%d")
 
-        input_records = self.env['sd_payaneh_nafti.input_info'].search([('registration_no', '=', registration_no)], order='id')
+        input_records = self.env['sd_payaneh_nafti.input_info'].search([('registration_no', '=', registration_no),
+                                                                        ('state', 'in', ['done', 'finished'])],
+                                                                       order='id')
         if len(input_records) == 0:
             return {
                 'errors': [_(f'No record have found for contract {registration_no} on selected date: {s_start_date} ')],

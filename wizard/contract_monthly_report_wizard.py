@@ -43,7 +43,7 @@ class SdPayanehNaftiReportContractMonthly(models.TransientModel):
         elif self.year == '1402':
 
             lst = [('a', 'A'), ('b', 'B'), ('c', 'C')]
-        print(f'\n+++++++++++++> _day_select lst: {lst}')
+        # print(f'\n+++++++++++++> _day_select lst: {lst}')
         return lst
     @api.onchange('year')
     def _day_select1(self):
@@ -54,7 +54,7 @@ class SdPayanehNaftiReportContractMonthly(models.TransientModel):
         elif self.year == '1402':
 
             lst = [('a', 'A'), ('b', 'B'), ('c', 'C')]
-        print(f'\n+++++++++++++>_day_select 1 lst: {lst}')
+        # print(f'\n+++++++++++++>_day_select 1 lst: {lst}')
         return
 
     @api.onchange('registration_no')

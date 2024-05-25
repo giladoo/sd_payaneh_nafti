@@ -40,7 +40,7 @@ class ReportSdPayanehNaftiMeterReport(models.AbstractModel):
             s_start_date = meter_report_date.strftime("%Y/%m/%d")
 
         this_date_input = self.env['sd_payaneh_nafti.input_info'].search(
-            [('loading_info_date', '=', meter_report_date), ])
+            [('loading_info_date', '=', meter_report_date), ('state', 'in', ['done', 'finished']), ])
         if len(this_date_input) == 0:
             return {
                 'errors': [_(f'No record have found for selected date: {s_start_date} ')],
