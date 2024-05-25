@@ -348,7 +348,7 @@
                                  style="page-break-inside: avoid; page-break-after: always;">
                                 <t t-set="contract_record" t-value="doc_data[0]"/>
                                 <t t-set="doc_data" t-value="doc_data[1]"/>
-                                <div  t-if="len(doc_data['inputs'][0]) == 0" class=" mt-2">
+                                <div  t-if="len(doc_data['inputs']) == 0" class=" mt-2">
                                     <t t-set="page_index" t-value="1"/>
                                     <t t-call="sd_payaneh_nafti.contract_daily_report_page_header"/>
                                     <div class="container text-center mt-5 border border-warning">
