@@ -117,10 +117,15 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
             'final_gsv_b_sum': 0,
             'final_mt_sum': 0,
         }
-
-        page_count = len(input_records_day) // PAGE_LINES + 1
-        for index in range(page_count):
-            inputs = input_records_day[index * PAGE_LINES:(index + 1) * PAGE_LINES]
+        # page_count = len(input_records_day) // PAGE_LINES + 1
+        # for index in range(page_count):
+        page_count = 0
+        page_numbers = [(0, 25), (25, 48), (48, 71), (71, 92), (92, 112), (112, 130), (130, 146), (146, 162)]
+        for index in page_numbers:
+            inputs = input_records_day[index[0]: index[1]]
+            if len(inputs) == 0:
+                break
+            page_count += 1
             totalizer_diff_sum = sum([_input.totalizer_difference for _input in inputs if _input.weighbridge == 'no'])
             final_tov_l_sum = sum([_input.final_tov_l for _input in inputs])
             final_gsv_l_sum = sum([_input.final_gsv_l for _input in inputs])

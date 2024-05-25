@@ -375,12 +375,19 @@
                                                             </t>
                                                         </tbody>
                                                         <tfoot>
-                                                            <t t-foreach="page_index" t-as="page_i">
-                                                                <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer"/>
-                                                            </t>
+
 
                                                             <t t-if="page_index == doc_data['page_count']">
+                                                                <t t-foreach="page_index" t-as="page_i">
+                                                                    <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer"/>
+                                                                </t>
                                                                 <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer_total"/>
+                                                            </t>
+                                                            <t t-else="">
+
+                                                                <t t-set="page_i" t-value="page_index - 1"/>
+<!--                                                                <div t-esc="page_i" class="h1 text-danger"></div>-->
+                                                                <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer"/>
                                                             </t>
                                                         </tfoot>
                                                     </table>
