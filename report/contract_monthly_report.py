@@ -58,22 +58,19 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
             g_first_day = first_day.strftime("%Y%m%d")
             g_last_day = last_day.strftime("%Y%m%d")
         date_of_range = [first_day + timedelta(days=delta) for delta in range((last_day - first_day).days + 1)]
-
+        registration = self.env['sd_payaneh_nafti.contract_registration'].search([('registration_no', '=', registration_no)])
         input_records = self.env['sd_payaneh_nafti.input_info'].search([('request_date', '>=', first_day),
                                                                         ('request_date', '<=', last_day),
                                                                         ('registration_no', '=', registration_no),
                                                                         ('state', 'in', ['done', 'finished']),],)
-        # r_1674 = list([(rec, rec.registration_no, rec.document_no) for rec in input_records if registration_no == 1674])
-        # print('+++++++++++++++++++++')
-        # for r in r_1674:
-        #     print(r)
-        # print()
-        if len(input_records) == 0:
-            return{
-                'errors': [_(f'No record have found for selected time duration: {s_first_day} to {s_last_day}')],
-                }
+
+
+        # if len(input_records) == 0:
+        #     return{
+        #         'errors': [_(f'No record have found for selected time duration: {s_first_day} to {s_last_day}')],
+        #         }
         docids = [input_records.ids]
-        registration = input_records[0].registration_no
+        # registration = input_records[0].registration_no
         if calendar == 'fa_IR':
             s_start_date = jdatetime.date.fromgregorian(date=registration.start_date).strftime("%Y/%m/%d")
             s_end_date = jdatetime.date.fromgregorian(date=registration.end_date).strftime("%Y/%m/%d")
@@ -100,7 +97,8 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
                 s_rec_date = jdatetime.date.fromgregorian(date=rec_date).strftime("%Y/%m/%d")
             else:
                 s_rec_date = rec_date.strftime("%Y/%m/%d")
-
+            if len(input_records) > 0:
+                pass
             data = [rec for rec in input_records if rec.loading_date == rec_date]
             final_gsv_l = [rec.final_gsv_l for rec in input_records if rec.loading_date == rec_date]
             final_mt = [rec.final_mt for rec in input_records if rec.loading_date == rec_date]
@@ -154,7 +152,8 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
         company_logo = f'/web/image/res.partner/{1}/image_128/'
         doc_data_list = [('', '')]
         return {
-            'docs': input_records[0] if input_records else '',
+            # 'docs': input_records[0] if input_records else '',
+            'docs': registration,
             'doc_ids': docids,
             'doc_model': 'sd_payaneh_nafti.input_info',
             # 'document_no': document_no,
