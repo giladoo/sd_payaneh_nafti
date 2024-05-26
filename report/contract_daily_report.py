@@ -24,6 +24,7 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
         errors = []
         doc_data_list = []
         PAGE_LINES = 25
+        BBL_FACTOR = 158.987
         date_format = '%Y-%m-%d'
         context = self.env.context
         time_z = pytz.timezone(context.get('tz'))
@@ -129,21 +130,21 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
             totalizer_diff_sum = sum([_input.totalizer_difference for _input in inputs if _input.weighbridge == 'no'])
             final_tov_l_sum = sum([_input.final_tov_l for _input in inputs])
             final_gsv_l_sum = sum([_input.final_gsv_l for _input in inputs])
-            final_gsv_b_sum = final_gsv_l_sum / 158.987
-            # final_gsv_b_sum = sum([round(_input.final_gsv_l / 158.987, 7) for _input in inputs])
-            # print(list([round(_input.final_gsv_l / 158.987, 3) for _input in inputs]))
+            final_gsv_b_sum = round(final_gsv_l_sum / BBL_FACTOR, 2)
+            # final_gsv_b_sum = sum([round(_input.final_gsv_l / BBL_FACTOR, 7) for _input in inputs])
+            # print(list([round(_input.final_gsv_l / BBL_FACTOR , 3) for _input in inputs]))
             final_mt_sum = sum([_input.final_mt for _input in inputs])
             page = {
                 'totalizer_diff_sum': totalizer_diff_sum,
                 'final_tov_l_sum': int(final_tov_l_sum),
                 'final_gsv_l_sum': int(final_gsv_l_sum),
-                'final_gsv_b_sum': round(final_gsv_b_sum, 2),
+                'final_gsv_b_sum': final_gsv_b_sum,
                 'final_mt_sum': final_mt_sum,
             }
             total['totalizer_diff_sum'] += totalizer_diff_sum
             total['final_tov_l_sum'] += int(final_tov_l_sum)
             total['final_gsv_l_sum'] += int(final_gsv_l_sum)
-            total['final_gsv_b_sum'] += round(final_gsv_b_sum, 2)
+            total['final_gsv_b_sum'] = round(total['final_gsv_l_sum'] / BBL_FACTOR, 2)
             total['final_mt_sum'] += final_mt_sum
             inputs_list.append(inputs)
             pages.append(page)
