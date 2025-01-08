@@ -1,9 +1,10 @@
-.sd_ltr, .sd_ltr a, .sd_ltr p {
+td .sd_ltr, .sd_ltr, .sd_ltr a, .sd_ltr p {
 //     unicode-bidi: plaintext;
-    font-family: system-ui !important;
+    font-family: Arial !important;
     direction: initial !important;
     text-align: initial !important;
 }
+
 
 .black_list {
 background-color: #f060509e;

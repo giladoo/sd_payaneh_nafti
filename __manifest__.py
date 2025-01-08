@@ -16,7 +16,7 @@
     # for the full list
     'category': 'Service Desk/Service Desk',
     'application': True,
-    'version': '1.2.4',
+    'version': '15.0.1.2.5',
 
     # any module necessary for this one to work correctly
     'depends': ['base', 'web', 'mail', 'barcodes'],
@@ -51,13 +51,14 @@
         'report/monthly_report.xml',
          'wizard/monthly_report_wizard.xml',
 
-        # 'report/yearly_report_template.xml',
-        # 'report/yearly_report.xml',
-        # 'wizard/yearly_report_wizard.xml',
-
         'report/annual_report_template.xml',
         'report/annual_report.xml',
         'wizard/annual_report_wizard.xml',
+
+        'report/locker_log_report_template.xml',
+        'report/locker_log_sheet_template.xml',
+        'report/locker_log_report.xml',
+        'wizard/locker_log_report_wizard.xml',
 
         'report/contract_monthly_report_template_export.xml',
         'report/contract_monthly_report_template.xml',

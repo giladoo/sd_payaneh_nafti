@@ -166,10 +166,10 @@
                                 <field name="compartment_2"/>
                                 <field name="compartment_3"/>
 
-                                <field name="api_box_locker"/>
-                                <field name="compartment_locker_1" widget="many2one"/>
-                                <field name="compartment_locker_2" widget="many2one"/>
-                                <field name="compartment_locker_3" widget="many2one"/>
+<!--                                <field name="api_box_locker"/>-->
+<!--                                <field name="compartment_locker_1" widget="many2one"/>-->
+<!--                                <field name="compartment_locker_2" widget="many2one"/>-->
+<!--                                <field name="compartment_locker_3" widget="many2one"/>-->
 
                             </group>
 
@@ -245,6 +245,10 @@
                     <field name="final_gsv_l" groups="base.group_system" optional="hide"/>
                     <field name="final_gsv_b" groups="base.group_system" optional="hide"/>
                     <field name="final_mt" groups="base.group_system" optional="hide"/>
+                    <field name="evacuation_box_seal" groups="base.group_system" optional="hide"/>
+                    <field name="compartment_1" groups="base.group_system" optional="hide"/>
+                    <field name="compartment_3" groups="base.group_system" optional="hide"/>
+                    <field name="compartment_2" groups="base.group_system" optional="hide"/>
                 </tree>
             </field>
         </record>
@@ -579,6 +583,19 @@
                             <field name="compartment_1" required="1" class="sd_ltr"/>
                             <field name="compartment_2" required="1" class="sd_ltr"/>
                             <field name="compartment_3" required="1" class="sd_ltr"/>
+                            <field name="lockers" required="0" class="sd_ltr" widget="many2many"
+                                   domain="[
+                                   ('batch_state', '=', 'published'),
+                                   ('input_info', '=', False),
+                                   ('locker_log', '=', False),
+                                   ]">
+                                <tree editable="top" create="0" delete="1" default_order="name">
+                                    <field name="name"  class="sd_ltr" style="font-family: Arial !important;" readonly="1"/>
+                                    <field name="locker_type"  class="sd_ltr"
+                                           domain="[('code', '=', 'tanker' )]"
+                                           options="{'no_open': 1, 'no_create': 1, 'no_edit': 1}"/>
+                                </tree>
+                            </field>
                         </group>
                         <group>
                             <!--                                <field name="api_box_locker" />-->

@@ -38,14 +38,15 @@
                 <th>مقدار (لیتر)</th>
             </tr>
         </template>
+
         <template id="outgate_daily_report_table_body">
             <tr>
                 <t t-foreach="row_data_line" t-as="row_data">
                     <td t-esc="row_data"></td>
-
                 </t>
             </tr>
         </template>
+
         <template id="outgate_daily_report_table_footer">
             <tr>
                 <td colspan="7">جمع</td>
@@ -94,6 +95,7 @@
             </div>
 
 </template>
+
         <template id="outgate_daily_report_data">
 <!--            <t t-call="sd_payaneh_nafti.layout_header"/>-->
             <div class="page" >

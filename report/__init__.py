@@ -12,5 +12,7 @@ from . import daily_report
 from . import contract_monthly_report
 from . import outgate_daily_report
 from . import annual_report
+from . import locker_log_report
+from . import locker_log_sheet
 # from . import yearly_report
 # from . import yearly_xls_report

@@ -1,30 +1,20 @@
 <odoo>
     <data>
-
          <!-- ==================================================  sd_payaneh_nafti.lockers ====================-->
 
         <record model="ir.ui.view" id="sd_payaneh_nafti_lockers_list">
             <field name="name">Lockers List</field>
             <field name="model">sd_payaneh_nafti.lockers</field>
             <field name="arch" type="xml">
-                <tree editable="bottom" delete="1" multi_edit="1" >
-                    <field name="name" />
-<!--                    <field name="input_info" />-->
-                    <field name="description" />
+                <tree delete="1" edit="1" >
+                    <field name="name"  class="sd_ltr" />
+                    <field name="locker_type" />
+                    <field name="input_info" />
+                    <field name="locker_log" />
+                    <field name="batch_id" />
+                    <field name="batch_state" />
+                    <field name="batch_group" />
                 </tree>
-            </field>
-        </record>
-        <record model="ir.ui.view" id="sd_payaneh_nafti_lockers_form">
-            <field name="name">Lockers Form</field>
-            <field name="model">sd_payaneh_nafti.lockers</field>
-            <field name="arch" type="xml">
-                <form>
-                    <group>
-                        <field name="name" />
-<!--                        <field name="input_info" />-->
-                        <field name="description" />
-                    </group>
-                </form>
             </field>
         </record>
 
@@ -36,9 +26,136 @@
             <field name="arch" type="xml">
                 <search string="Lockers">
                     <field name="name" />
-<!--                    <field name="input_info" />-->
-                    <field name="description" />
+                    <field name="name" />
+                    <field name="input_info" />
+                    <filter name="input_info_group" string="Inputs" context="{'group_by': 'input_info'}"/>
                 </search>
+            </field>
+        </record>
+
+         <!-- ==================================================  sd_payaneh_nafti.locker_type ====================-->
+
+        <record model="ir.ui.view" id="sd_payaneh_nafti_locker_type_list">
+            <field name="name">Locker Type List</field>
+            <field name="model">sd_payaneh_nafti.locker_type</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" delete="1" multi_edit="1" >
+                    <field name="sequence" widget="handle"/>
+                    <field name="name" />
+                    <field name="code" />
+                </tree>
+            </field>
+        </record>
+
+         <!-- ==================================================  sd_payaneh_nafti.locker_batch ====================-->
+
+        <record model="ir.ui.view" id="sd_payaneh_nafti_locker_batch_list">
+            <field name="name">Locker Batch List</field>
+            <field name="model">sd_payaneh_nafti.locker_batch</field>
+            <field name="arch" type="xml">
+
+                <tree editable="bottom" delete="1" >
+                    <field name="state" widget="badge"
+                           decoration-success="state == 'published'"
+                           decoration-danger="state == 'canceled'"
+                           decoration-info="state == 'paused'"
+                    />
+                    <field name="sequence" widget="handle"  />
+                    <button string="Publish"
+                            name="lockers_button" type="object" class="btn btn-outline-success"
+                            attrs="{'invisible': [('state', 'not in', ['draft', 'paused'])]}"
+                            context="{'locker_btn':'publish'}"/>
+
+<!--                    <button string="Cancel"-->
+<!--                            name="lockers_button" type="object" class="btn btn-outline-danger"-->
+<!--                            attrs="{'invisible': [('state', 'not in', ['published', 'canceled'])]}"-->
+<!--                            context="{'locker_btn':'cancel'}"/>-->
+
+                    <button string="Pause"
+                            name="lockers_button" type="object" class="btn btn-outline-info"
+                            attrs="{'invisible': [('state', 'not in', ['published', 'canceled'])]}"
+                            context="{'locker_btn':'pause'}"/>
+
+                    <button string="Draft"
+                            name="lockers_button" type="object" class="btn btn-outline-info"
+                            attrs="{'invisible': ['|', ('is_inuse', '=', True),('state', '=', 'draft')]}"
+                            context="{'locker_btn':'draft'}"/>
+
+                    <field name="start_no" class="sd_ltr"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                    <field name="end_no" class="sd_ltr" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="count" class="text-center" />
+                    <field name="free_lockers" class="text-center" />
+                    <field name="is_inuse" invisible="1" />
+                    <field name="receive_date"  class="text-center"  attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="letter_no" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="description" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="file_name" invisible="1"/>
+                    <field name="attachment" widget="binary" filename="file_name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                </tree>
+            </field>
+        </record>
+
+         <!-- ==================================================  sd_payaneh_nafti.locker_log ====================-->
+
+        <record model="ir.ui.view" id="sd_payaneh_nafti_locker_log_list">
+            <field name="name">Locker Log List</field>
+            <field name="model">sd_payaneh_nafti.locker_log</field>
+            <field name="arch" type="xml">
+                <tree >
+                    <field name="subject" />
+                    <field name="issue_date" />
+                    <field name="lockers" widget="many2many_tags" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sd_payaneh_nafti_locker_log_form">
+            <field name="name">Locker Log List</field>
+            <field name="model">sd_payaneh_nafti.locker_log</field>
+            <field name="arch" type="xml">
+                <form >
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="subject"/>
+                            <h1><field name="subject" placeholder="e.g. Master meter repair"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="issue_date" />
+                                <field name="file_name" invisible="1" />
+                                <field name="attachment" />
+
+                            </group>
+                                <div>
+
+                                    <field name="lockers" required="0" class="sd_ltr" widget="many2many"
+                                           domain="[
+                                           ('batch_state', '=', 'published'),
+                                           ('input_info', '=', False),
+                                           ('locker_log', '=', False),
+                                           ]">
+                                            <tree editable="top" create="0" delete="1" default_order="name">
+                                                <field name="name"  class="sd_ltr" style="font-family: Arial !important;" readonly="1"/>
+                                                <field name="locker_type"  class="sd_ltr"
+                                                       domain="[('code', 'in', ['meter', 'report'] )]"
+                                                       options="{'no_open': 1, 'no_create': 1, 'no_edit': 1}"/>
+                                            </tree>
+                                    </field>
+                                </div>
+
+
+                        </group>
+                        <group string="Description">
+                            <field name="description" />
+
+                        </group>
+                    </sheet>
+                                        <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </form>
             </field>
         </record>
 
@@ -48,6 +165,25 @@
             <field name="name">Lockers</field>
             <field name="res_model">sd_payaneh_nafti.lockers</field>
             <field name="view_mode">tree</field>
+            <field name="context">{'search_default_input_info_group': 1}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_window_locker_type">
+            <field name="name">Locker Type</field>
+            <field name="res_model">sd_payaneh_nafti.locker_type</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_window_locker_batch">
+            <field name="name">Locker Batch</field>
+            <field name="res_model">sd_payaneh_nafti.locker_batch</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_window_locker_log">
+            <field name="name">Locker Log</field>
+            <field name="res_model">sd_payaneh_nafti.locker_log</field>
+            <field name="view_mode">tree,form</field>
         </record>
 
         <!-- ==================================================  Menu ====================-->
@@ -57,6 +193,24 @@
                   id="lockers_menu"
                   parent="settings_menu"
                   action="action_window_lockers"/>
+
+        <menuitem name="Locker Type"
+                  sequence="500"
+                  id="locker_type_menu"
+                  parent="settings_menu"
+                  action="action_window_locker_type"/>
+
+        <menuitem name="Locker Batch"
+                  sequence="500"
+                  id="locker_batch_menu"
+                  parent="settings_menu"
+                  action="action_window_locker_batch"/>
+
+        <menuitem name="Locker Log"
+                  sequence="500"
+                  id="locker_log_menu"
+                  parent="settings_menu"
+                  action="action_window_locker_log"/>
 
     </data>
 </odoo>
