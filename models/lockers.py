@@ -6,7 +6,7 @@ from time import time
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
-
+import logging
 # from colorama import Fore
 
 class SdPayanehNaftiLockers(models.Model):
@@ -78,11 +78,11 @@ class SdPayanehNaftiLockers(models.Model):
             print(f"\n len ALL: {len(active_ids)} time: {round(time() - st1)}")
 
         elif buttons == 'name':
-            print(f"\n#################     Name    ###################")
-            limit_time_cpu = self.env['ir.config_parameter'].sudo().get_param('limit_time_cpu')
+            logging.info(f"\n#################     Name    ###################")
+            limit_time_cpu = self.env['ir.config_parameter'].sudo().get_param('limit_time_cpu') or 180
             chunk_list = 10000
             active_ids = self.search([('locker_no', '=', False)]).ids
-            print(f"\n len active_ids: {len(active_ids)}")
+            logging.info(f"\n len active_ids: {len(active_ids)}")
             active_ids_lists = [active_ids[i:i + chunk_list] for i in range(0, len(active_ids), chunk_list)]
             st1 = time()
             total_time = 0
@@ -95,11 +95,13 @@ class SdPayanehNaftiLockers(models.Model):
                         rec.package_id = 1
                 total_time += round(time() - st2)
                 total_count += chunk_list
-                print(f">>>> len: {len(active_ids_list):,} time: {round(time() - st2)}   total_count: [{total_count:,}] total_time:{total_time}")
-                if limit_time_cpu - total_time < 40:
-                    print(f"TERMINATED total_count:[{total_count}]")
+                time_rate = round(total_time / limit_time_cpu, 2)
+                logging.info(f"\n>>>> len: {len(active_ids_list):,} time: {total_time}  total_count: [{total_count:,}] "
+                             f"\ntotal_time:{total_time} limit_time_cpu: {limit_time_cpu} time_rate: {time_rate}\n ")
+                if time_rate > .85:
+                    logging.info(f"TERMINATED total_count:[{total_count}]")
                     break
-            print(f"\n len ALL: {len(active_ids)} time: {round(time() - st1)}")
+            logging.info(f"\n len ALL: {len(active_ids)} time: {round(time() - st1)}")
 
 
 class SdPayanehNaftiLockerPackage(models.Model):
