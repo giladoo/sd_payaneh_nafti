@@ -583,14 +583,14 @@
                             <field name="compartment_1" required="1" class="sd_ltr"/>
                             <field name="compartment_2" required="1" class="sd_ltr"/>
                             <field name="compartment_3" required="1" class="sd_ltr"/>
-                            <field name="lockers" required="0" class="sd_ltr" widget="many2many"
+                            <field name="lockers" required="0" class="sd_ltr" widget="many2many" groups="base.group_system"
                                    domain="[
                                    ('batch_state', '=', 'published'),
                                    ('input_info', '=', False),
                                    ('locker_log', '=', False),
                                    ]">
                                 <tree editable="top" create="0" delete="1" default_order="name">
-                                    <field name="name"  class="sd_ltr" style="font-family: Arial !important;" readonly="1"/>
+                                    <field name="locker_no"  class="sd_ltr" style="font-family: Arial !important;" readonly="1"/>
                                     <field name="locker_type"  class="sd_ltr"
                                            domain="[('code', '=', 'tanker' )]"
                                            options="{'no_open': 1, 'no_create': 1, 'no_edit': 1}"/>

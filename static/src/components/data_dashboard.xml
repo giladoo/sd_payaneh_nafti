@@ -33,6 +33,7 @@
                                     onChange="onChange"
                                     status="state.openInputInfo.status" />
                         <DataCards onClick="()=>newRequestCreation()"   status="state.newRequest.status"   />
+                        <DataLockers onClick="()=>viewLockerPackage()"   name="state.lockers.name"   status="state.lockers.status"   />
 
                     </div>
                     <div class="row">

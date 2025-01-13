@@ -6,6 +6,7 @@
     import { useService } from "@web/core/utils/hooks"
     import { DataCards } from "./data_cards/data_cards"
     import { DataPlans } from "./data_plans/data_plans"
+    import { DataLockers } from "./data_lockers/data_lockers"
     import Bus from 'web.Bus';
     const { DateTime, Settings } = luxon;
     import core from 'web.core';
@@ -54,6 +55,13 @@ export class DataDashboard extends Component {
             },
             newRequest: {
                 status: "Create",
+            },
+            lockers: {
+                name: _t('Lockers'),
+                status: [
+                {"box_no": 1, "start_no": "SPT100", "end_no": "SPT199", "available": 350},
+                {"box_no": 2, "start_no": "SPT200", "end_no": "SPT299", "available": 500},
+                ],
             },
             this_day_requests_count: {
                 value: 0,
@@ -115,6 +123,7 @@ export class DataDashboard extends Component {
             await this.loadPlan()
             await this.getContracts()
             await this.getRequests()
+            await this.getLockerPackage()
 //            getRequestsInterval = setInterval(this.getRequests, 30000)
         })
         onMounted(()=> {
@@ -146,8 +155,41 @@ export class DataDashboard extends Component {
 //        this.toOpenInputInfo = this.toOpenInputInfo.bind(this);
         this._onLoadingPlanCard = this._onLoadingPlanCard.bind(this);
         this.viewTodayLoadingPlan = this.viewTodayLoadingPlan.bind(this);
+        this.viewLockerPackage = this.viewLockerPackage.bind(this);
 
 
+    }
+    async getLockerPackage(){
+        const packages = await this.orm.call("sd_payaneh_nafti.locker_package", "get_locker_package", [[]])
+        this.state.lockers.status = JSON.parse(packages).ids
+        console.log('packages:', packages, this.state.lockers.status)
+    }
+    async viewLockerPackage(){
+
+//        const views = await this.orm.searchRead(
+//            "ir.ui.view",
+//            [["xml_id", "=", "sd_payaneh_nafti_locker_package_list"]],
+//            ["name"],
+//            { limit: 3 }
+//        );
+//        console.log('views:', views)
+//        const view = views[0];
+//        view.type = view.type === "tree" ? "list" : view.type; // ignore tree view
+
+
+
+        let domain = [['state', '=', 'published']]
+        this.actionService.doAction({
+            name: "Locker Package",
+            res_model: "sd_payaneh_nafti.locker_package",
+//            res_id: this.actionId,
+            views: [[false, "list"],],
+            type: "ir.actions.act_window",
+            view_mode: "list",
+            domain: domain,
+            create: false,
+            target: "current",
+        });
     }
     async getSpgr(){
         let dateFormat = session.user_context.lang == 'fa_IR' ? "jYYYY/jMM/jDD" : "YYYY-MM-DD"
@@ -155,13 +197,12 @@ export class DataDashboard extends Component {
         this.state.spgr.status = moment(spgr[0].spgr_date).format(dateFormat);
         this.state.spgr.value = spgr[0].spgr;
     }
-//    loadingPlan(e){
-//        console.log('date:', e);
-//    }
+
 //    async loading_plan_detail(){
 //        let loadingPlanDetail = document.querySelector('.loading_plan_detail')
 //        let plans = await this.orm.call("sd_payaneh_nafti.loading_plan", "loading_plans_detail", [],{})
 //    }
+
     viewTodayLoadingPlan(theDate){
         let today = moment().locale('en').format('YYYY/MM/DD')
         let domain = [['record_date', '=', today]]
@@ -396,5 +437,5 @@ export class DataDashboard extends Component {
 }
 
 DataDashboard.template = "data_dashboard"
-DataDashboard.components = { DataCards, DataPlans }
+DataDashboard.components = { DataCards, DataPlans, DataLockers }
 registry.category("actions").add("data_dashboard", DataDashboard)
