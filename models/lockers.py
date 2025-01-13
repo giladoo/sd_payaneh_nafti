@@ -2,12 +2,12 @@
 import json
 from datetime import  datetime, timedelta
 from time import time
-from icecream import ic
+# from icecream import ic
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 
-from colorama import Fore
+# from colorama import Fore
 
 class SdPayanehNaftiLockers(models.Model):
     _name = 'sd_payaneh_nafti.lockers'
@@ -160,7 +160,7 @@ class SdPayanehNaftiLockerPackage(models.Model):
                             })
                 if len(ids) == 2:
                     break
-        ic(ids)
+        # ic(ids)
         data = {'ids': ids}
         return json.dumps(data)
 
@@ -275,7 +275,7 @@ class SdPayanehNaftiLockerBatch(models.Model):
             self.state = 'paused'
 
         elif locker_btn == 'view':
-            ic()
+            # ic()
             return {
                 'type': 'ir.actions.act_window',
                 'res_model': self._name,
@@ -299,7 +299,7 @@ class SdPayanehNaftiLockerBatch(models.Model):
         if vals.get('state', '') == 'published':
             packages = package_model.search([('batch_id', '=', self.id)])
 
-            ic(self.count // self.package_count, self.count % self.package_count)
+            # ic(self.count // self.package_count, self.count % self.package_count)
             # todo: check if the locker of a package is in use
             if packages:
                 for rec in packages:
@@ -311,7 +311,7 @@ class SdPayanehNaftiLockerBatch(models.Model):
                 pkg_start_no = 0
                 pkg_end_no = 0
                 pkgs = self.count // self.package_count
-                ic(pkgs)
+                # ic(pkgs)
                 start_prefix, start_number = self._get_prefix_number(self.start_no)
                 for i in range(pkgs):
                     pkg_start_no = start_number + (i * self.package_count)
@@ -326,7 +326,7 @@ class SdPayanehNaftiLockerBatch(models.Model):
                         'end_no': f"{start_prefix}{pkg_end_no}",
                     })
                 pkgs = self.count % self.package_count
-                ic(pkgs)
+                # ic(pkgs)
                 if pkgs > 0:
                     package_model.create({
                         'box_no': i + 2 if pkgs > 0 else 1,
