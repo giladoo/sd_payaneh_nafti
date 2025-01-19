@@ -27,7 +27,7 @@
             </script>
 
             <div class="page m-0 p-0" t-foreach="doc_data_list " t-as="doc_data"
-                 style="font-size: .9rem; page-break-inside: avoid; page-break-after: always; width: 100%;">
+                 style="font-size: .8rem; page-break-inside: avoid; page-break-after: always; width: 100%;">
                 <div class="m-0 p-0 ">
                     <t t-set="input_record" t-value="doc_data[0]"/>
                     <t t-set="doc_data" t-value="doc_data[1]"/>
@@ -55,13 +55,13 @@
                                         <div>شرکت ملی نفت ایران</div>
                                         <div>شرکت پایانه های نفتی ایران</div>
                                         <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
-                                        <div class="h2 mt-2 mb-4">دستور بارگیری</div>
+                                        <div class="h2 mt-2 mb-4">Loading Permit</div>
                                     </div>
 
                                     <div class="row py_border_2 border border-dark rounded mb-2 py-2 text-left">
                                         <div class="col-8">
                                             <div class="row">
-                                                <div class="col-4">Buyer1</div>
+                                                <div class="col-4">Buyer</div>
                                                 <div class="text-nowrap">
                                                     <t t-esc="input_record.buyer.name"/>
                                                 </div>
@@ -83,7 +83,7 @@
                                         <div class="col-4  px-0">
                                             <div class="row border-bottom border-dark mx-2 py-2">
                                                 <div class="col-4">
-                                                    contractor name
+                                                    Contractor
                                                 </div>
                                                 <div class="col-8">
                                                     <t t-esc="input_record.contractor.name"/>
@@ -123,7 +123,7 @@
                                             </div>
                                             <div class="col-12 text-center ">
                                                 <div class="h6 mt-2">
-                                                    نام و امضاء تهیه کننده
+                                                    Operator Sign
                                                 </div>
                                                 <div>
                                                     <t t-esc="doc_data['user_name']"/>
@@ -150,7 +150,7 @@
                                             </div>
                                             <div class="row border-bottom border-dark mx-2 py-2">
                                                 <div class="col-4">
-                                                    contract Type
+                                                    Contract Type
                                                 </div>
                                                 <div class="col-8">
                                                     <t t-esc="doc_data['contract_type']"/>
@@ -215,7 +215,7 @@
                                             </div>
                                             <div class="col-12 text-center ">
                                                 <div class="h6 mt-2">
-                                                    تایید حراست ورودی
+                                                    Gate Security
                                                 </div>
                                             </div>
                                         </div>
