@@ -88,6 +88,7 @@
         # 'data/lockers_sequence.xml',
         'data/cargo_types_data.xml',
         'views/loading_plan.xml',
+        'data/lockers_data.xml',
 
     ],
     'assets': {
@@ -104,6 +105,7 @@
             'sd_payaneh_nafti/static/src/js/o_field_x2many_list_row_add_none.js',
             'sd_payaneh_nafti/static/src/components/**/*.js',
             'sd_payaneh_nafti/static/src/components/**/*.css',
+            'sd_payaneh_nafti/static/src/web/fields/locker_type.js',
 
         ],
         'web.report_assets_common': [

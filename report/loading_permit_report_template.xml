@@ -3,24 +3,50 @@
     <data>
 
         <template id="loading_permit_report_data">
+            <style>
+                @media print {
+                body{
+                max-height:148mm;
+                max-width:210mm;
+<!--                border: 1px solid blue;-->
+                margin: 1cm;
+                padding: 50px;
+                }
+                @page {
+                size: A5 landscape;
+                height:130%;
+                width:130%;
+                margin: 0cm 0;
+                padding: 0px;
+                }
+                }
+
+            </style>
+
             <!--            <t t-call="web.html_container">-->
             <!--                <t t-call="web.basic_layout">-->
             <!--                <t t-call="web.internal_layout">-->
-            <div class="page">
-                <div class="container " style="font-size: .9rem">
-                    <div t-foreach="doc_data_list" t-as="doc_data"
-                         style="page-break-inside: avoid; page-break-after: always;">
+            <div class="page m-0 p-0"
+                 style="page-break-inside: avoid;
+                        page-break-after: avoid;
+                        width: 100%;
+                        ">
+                <script>
+                    window.print();
+                </script>
+                <div class=" m-0 p-0  " style="font-size: .9rem; ">
+                    <div t-foreach="doc_data_list " t-as="doc_data" >
                         <t t-set="input_record" t-value="doc_data[0]"/>
                         <t t-set="doc_data" t-value="doc_data[1]"/>
 
-                        <div class="container mt-2">
+                        <div class=" mt-2">
                             <div t-if="errors != []">
                                 <div style="direction: ltr" t-esc="errors[0]"></div>
                             </div>
                             <div t-if="errors == []">
 
 
-                                <div class="container iransans_font">
+                                <div class=" iransans_font">
 
                                     <div style="direction:rtl">
                                         <div class="text-center">
@@ -45,7 +71,7 @@
                                         </div>
 
 
-                                        <div class="row border border-primary py-2 text-left">
+                                        <div class="row py_border_2 border border-dark rounded mb-2 py-2 text-left">
                                             <div class="col-8">
                                                 <div class="row">
                                                     <div class="col-4">Buyer1</div>
@@ -65,9 +91,9 @@
                                             </div>
                                         </div>
 
-                                        <div class="row border border-dark border-top-0 text-left">
+                                        <div class="row p-1 py_border_2 border border-dark rounded text-left">
                                             <div class="col-4  px-0">
-                                                <div class="row border-bottom border-info   mx-0 py-2">
+                                                <div class="row border-bottom border-dark   mx-2 py-2">
                                                     <div class="col-4">
                                                         contractor name
                                                     </div>
@@ -75,7 +101,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="row border-bottom border-info   mx-0 py-1">
+                                                <div class="row border-bottom border-dark   mx-2 py-1">
                                                     <div class="col-4 text-nowrap">
                                                         Tanker No
                                                     </div>
@@ -100,7 +126,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row border-bottom border-info   mx-0 py-2">
+                                                <div class="row border-bottom border-dark   mx-2 py-2">
                                                     <div class="col-4">
                                                         Cargo Type
                                                     </div>
@@ -108,7 +134,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 text-center ">
-                                                    <div class="h6">
+                                                    <div class="h6 mt-2">
                                                         نام و امضاء تهیه کننده
                                                     </div>
                                                     <div t-esc="doc_data['user_name']">
@@ -122,33 +148,33 @@
                                             </div>
 
                                             <div class="col-4 border-left border-right border-dark p-0 ">
-                                                <div class="row border-bottom border-info   mx-0 py-2">
+                                                <div class="row border-bottom border-dark   mx-2 py-2">
                                                     <div class="col-4 text-nowrap">
                                                         Contract No
                                                     </div>
                                                     <div class="col-8" t-esc="doc_data['contract_no']">
                                                     </div>
                                                 </div>
-                                                <div class="row border-bottom border-info   mx-0 py-2">
+                                                <div class="row border-bottom border-dark   mx-2 py-2">
                                                     <div class="col-4">
                                                         Driver
                                                     </div>
                                                     <div class="col-8" t-esc="doc_data['driver']">
                                                     </div>
                                                 </div>
-                                                <div class="row border-bottom border-info   mx-0 py-2">
+                                                <div class="row border-bottom border-dark   mx-2 py-2">
                                                     <div class="col-4">
                                                         contract Type
                                                     </div>
                                                     <div class="col-8" t-esc="doc_data['contract_type']">
                                                     </div>
                                                 </div>
-                                                <div class="row mx-0">
-                                                    <div class="col-3 align-self-center">
-                                                        contract Type
-                                                    </div>
-                                                    <div class="col-9">
-                                                        <div class="row border-bottom border-info  py-2">
+                                                <div class="row mx-1">
+<!--                                                    <div class="col-3 align-self-center">-->
+<!--                                                        contract Type-->
+<!--                                                    </div>-->
+                                                    <div class="col mx-1">
+                                                        <div class="row border-bottom border-dark  py-2">
                                                             <div class="col-6">
                                                                 Front Container
                                                             </div>
@@ -156,7 +182,7 @@
                                                                  t-esc="doc_data['front_container']">
                                                             </div>
                                                         </div>
-                                                        <div class="row border-bottom border-info  py-2">
+                                                        <div class="row border-bottom border-dark  py-2">
                                                             <div class="col-6">
                                                                 Middle Container
                                                             </div>
@@ -164,7 +190,7 @@
                                                                  t-esc="doc_data['middle_container']">
                                                             </div>
                                                         </div>
-                                                        <div class="row border-bottom border-info  py-2">
+                                                        <div class="row border-bottom border-dark  py-2">
                                                             <div class="col-6">
                                                                 Back Container
                                                             </div>
@@ -176,7 +202,7 @@
                                                             <div class="col-6">
                                                                 Total
                                                             </div>
-                                                            <div class="col-6 bg-dark text-light h6 m-0"
+                                                            <div class="col-6 h6 m-0"
                                                                  t-esc="doc_data['total']">
                                                             </div>
                                                         </div>
@@ -186,7 +212,7 @@
                                             </div>
 
                                             <div class="col-4  p-0 ">
-                                                <div class="row border-bottom border-info   mx-0 py-2">
+                                                <div class="row border-bottom border-dark   mx-2 py-2">
                                                     <div class="col-6">
                                                         Issue Date
                                                     </div>
@@ -194,7 +220,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="row border-bottom border-info   mx-0 py-2">
+                                                <div class="row border-bottom border-dark   mx-2 py-2">
                                                     <div class="col-6">
                                                         Loading No
                                                     </div>
@@ -202,7 +228,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 text-center ">
-                                                    <div class="h6">
+                                                    <div class="h6 mt-2">
                                                         تایید حراست ورودی
                                                     </div>
                                                 </div>

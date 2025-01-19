@@ -28,12 +28,16 @@ class SdPayanehNaftiLockers(models.Model):
 
     batch_id = fields.Many2one('sd_payaneh_nafti.locker_batch')
     batch_state = fields.Selection(related='batch_id.state')
-    batch_group = fields.Char()
+    batch_group = fields.Char(store=True, compute='_batch_group')
 
     package_id = fields.Many2one('sd_payaneh_nafti.locker_package')
     package_state = fields.Selection(related='package_id.state')
     package_sequence = fields.Integer(related='package_id.sequence')
 
+    @api.depends('locker_no')
+    def _batch_group(self):
+        for rec in self:
+            rec.batch_group = rec.locker_no[:5] if rec.locker_no else ''
 
     def compair_lockers(self,):
         buttons = self.env.context.get('buttons', 'buttons')

@@ -11,7 +11,7 @@ import jdatetime
 import math
 import logging
 import pytz
-
+from icecream import ic
 cpl_counter = 0
 
 
@@ -537,8 +537,17 @@ class SdPayanehNaftiInputInfo(models.Model):
         self.send_message()
         return res
 
+    def set_locker_types(self):
+        ic(self.lockers)
+        return True
+
     def write(self, vals):
         # Changing the compartment_1 means that there are loading info entry. So, it moves the state to cargo_document.
+
+
+        if vals.get('lockers') :
+            ic(self.lockers, vals.get('lockers'))
+
         if vals.get('meter_no') or vals.get('compartment_locker_1'):
             vals['state'] = 'cargo_document'
 
@@ -584,8 +593,16 @@ class SdPayanehNaftiInputInfo(models.Model):
     def print_loading_permit(self):
         if self.state == 'loading_permit':
             self.write({'state': 'loading_info'})
-        data = {'form_data': {'document_no': (0, self.document_no)}}
-        return self.env.ref('sd_payaneh_nafti.loading_permit_report').report_action(self, data=data)
+        # TODO: print direct
+        # data = {'form_data': {'document_no': (0, self.document_no)}}
+        # return self.env.ref('sd_payaneh_nafti.loading_permit_report').report_action(self, data=data)
+
+        url = f"/report/html/sd_payaneh_nafti.loading_permit_report_template/{self.id}"
+        return{
+            'type': 'ir.actions.act_url',
+            'url': url,
+            'target': 'new',
+        }
 
     def loading_info(self):
         data = {'form_data': {'document_no': (0, self.document_no)}}
@@ -607,6 +624,13 @@ class SdPayanehNaftiInputInfo(models.Model):
     def print_cargo_document(self):
         data = {'form_data': {'document_no': (0, self.document_no), 'calendar': 'fa_IR'}}
         return self.env.ref('sd_payaneh_nafti.cargo_document_report').report_action(self, data=data)
+
+        # url = f"/report/html/sd_payaneh_nafti.cargo_document_report_template/{self.id}"
+        # return {
+        #     'type': 'ir.actions.act_url',
+        #     'url': url,
+        #     'target': 'new',
+        # }
 
     def input_done(self):
         for rec in self:

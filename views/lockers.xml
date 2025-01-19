@@ -6,7 +6,7 @@
             <field name="name">Lockers List</field>
             <field name="model">sd_payaneh_nafti.lockers</field>
             <field name="arch" type="xml">
-                <tree delete="1" edit="1">
+                <tree delete="1" create="0">
                     <field name="locker_no" class="sd_ltr"/>
                     <field name="package_sequence" invisible="1"/>
                     <field name="package_id"  class="sd_ltr" widget="badge"/>
@@ -14,8 +14,8 @@
                     <field name="locker_type"/>
                     <field name="input_info"/>
                     <field name="locker_log"/>
-                    <field name="batch_id"/>
-                    <field name="batch_state"/>
+<!--                    <field name="package_id"/>-->
+                    <field name="package_state" />
                     <field name="batch_group"/>
                 </tree>
             </field>

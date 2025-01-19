@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- <data> -->
+
+        <record id="locker_type_00" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Evacuation Box</field>
+            <field name="code">tanker</field>
+        </record>
+        <record id="locker_type_01" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Compartment 1</field>
+            <field name="code">tanker</field>
+        </record>
+        <record id="locker_type_02" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Compartment 2</field>
+            <field name="code">tanker</field>
+        </record>
+        <record id="locker_type_03" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Compartment 3</field>
+            <field name="code">tanker</field>
+        </record>
+        <record id="locker_type_04" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Compartment 4</field>
+            <field name="code">tanker</field>
+        </record>
+        <record id="locker_type_05" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Compartment 5</field>
+            <field name="code">tanker</field>
+        </record>
+        <record id="locker_type_06" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Compartment 6</field>
+            <field name="code">tanker</field>
+        </record>
+        <record id="locker_type_07" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Compartment 7</field>
+            <field name="code">tanker</field>
+        </record>
+        <record id="locker_type_08" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Compartment 8</field>
+            <field name="code">tanker</field>
+        </record>
+
+        <record id="locker_type_10" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Master Meter</field>
+            <field name="code">meter</field>
+        </record>
+
+        <record id="locker_type_11" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Meter 1</field>
+            <field name="code">meter</field>
+        </record>
+        <record id="locker_type_12" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Meter 2</field>
+            <field name="code">meter</field>
+        </record>
+        <record id="locker_type_13" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Meter 3</field>
+            <field name="code">meter</field>
+        </record>
+        <record id="locker_type_14" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Meter 4</field>
+            <field name="code">meter</field>
+        </record>
+        <record id="locker_type_15" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Meter 5</field>
+            <field name="code">meter</field>
+        </record>
+        <record id="locker_type_16" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Meter 6</field>
+            <field name="code">meter</field>
+        </record>
+        <record id="locker_type_17" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Meter 7</field>
+            <field name="code">meter</field>
+        </record>
+        <record id="locker_type_18" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Meter 8</field>
+            <field name="code">meter</field>
+        </record>
+
+        <record id="locker_type_30" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Lost</field>
+            <field name="code">report</field>
+        </record>
+        <record id="locker_type_31" model="sd_payaneh_nafti.locker_type">
+            <field name="name">Damaged</field>
+            <field name="code">report</field>
+        </record>
+
+
+    </data>
+</odoo>
