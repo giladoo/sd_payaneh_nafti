@@ -593,16 +593,16 @@ class SdPayanehNaftiInputInfo(models.Model):
     def print_loading_permit(self):
         if self.state == 'loading_permit':
             self.write({'state': 'loading_info'})
-        # TODO: print direct
-        # data = {'form_data': {'document_no': (0, self.document_no)}}
-        # return self.env.ref('sd_payaneh_nafti.loading_permit_report').report_action(self, data=data)
+        data = {'form_data': {'document_no': (0, self.document_no)}}
+        return self.env.ref('sd_payaneh_nafti.loading_permit_report').report_action(self, data=data)
 
-        url = f"/report/html/sd_payaneh_nafti.loading_permit_report_template/{self.id}"
-        return{
-            'type': 'ir.actions.act_url',
-            'url': url,
-            'target': 'new',
-        }
+        # TODO: print direct dialog box; it had some problems while user wanted to use it.
+        # url = f"/report/html/sd_payaneh_nafti.loading_permit_report_template/{self.id}"
+        # return{
+        #     'type': 'ir.actions.act_url',
+        #     'url': url,
+        #     'target': 'new',
+        # }
 
     def loading_info(self):
         data = {'form_data': {'document_no': (0, self.document_no)}}
