@@ -169,12 +169,12 @@
                                                     <div class="col-8" t-esc="doc_data['contract_type']">
                                                     </div>
                                                 </div>
-                                                <div class="row mx-1">
+                                                <div class="row ">
 <!--                                                    <div class="col-3 align-self-center">-->
 <!--                                                        contract Type-->
 <!--                                                    </div>-->
-                                                    <div class="col mx-1">
-                                                        <div class="row border-bottom border-dark  py-2">
+                                                    <div class="col">
+                                                        <div class="row border-bottom border-dark mx-2 py-2">
                                                             <div class="col-6">
                                                                 Front Container
                                                             </div>
@@ -182,7 +182,7 @@
                                                                  t-esc="doc_data['front_container']">
                                                             </div>
                                                         </div>
-                                                        <div class="row border-bottom border-dark  py-2">
+                                                        <div class="row border-bottom border-dark mx-2 py-2">
                                                             <div class="col-6">
                                                                 Middle Container
                                                             </div>
@@ -190,7 +190,7 @@
                                                                  t-esc="doc_data['middle_container']">
                                                             </div>
                                                         </div>
-                                                        <div class="row border-bottom border-dark  py-2">
+                                                        <div class="row border-bottom border-dark mx-2 py-2">
                                                             <div class="col-6">
                                                                 Back Container
                                                             </div>
@@ -198,7 +198,7 @@
                                                                  t-esc="doc_data['back_container']">
                                                             </div>
                                                         </div>
-                                                        <div class="row py-2">
+                                                        <div class="row mx-2 py-2">
                                                             <div class="col-6">
                                                                 Total
                                                             </div>
