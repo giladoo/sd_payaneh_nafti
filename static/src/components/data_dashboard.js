@@ -182,8 +182,7 @@ export class DataDashboard extends Component {
         this.actionService.doAction({
             name: "Locker Package",
             res_model: "sd_payaneh_nafti.locker_package",
-//            res_id: this.actionId,
-            views: [[false, "list"],],
+            views: [[false, "list"]],
             type: "ir.actions.act_window",
             view_mode: "list",
             domain: domain,

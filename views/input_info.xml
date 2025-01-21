@@ -327,6 +327,7 @@
                                 <field name="document_no" placeholder="1111" required="1"/>
                             </h3>
                         </div>
+
                         <group string="General Information">
                             <group>
                                 <field name="truck_in_30_record" invisible="1"/>
@@ -530,7 +531,7 @@
             <field name="model">sd_payaneh_nafti.input_info</field>
             <field name="priority">10</field>
             <field name="arch" type="xml">
-                <form js_class="remove_action_button" create="0">
+                <form  create="0">
                     <div class="oe_title">
                         <label for="document_no"/>
                         <h3>
@@ -583,22 +584,29 @@
                             <field name="compartment_1" required="1" class="sd_ltr"/>
                             <field name="compartment_2" required="1" class="sd_ltr"/>
                             <field name="compartment_3" required="1" class="sd_ltr"/>
-                            <field name="lockers" required="0" class="sd_ltr" widget="many2many_button" groups="base.group_system"
-                                   domain="[
-                                   ('package_state', '=', 'published'),
-                                   ('input_info', '=', False),
-                                   ('locker_log', '=', False),
-                                   ]">
+                            <field name="lockers" class="sd_ltr" groups="base.group_system" readonly="0" >
                                 <tree editable="top" create="0" delete="1" default_order="locker_no">
                                     <field name="locker_no"  class="sd_ltr" style="font-family: Arial !important;" readonly="1"/>
-                                    <field name="locker_type"  class="sd_ltr"
-                                           domain="[('code', '=', 'tanker' )]"
-                                           options="{'no_open': 1, 'no_create': 1, 'no_edit': 1}"/>
                                 </tree>
                             </field>
-<!--                            <field name="compartment_1" widget="locker_types" required="1" class="sd_ltr"/>-->
 
+<!--                            <field name="lockers" required="0" readonly="0" class="sd_ltr" groups="base.group_system"-->
+<!--                                   domain="[-->
+<!--                                   ('package_state', '=', 'published'),-->
+<!--                                   ('input_info', '=', False),-->
+<!--                                   ('locker_log', '=', False),-->
+<!--                                   ]">-->
+<!--                                <tree editable="top" edit="1" create="0" delete="1" default_order="locker_no">-->
+<!--                                    <field name="locker_no"  class="sd_ltr" style="font-family: Arial !important;" readonly="1"/>-->
+<!--                                    <field name="locker_type"  class="sd_ltr"-->
+<!--                                           domain="[('code', '=', 'tanker' )]"-->
+<!--                                           options="{'no_open': 1, 'no_create': 1, 'no_edit': 1}"/>-->
+<!--                                </tree>-->
+<!--                            </field>-->
+
+<!--                            <field name="compartment_1" widget="locker_types" required="1" class="sd_ltr"/>-->
 <!--                            <button string="Types" name="set_locker_types" type="object" class="btn btn-outline-primary"></button>-->
+
                         </group>
                         <group>
                             <!--                                <field name="api_box_locker" />-->

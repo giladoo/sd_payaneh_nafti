@@ -17,7 +17,7 @@ class SdPayanehNaftiLockers(models.Model):
     _order = 'package_sequence,locker_no'
 
 
-    name = fields.Char(required=False,)
+    # name = fields.Char(required=False,)
     locker_no = fields.Char(required=False,)
 
     input_info = fields.Many2one('sd_payaneh_nafti.input_info')
