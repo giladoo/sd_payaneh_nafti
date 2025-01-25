@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates>
-    <t t-name="data_cards" owl="1">
-        <div class="col-sm-3 m-0 p-0">
-            <div class="shadow border m-2 p-4 bg-white text-center sd_payaneh_data_cards "
+    <t t-name="data_cards" owl="1"  >
+        <div class="col-sm-3 m-0 p-0"  >
+            <div class="shadow border m-2 p-3 bg-white text-center sd_payaneh_data_cards "
                  t-on-click="props.hasOwnProperty('onClick') ? ()=>props.onClick() : ''"
                  t-attf-style=" {{props.hasOwnProperty('onClick') ? 'cursor: pointer;' : ''}}">
                 <div class="h1 fw-bold text-dark"><span t-esc="props.value"></span></div>
-                <div class="h3 text-muted"><span t-esc="props.name"></span></div>
+                <div class="h3 text-muted"><span t-esc="props.name" ></span></div>
                 <div class="h3 text-muted"><span t-esc="props.status"></span></div>
+                <div class="text-muted" t-raw="props.link"></div>
             </div>
         </div>
 

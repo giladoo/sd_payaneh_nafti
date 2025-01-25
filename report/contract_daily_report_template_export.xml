@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ############################  EXPORT Daily Report   ############################ -->
+
+                <template id="contract_daily_report_page_header_export">
+            <div class="row mb-1 mx-0">
+                <div class="col-4">
+                    <div style="padding:0; margin:0px; padding-top:0px; padding-bottom:10px; text-align:center;">
+                            <img t-att-src="'/report/barcode/Code128/'+contract_record['contract_no']" style="width:250px;height:25px" t-att-alt="contract_record['contract_no']"/>
+                        </div>
+                    <div class="row">
+                        <div class="col-3">Buyer:</div>
+                        <div class="col-9 h4"
+                             t-esc="contract_record.buyer.name"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">Destination:</div>
+                        <div class="col-9 h6"
+                             t-esc="contract_record.destination.name"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">Loading Date:</div>
+                        <div class="col-9 h6" t-esc="report_date"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">Page No:</div>
+                        <div class="col-9 h6" >
+                            <span t-esc="page_index"></span><span>/</span><span t-esc="doc_data['page_count']"></span>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="text-center">
+
+                        <div>
+                            <img alt="Logo" t-att-src="'/logo?company=1'"
+                                 t-att-alt="''"
+                                 style=" height: 50px;" height="50"/>
+                        </div>
+                        <div> NATIONAL IRANIAN OIL COMPANY</div>
+                        <div>IRANIAN OIL TERMINALS COMPANY</div>
+                        <div>SOUTH PARS TERMINAL</div>
+                        <div class="h6 mt-2 mb-2"> DAILY REPORT</div>
+
+                    </div>
+
+                </div>
+                <div class="col-4 row">
+                    <div class="col-4"></div>
+
+                    <div class="col-8" style="font-size: 10px;">
+                        <div class="row border border-dark">
+                            <div class="col-6 px-1 ">
+                                Letter No
+                            </div>
+                            <div class="col-6 px-1 "
+                                 t-esc="contract_record.letter_no"></div>
+                        </div>
+                        <div class="row border border-dark border-top-0">
+                            <div class="col-6 px-1 ">
+                                Contract No
+                            </div>
+                            <div class="col-6 px-1 "
+                                 t-esc="contract_record.contract_no"></div>
+                        </div>
+                        <div class="row border border-dark border-top-0">
+                            <div class="col-6 px-1 ">
+                                Order No
+                            </div>
+                            <div t-if="contract_record.order_no != ''"
+                                 class="col-6 px-1 "
+                                 t-esc="contract_record.order_no">---
+                            </div>
+                        </div>
+                        <div t-if="page_index == 1" class="row border border-dark border-top-0">
+                            <div class="col-6 px-1 ">
+                                unit
+                            </div>
+                            <div class="col-6 px-1 "
+                                 t-esc="doc_data['unit']"></div>
+                        </div>
+                        <div t-if="page_index == 1" class="row border border-dark border-top-0">
+                            <div class="col-6 px-1 ">
+                                Amount
+                            </div>
+                            <div class="col-6 px-1 "
+                                 t-esc="'{:,d}'.format(contract_record.amount)">
+
+                            </div>
+                        </div>
+                        <div t-if="page_index == 1" class="row border border-dark border-top-0">
+                            <div class="col-6 px-1 ">
+                                Delivered
+                            </div>
+<!--                            <div class="col-6 px-1 "-->
+<!--                                 t-esc="'{:,f}'.format(doc_data['used_amounts'])">-->
+<!--                            </div>-->
+                            <div class="col-6 px-1 "
+                                 t-esc="'{:,d}'.format(doc_data['used_amounts'])">
+                            </div>
+                        </div>
+                        <div t-if="page_index == 1" class="row border border-dark border-top-0">
+                            <div class="col-6 px-1 ">
+                                Remained
+                            </div>
+
+                          <div class="col-6 px-1 "
+                                 t-esc="'{:,d}'.format(doc_data['remain_amounts'])">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </template>
+
+        <template id="contract_daily_report_table_header_export">
+            <tr>
+                <th>No</th>
+                <th>Plate</th>
+                <th>
+                    <div class="th_rotate">Tank No</div>
+                </th>
+                <th>
+                    <p>SP.GR</p>
+                    <p>60/60</p>
+                </th>
+                <th>API</th>
+                <th>
+                    <p>T</p>
+                    <p>(C)</p>
+                </th>
+                <th>
+                    <p>T</p>
+                    <p>(F)</p>
+                </th>
+                <th>
+                    <p>P</p>
+                    <p>(Bar)</p>
+                </th>
+                <th>
+                    <p>P</p>
+                    <p>(PSI)</p>
+                </th>
+                <th>Loading Type</th>
+                <th>
+                    <div class="th_rotate">Miter</div>
+                </th>
+                <th>
+                    <p>First Totalizer</p>
+                    <p>Tanker Emt Weight</p>
+                </th>
+                <th>
+                    <p>Last Totalizer</p>
+                    <p>Tanker Full Weight</p>
+                </th>
+                <th>
+                    <p>Totalizer Difference</p>
+                    <p>Pure Weight</p>
+                </th>
+                <th>
+                    <div class="th_rotate">K-FACTOR</div>
+                </th>
+
+                <th>C.T.L 6A</th>
+                <th>C.P.L 6A</th>
+                <th>
+                    <p>T.O.V</p>
+                    <p>(Litter)</p>
+                </th>
+                <th>
+                    <p>G.S.V</p>
+                    <p>(Litter)</p>
+                    <p>60C</p>
+                </th>
+                <th>
+                    <p>G.S.V</p>
+                    <p>(BBLS)</p>
+                    <p>60C</p>
+                </th>
+                <th>TAB. 13</th>
+                <th>M. Tons</th>
+                <th>Loading No</th>
+            </tr>
+        </template>
+
+        <template id="contract_daily_report_table_body_export">
+            <tr>
+                <td class="px-1" t-esc="row_index"></td>
+                <td class="px-1 plate_data">
+                    <div class="row mx-0">
+                        <span class="col px-0"
+                              t-esc="row_data_line.plate_1"></span>
+                        <span class="col px-0">-</span>
+                        <span class="col px-0"
+                              t-esc="row_data_line.plate_2"></span>
+                        <span class="col px-0"
+                              t-esc="row_data_line.plate_3"></span>
+                        <span class="col px-0"
+                              t-esc="row_data_line.plate_4"></span>
+
+                    </div>
+                </td>
+                <td class="px-1"
+                    t-esc="row_data_line.centralized_container"></td>
+                <td class="px-1" t-esc="row_data_line.sp_gr"></td>
+                <td class="px-1" t-esc="row_data_line.api_a"></td>
+                <td class="px-1" t-esc="row_data_line.temperature"></td>
+                <td class="px-1"
+                    t-esc="'%.1f' % row_data_line.temperature_f"></td>
+                <td class="px-1" t-esc="row_data_line.pressure"></td>
+                <td class="px-1" t-esc="row_data_line.pressure_psi"></td>
+                <td class="px-1">
+                    <span t-if="row_data_line.weighbridge == 'yes'">
+                        Weighbridge
+                    </span>
+                    <span t-else="">Meter</span>
+                </td>
+                <td class="px-1" >
+                    <t t-if="row_data_line.weighbridge == 'yes'" >
+                        #
+                    </t>
+                    <t t-else="" t-esc="row_data_line.meter_no"></t>
+                </td>
+                <t t-if="row_data_line.weighbridge == 'yes'">
+                    <td class="plate_data px-1"
+                        t-esc="'{:,d}'.format(row_data_line.tanker_empty_weight)"></td>
+                    <td class="plate_data px-1"
+                        t-esc="'{:,d}'.format(row_data_line.tanker_full_weight)"></td>
+                    <td class="plate_data px-1"
+                        t-esc="'{:,d}'.format(row_data_line.tanker_pure_weight)"></td>
+                </t>
+                <t t-else="">
+                    <td class="plate_data px-1"
+                        t-esc="'{:,d}'.format(row_data_line.totalizer_start)"></td>
+                    <td class="plate_data px-1"
+                        t-esc="'{:,d}'.format(row_data_line.totalizer_end)"></td>
+                    <td class="plate_data px-1"
+                        t-esc="'{:,d}'.format(row_data_line.totalizer_difference)"></td>
+                </t>
+                <td class="px-1" t-esc="'%.4f' % row_data_line.correction_factor"></td>
+                <td class="px-1" t-esc="'%.5f' % row_data_line.ctl"></td>
+                <td class="px-1" t-esc="'%.5f' % row_data_line.cpl"></td>
+                <td class="px-1" t-esc="'%d' % row_data_line.final_tov_l"></td>
+                <td class="px-1" t-esc="'%d' % row_data_line.final_gsv_l"></td>
+                <td class="px-1" t-esc="'%d' % row_data_line.final_gsv_b"></td>
+                <td class="px-1" t-esc="'%.5f' % row_data_line.tab_13"></td>
+                <td class="px-1" t-esc="'%.3f' % row_data_line.final_mt"></td>
+                <td class="px-1" t-esc="row_data_line.loading_no"></td>
+            </tr>
+        </template>
+
+        <template id="contract_daily_report_table_footer_export">
+            <tr>
+    <td class="border-0" colspan="6"></td>
+    <td class="border-dark" colspan="7">
+        <span>Sum of page </span>
+        <span t-esc="page_i + 1"></span>
+        <span> Totalizer difference of meter loading
+        </span>
+    </td>
+
+    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['pages'][page_i]['totalizer_diff_sum'])"></td>
+    <td class="border-0" ></td>
+    <td class="border-dark" colspan="2">
+        <span>Sum of page</span>
+        <span t-esc="page_i + 1"></span>
+    </td>
+    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['pages'][page_i]['final_tov_l_sum'])"></td>
+    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['pages'][page_i]['final_gsv_l_sum'])"></td>
+    <td class="border-dark" t-esc="'%d' % doc_data['pages'][page_i]['final_gsv_b_sum']"></td>
+    <td class="border-0" ></td>
+    <td class="border-dark" t-esc="'%.3f' % doc_data['pages'][page_i]['final_mt_sum']"></td>
+    <td class="border-0" ></td>
+</tr>
+        </template>
+
+        <template id="contract_daily_report_table_footer_total_export">
+            <tr>
+    <td class="border-0" colspan="6"></td>
+    <td class="border-dark" colspan="7">
+        <span>Total totalizer difference of meter loading
+        </span>
+    </td>
+
+    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['total']['totalizer_diff_sum'])"></td>
+    <td class="border-0" ></td>
+    <td class="border-dark" colspan="2">
+        <span>Total</span>
+    </td>
+    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['total']['final_tov_l_sum'])"></td>
+    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['total']['final_gsv_l_sum'])"></td>
+    <td class="border-dark" t-esc="'%d' % doc_data['total']['final_gsv_b_sum']"></td>
+    <td class="border-0" ></td>
+    <td class="border-dark" t-esc="'%.3f' % doc_data['total']['final_mt_sum']"></td>
+    <td class="border-0" ></td>
+</tr>
+        </template>
+
+        <template id="contract_daily_report_page_footer_export">
+            <div class="row text-center mt-4">
+                <div class="col-4">
+                    <div>
+                        SOUTH PARS TERMINAL REP.
+                    </div>
+                    <div>
+                        DFGDFG
+                    </div>
+<!--                    <div class="mt-2" t-esc="doc_data['payaneh_agent']"></div>-->
+                </div>
+                <div class="col-4">
+                    <div>
+                        MINISTRY OF PETROLEUM REP.
+                    </div>
+                    <div>
+                        FGDFGFD
+                    </div>
+<!--                    <div class="mt-2" t-esc="doc_data['observe_agent']"></div>-->
+                </div>
+                <div class="col-4">
+                    <div>
+                        CONSIGNEE/AGENCY REP.
+                    </div>
+                    <div>
+                        RTGERTGD
+                    </div>
+<!--                    <div class="mt-2" t-esc="doc_data['buyer_agent']"></div>-->
+                </div>
+            </div>
+            <div style="page-break-after: always;"></div>
+
+        </template>
+
+        <template id="contract_daily_report_data_export">
+                   <div class="page roboto multi_page_report" style="font-size: .8rem;" >
+                            <div t-foreach="doc_data_list" t-as="doc_data">
+                                <t t-set="contract_record" t-value="doc_data[0]"/>
+                                <t t-set="doc_data" t-value="doc_data[1]"/>
+                                <div class=" mt-2">
+                                        <t t-set="page_index" t-value="0"/>
+                                        <t t-set="row_index" t-value="0"/>
+                                        <t t-foreach="doc_data['inputs']" t-as="row_data_lines">
+                                            <t t-if="len(row_data_lines) > 0">
+                                                <t t-set="page_index" t-value="page_index + 1"/>
+<!--                                                <div style="page-break-after: always;"></div>-->
+                                                <t t-call="sd_payaneh_nafti.contract_daily_report_page_header_export"/>
+<!--                                                <div class="iransans_font" style="direction:rtl">-->
+                                                <div >
+                                                    <table class="table table-bordered border-0 text-center contract_daily_report_table">
+                                                        <thead class=" text-center">
+                                                            <t t-call="sd_payaneh_nafti.contract_daily_report_table_header_export"/>
+                                                        </thead>
+                                                        <tbody>
+                                                            <t t-foreach="row_data_lines" t-as="row_data_line">
+                                                                <t t-set="row_index" t-value="row_index + 1"/>
+                                                                <t t-call="sd_payaneh_nafti.contract_daily_report_table_body_export"/>
+                                                            </t>
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <t t-foreach="page_index" t-as="page_i">
+                                                                <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer_export"/>
+                                                            </t>
+
+                                                            <t t-if="page_index == doc_data['page_count']">
+                                                                <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer_total_export"/>
+                                                            </t>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                                <t t-call="sd_payaneh_nafti.contract_daily_report_page_footer_export"/>
+<!--                                                <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer"/>-->
+                                            </t>
+                                        </t>
+                                    </div>
+                                    <div class="mb-5"></div>
+                                    <div class="mb-5"></div>
+                            </div>
+                        </div>
+        </template>
+
+    </data>
+</odoo>

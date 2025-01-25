@@ -7,13 +7,13 @@ from datetime import datetime, date
 from datetime import timedelta
 import jdatetime
 from odoo.exceptions import ValidationError, UserError
-
+import pytz
 # #############################################################################
 class SdPayanehNaftiReportOutgateDaily(models.TransientModel):
     _name = 'sd_payaneh_nafti.report.outgate_daily_report'
     _description = 'Outgate Daily Report'
 
-    start_date = fields.Date(required=True, default=lambda self: date.today() )
+    start_date = fields.Date(required=True, default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz'))) )
     calendar = fields.Selection([('fa_IR', 'Persian'), ('en_US', 'Gregorian')],
                                 default=lambda self: 'fa_IR' if self.env.context.get('lang') == 'fa_IR' else 'en_US')
 

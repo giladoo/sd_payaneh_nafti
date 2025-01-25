@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from odoo import models, fields, api , _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime, date, timedelta
@@ -13,33 +15,42 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
     _description = 'Contract Daily Report'
 
     # ########################################################################################
+    def get_report_values(self, docids=None, data=None):
+        return self._get_report_values(docids, data)
+
+    # ########################################################################################
     @api.model
-    def _get_report_values(self, docids, data=None):
+    def _get_report_values(self, docids=None, data=None):
         errors = []
         doc_data_list = []
         PAGE_LINES = 25
+        BBL_FACTOR = 158.987
+        date_format = '%Y-%m-%d'
         context = self.env.context
         time_z = pytz.timezone(context.get('tz'))
         date_time = datetime.now(time_z)
         calendar = context.get('lang')
         date_time = self.date_converter(date_time, context.get('lang'))
-        form_data = data.get('form_data')
-        loading_type = form_data.get('loading_type')
 
         if docids:
-            contract_record = self.env['sd_payaneh_nafti.contract_registration'].browse(docids)
+            contract_record = self.env['sd_payaneh_nafti.contract_registration'].browse(docids[0])
+            registration_no = contract_record.registration_no
+            loading_type = contract_record.loading_type
             # contract_no = input_record.contract_no
-            calendar = context.get('lang')
+            report_date = date.today()
+
         else:
+            form_data = data.get('form_data')
+            loading_type = form_data.get('loading_type')
             registration_no = form_data.get('registration_no')[1]
-            contract_record = self.env['sd_payaneh_nafti.contract_registration'].search([('registration_no', '=', registration_no)])
+            contract_record = self.env['sd_payaneh_nafti.contract_registration'].search([
+                ('registration_no', '=', registration_no)])
             # calendar = form_data.get('calendar')
             docids = [contract_record.id]
+            report_date = form_data.get('report_date') if 'report_date' in form_data.keys() else False
+            report_date = datetime.strptime(report_date, date_format).date()
         # REPORT DATE
-        calendar = context.get('lang')
-        report_date = form_data.get('report_date') if 'report_date' in form_data.keys() else False
-        date_format = '%Y-%m-%d'
-        report_date = datetime.strptime(report_date, date_format).date()
+        g_start_date = report_date.strftime("%Y%m%d")
 
         if calendar == 'fa_IR':
             first_day = jdatetime.date.fromgregorian(date=report_date).replace(day=1)
@@ -57,15 +68,27 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
             report_day = report_date
             s_start_date = report_date.strftime("%Y/%m/%d")
 
-        input_records = self.env['sd_payaneh_nafti.input_info'].search([('registration_no', '=', registration_no)], order='id')
+        input_records = self.env['sd_payaneh_nafti.input_info'].search([('registration_no', '=', registration_no),
+                                                                        ('state', 'in', ['done', 'finished'])],
+                                                                       order='id')
         if len(input_records) == 0:
             return {
                 'errors': [_(f'No record have found for contract {registration_no} on selected date: {s_start_date} ')],
             }
 
-        input_records_behind_date = tuple(filter(lambda rec: rec.loading_date <= report_day, input_records))
+        # for contract in contract_record:
+        # todo: you need to create a reprot dataset for  multi record selection
+
+        input_records_behind_date = tuple(filter(lambda rec: rec.request_date <= report_day, input_records))
         registration = input_records[0].registration_no
-        unit = dict(registration._fields['unit']._description_selection(self.env)).get(registration.unit)
+        if loading_type == 'internal':
+            unit = dict(registration._fields['unit']._description_selection(self.env)).get(registration.unit)
+        else:
+            unit = registration.unit
+        #     todo: it shows metric_tone which needed to show Metric Tone
+
+        # print(f'>>>>>>>>>\n unit: {unit} registration.unit: {registration.unit} '
+        #       f'\n {registration._fields["unit"]}')
 
         if registration.unit == 'barrel':
             used_amounts = sum([ua.final_gsv_b for ua in input_records_behind_date])
@@ -84,8 +107,8 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
         #                   f'\n used_amounts: {used_amounts}'
         #                   f'\n ')
 
-        input_records_day = tuple(filter(lambda rec: rec.loading_date == report_day, input_records))
-        # print(f'\n input_records: {len(input_records)} \n {input_records} \ninput_records_day {len(input_records_day)}\n {input_records_day}\n')
+        input_records_day = tuple(filter(lambda rec: rec.request_date == report_day, input_records))
+        input_records_day = sorted(input_records_day, key=lambda rec: rec.loading_no)
         inputs_list = []
         pages = []
         total = {
@@ -95,29 +118,38 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
             'final_gsv_b_sum': 0,
             'final_mt_sum': 0,
         }
-
-        page_count = len(input_records_day) // PAGE_LINES + 1
-        for index in range(page_count):
-            inputs = input_records_day[index * PAGE_LINES:(index + 1) * PAGE_LINES]
+        # page_count = len(input_records_day) // PAGE_LINES + 1
+        # for index in range(page_count):
+        page_count = 0
+        page_numbers = [(0, 25), (25, 48), (48, 71), (71, 92), (92, 112), (112, 130), (130, 146), (146, 162)]
+        for index in page_numbers:
+            inputs = input_records_day[index[0]: index[1]]
+            if len(inputs) == 0:
+                break
+            page_count += 1
             totalizer_diff_sum = sum([_input.totalizer_difference for _input in inputs if _input.weighbridge == 'no'])
             final_tov_l_sum = sum([_input.final_tov_l for _input in inputs])
             final_gsv_l_sum = sum([_input.final_gsv_l for _input in inputs])
+            final_gsv_b_sum = round(final_gsv_l_sum / BBL_FACTOR, 2)
+            # final_gsv_b_sum = sum([round(_input.final_gsv_l / BBL_FACTOR, 7) for _input in inputs])
+            # print(list([round(_input.final_gsv_l / BBL_FACTOR , 3) for _input in inputs]))
             final_mt_sum = sum([_input.final_mt for _input in inputs])
             page = {
                 'totalizer_diff_sum': totalizer_diff_sum,
                 'final_tov_l_sum': int(final_tov_l_sum),
                 'final_gsv_l_sum': int(final_gsv_l_sum),
-                'final_gsv_b_sum': final_gsv_l_sum/158.987,
+                'final_gsv_b_sum': final_gsv_b_sum,
                 'final_mt_sum': final_mt_sum,
             }
             total['totalizer_diff_sum'] += totalizer_diff_sum
             total['final_tov_l_sum'] += int(final_tov_l_sum)
             total['final_gsv_l_sum'] += int(final_gsv_l_sum)
-            total['final_gsv_b_sum'] += final_gsv_l_sum/158.987
+            total['final_gsv_b_sum'] = round(total['final_gsv_l_sum'] / BBL_FACTOR, 2)
             total['final_mt_sum'] += final_mt_sum
             inputs_list.append(inputs)
             pages.append(page)
-
+        # errors = [f'No inputs'] if len(inputs_list[0]) == 0 else errors
+        # inputs_list = [f'No inputs'] if len(inputs_list[0]) == 0 else inputs_list
         doc_data = {
                     'page_lines': PAGE_LINES,
                     'inputs': inputs_list,
@@ -128,20 +160,34 @@ class ReportSdPayanehNaftiContractDailyReport(models.AbstractModel):
                     'total': total,
                     'page_count': page_count,
                     'input_records_day': input_records_day,
-                    'payaneh_agent': form_data.get('payaneh_agent'),
-                    'observe_agent': form_data.get('observe_agent'),
-                    'buyer_agent': form_data.get('buyer_agent')
+                    # 'payaneh_agent': form_data.get('payaneh_agent'),
+                    # 'observe_agent': form_data.get('observe_agent'),
+                    # 'buyer_agent': form_data.get('buyer_agent')
                     }
         doc_data_list.append((contract_record, doc_data))
 
 
-
+#         print(f'''
+#
+# contract_record:
+# {contract_record}
+#
+# doc_data_list:
+# {doc_data_list}
+# errors:
+# {errors}
+#
+# # g_start_date:
+# # {g_start_date}  {type(g_start_date)}
+#
+# ''')
 
         company_logo = f'/web/image/res.partner/{1}/image_128/'
         return {
             'docs': contract_record,
             'doc_ids': docids,
             'doc_model': 'sd_payaneh_nafti.input_info',
+            'report_date_g': g_start_date,
             'report_date': s_start_date,
             'loading_type': loading_type,
 

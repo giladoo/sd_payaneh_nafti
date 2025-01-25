@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+<!--         <data>-->
+
+
+        <record id="spgr_0" model="sd_payaneh_nafti.spgr">
+            <field name="spgr">0.7272</field>
+        </record>
+>
+
+         </data>
+</odoo>

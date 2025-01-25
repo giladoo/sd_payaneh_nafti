@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="locker_log_sheet_data">
+            <div class="page">
+                <div class="container iransans_font" style="font-size: .9rem">
+                    <div class="container mt-2">
+                        <div class="container iransans_font">
+                            <div style="direction:rtl">
+                                <div class="text-center">
+                                    <!--                        <div style="display:block; position:absolute;padding:0; margin:0px; padding-top:10px; padding-bottom:10px; text-align:center;">-->
+                                    <!--                            <img t-att-src="'/sheet/barcode/Code128/'+contract_record['contract_no']" style="width:250px;height:25px" t-att-alt="contract_record['contract_no']"/>-->
+                                    <!--                        </div>-->
+                                    <div>
+                                        <img alt="Logo" t-att-src="'/logo?company=1'" t-att-alt="''"
+                                             style=" height: 50px;" height="50"/>
+                                    </div>
+                                    <div>شرکت ملی نفت ایران</div>
+                                    <div>شرکت پایانه های نفتی ایران</div>
+                                    <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
+                                    <div class="h5 mt-2 mb-4">
+                                        ثبت وضعیت پلمپ ها
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-9"></div>
+                                    <div class="col-3">
+                                        <span>تاریخ :</span>
+                                        <span t-esc="data[o.id].get('issue_date', '')"></span>
+                                    </div>
+
+
+                                </div>
+                                        <div class="h5" t-esc="o.subject"></div>
+
+                                <div class="my-5 p-3 border border-dark rounded ">
+
+                                    <div class="container ">
+                                        <div class="row border-bottom border-dark ">
+                                            <div class="col-6">Locker Number</div>
+                                            <div class="col-6">Log Type</div>
+                                        </div>
+                                        <t t-foreach="o.lockers" t-as="locker">
+                                            <div class="row border-bottom">
+                                                <div class="col-6" t-esc="locker.name"
+                                                     style="font-family: Arial !important;"></div>
+                                                <div class="col-6" t-esc="locker.locker_type.name"></div>
+                                            </div>
+
+                                        </t>
+                                    </div>
+
+
+                                </div>
+                                    <div class="my-4 border border-dark rounded">
+                                        <div class="m-2 h5">
+                                            Descriptions
+                                        </div>
+                                        <div class="m-4" t-esc="o.description"></div>
+                                    </div>
+                                <div>
+                                    <table class="table table-bordered border-0 text-center locker_log_sheet_table">
+                                        <thead class=" text-center">
+                                            <!--                                            <t t-call="sd_payaneh_nafti.locker_log_sheet_table_header"/>-->
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="row_data_lines" t-as="row_data_line">
+                                                <!--                                                                <t t-set="row_index" t-value="row_index + 1"/>-->
+                                                <!--                                                <t t-call="sd_payaneh_nafti.locker_log_sheet_table_body"/>-->
+                                            </t>
+                                        </tbody>
+                                        <tfoot>
+                                            <!--                                            <t t-call="sd_payaneh_nafti.locker_log_sheet_table_footer"/>-->
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-5"></div>
+                        <div class="mb-5"></div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="locker_log_sheet_template">
+            <t t-call="web.basic_layout" t-lang="lang">
+                <div t-if="errors != []">
+                    <div class="container mt-2 text-center">
+                        <div class="border border-danger rounded p-3" style="direction: ltr" t-esc="errors[0]"></div>
+                    </div>
+                </div>
+                <div t-if="errors == []">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-call="sd_payaneh_nafti.locker_log_sheet_data"/>
+                    </t>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

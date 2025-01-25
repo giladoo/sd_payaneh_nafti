@@ -29,7 +29,7 @@
             <field name="name">Basic Information List</field>
             <field name="model">sd_payaneh_nafti.contract_info</field>
             <field name="arch" type="xml">
-                <form>
+                <form >
                     <sheet>
                         <group>
                             <group>

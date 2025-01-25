@@ -55,7 +55,7 @@
         <!-- ==================================================  Menu ====================-->
 
         <menuitem name="Buyers"
-                  sequence="20"
+                  sequence="50"
                   id="buyers_menu"
                   parent="settings_menu"
                   action="action_window_buyers"/>

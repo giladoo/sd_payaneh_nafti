@@ -8,29 +8,42 @@
                 <form js_class="many2many_no_add_delete">
                     <group>
                         <group>
-                            <field name="start_date"/>
+                            <field name="meter_report_date"/>
                         </group>
                         <group>
+
 
                         </group>
                     </group>
                     <group>
-                        <field name="meter_data">
-                            <tree delete="0" create="0" >
-                                <field name="report_date" readonly="1"/>
-                                <field name="meter" readonly="1"/>
-                                <field name="first_totalizer" />
-                                <field name="last_totalizer" />
-                                <field name="meter_amounts" />
-                                <field name="description"/>
-                            </tree>
-                        </field>
+<!--                        <field name="meter_data">-->
+<!--                            <tree delete="0" create="0" >-->
+<!--                                <field name="report_date" readonly="1"/>-->
+<!--                                <field name="meter" readonly="1"/>-->
+<!--                                <field name="first_totalizer" />-->
+<!--                                <field name="last_totalizer" />-->
+<!--                                <field name="meter_amounts" />-->
+<!--                                <field name="description"/>-->
+<!--                            </tree>-->
+<!--                        </field>-->
 
                     </group>
 
+                            <div class="row">
+                                <div class="col-7">
+                                    <field name="meters" />
+                                    <field name="mismatch" />
+
+                                </div>
+                                <div class="col-5">
+                                    <field name="meter_comment" class="h-100" widget="html"/>
+
+                                </div>
+                            </div>
 
                     <footer>
-                        <button name="process_report" string="Generate" type="object" class="btn btn-primary"/>
+                        <button name="process_report" string="Generate" type="object" class="btn btn-primary mx-1"/>
+                        <button name="process_xls_report" string="Excel" type="object" class="btn btn-primary mx-1"/>
                         <button string="Cancel" special="cancel" class="btn-secondary"/>
                     </footer>
 
@@ -50,6 +63,13 @@
                   sequence="70"
                   id="meter_report_menu"
                   parent="sd_payaneh_nafti.reports_menu"
+                  groups="sd_payaneh_nafti.group_sd_payaneh_nafti_users"
+                  action="meter_report_wizard_action"/>
+
+        <menuitem name="Meters"
+                  sequence="200"
+                  id="meter_report_payaneh_root_menu"
+                  parent="sd_payaneh_nafti.payaneh_root_menu"
                   groups="sd_payaneh_nafti.group_sd_payaneh_nafti_users"
                   action="meter_report_wizard_action"/>
     </data>

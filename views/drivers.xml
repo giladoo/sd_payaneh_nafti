@@ -37,6 +37,7 @@
                             <field name="black_list" widget="boolean_toggle"/>
 
                             <field name="card_no" />
+                            <field name="melli_code" />
                             <field name="description" />
 
                         </group>

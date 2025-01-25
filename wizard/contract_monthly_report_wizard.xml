@@ -5,22 +5,25 @@
             <field name="name">sd_payaneh_nafti.report.contract_monthly_report.form</field>
             <field name="model">sd_payaneh_nafti.report.contract_monthly_report</field>
             <field name="arch" type="xml">
-                <form>
+                <form js_class="contract_monthly_report_wizard">
                     <group>
                         <group>
                             <field name="loading_type" />
-                            <field name="registration_no" options='{"no_open": True, "no_create": True}'/>
+                            <field name="registration_no" class="registration_no_selection" options='{"no_open": True, "no_create": True}'/>
                         </group>
                     </group>
                     <group>
                         <group >
 <!--                            <field name="start_date" />-->
 <!--                            <field name="calendar" invisible="context.get('lang') != 'fa_IR'"/>-->
-                            <label for="month" string="Month"/>
+                            <label for="month" string="Month" />
                             <div class="o_row">
                                 <field name="month" class="col col-lg-5" />
                                 <field name="year" class="col col-lg-4"/>
                             </div>
+                        </group>
+                        <group>
+<!--                            <field name="days"/>-->
                         </group>
 
                     </group>

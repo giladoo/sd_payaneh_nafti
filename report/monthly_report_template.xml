@@ -20,9 +20,13 @@
         </template>
 
         <template id="monthly_report_table_body">
-            <tr>
+            <tr class="tr_bottom_dark ">
+                <t t-set="data_index" t-value="0"/>
                 <t t-foreach="row_data_line" t-as="row_data">
-                    <td t-esc="row_data"></td>
+                    <td t-if="data_index == 10" t-esc="'%.2f' % row_data"></td>
+                    <td t-elif="data_index == 11" t-esc="'%.3f' % row_data"></td>
+                    <td t-else="" t-esc="row_data"></td>
+                    <t t-set="data_index" t-value="data_index + 1"/>
 
                 </t>
             </tr>
@@ -51,20 +55,43 @@
                 <td rowspan="2" colspan="4">بر اساس نوع فروش</td>
                 <td colspan="5">جمع فروش در بورس انرژی</td>
                 <td t-esc="footer_data['final_gsv_l_stock']"></td>
-                <td t-esc="footer_data['final_gsv_b_stock']"></td>
-                <td t-esc="footer_data['final_mt_stock']"></td>
+                <td t-esc="'%.2f' % footer_data['final_gsv_b_stock']"></td>
+                <td t-esc="'%.3f' % footer_data['final_mt_stock']"></td>
                 <td t-esc="footer_data['tank_count_stock']"></td>
 
             </tr>
             <tr>
                 <td colspan="5">جمع فروش عادی</td>
                 <td t-esc="footer_data['final_gsv_l_general']"></td>
-                <td t-esc="footer_data['final_gsv_b_general']"></td>
-                <td t-esc="footer_data['final_mt_general']"></td>
+                <td t-esc="'%.2f' % footer_data['final_gsv_b_general']"></td>
+                <td t-esc="'%.3f' % footer_data['final_mt_general']"></td>
                 <td t-esc="footer_data['tank_count_general']"></td>
 
             </tr>
-            <tr class="monthly_report_table_total">
+
+            <tr>
+                <td colspan="13" class="bg-300" style="height: 20px;"></td>
+            </tr>
+             <tr>
+                <td rowspan="2" colspan="4">بر اساس نوع ارسال</td>
+                <td colspan="5">جمع ارسال داخلی</td>
+                <td t-esc="footer_data['final_gsv_l_internal']"></td>
+                <td t-esc="'%.2f' % footer_data['final_gsv_b_internal']"></td>
+                <td t-esc="'%.3f' % footer_data['final_mt_internal']"></td>
+                <td t-esc="footer_data['tank_count_internal']"></td>
+            </tr>
+            <tr>
+                <td colspan="5">جمع ارسال صادراتی</td>
+                <td t-esc="footer_data['final_gsv_l_export']"></td>
+                <td t-esc="'%.2f' % footer_data['final_gsv_b_export']"></td>
+                <td t-esc="'%.3f' % footer_data['final_mt_export']"></td>
+                <td t-esc="footer_data['tank_count_export']"></td>
+
+            </tr>
+                        <tr>
+                <td colspan="13" class="bg-300" style="height: 20px;"></td>
+            </tr>
+            <tr class="monthly_report_table_total mt-3">
                 <td colspan="9">جمع کل ماه جاری</td>
                 <td t-esc="'{:,d}'.format(footer_data['final_gsv_l_stock'] + footer_data['final_gsv_l_general'])"></td>
                 <td t-esc="'%.2f' % (footer_data['final_gsv_b_stock'] + footer_data['final_gsv_b_general'])"></td>
@@ -72,25 +99,20 @@
                 <td t-esc="footer_data['tank_count_stock'] + footer_data['tank_count_general']"></td>
 
             </tr>
-            <tr>
-                <td colspan="13" style="height: 10px;"></td>
-            </tr>
-             <tr>
-                <td rowspan="2" colspan="4">بر اساس نوع ارسال</td>
-                <td colspan="5">جمع ارسال داخلی</td>
-                <td t-esc="footer_data['final_gsv_l_internal']"></td>
-                <td t-esc="footer_data['final_gsv_b_internal']"></td>
-                <td t-esc="footer_data['final_mt_internal']"></td>
-                <td t-esc="footer_data['tank_count_internal']"></td>
-            </tr>
-            <tr>
-                <td colspan="5">جمع ارسال صادراتی</td>
-                <td t-esc="footer_data['final_gsv_l_export']"></td>
-                <td t-esc="footer_data['final_gsv_b_export']"></td>
-                <td t-esc="footer_data['final_mt_export']"></td>
-                <td t-esc="footer_data['tank_count_export']"></td>
+        </template>
 
-            </tr>
+        <template id="sign_area">
+            <div class="row mt-4 text-center">
+                <div class="col-4">
+                    پایانه میعانات گازی پارس جنوبی
+                </div>
+                <div class="col-3">
+
+                </div>
+                <div class="col-5">
+                    اداره نظارت بر صادرات، واردات و مبادلات مواد نفتي
+                </div>
+            </div>
 
         </template>
 
@@ -99,8 +121,8 @@
 <!--                <t t-call="web.basic_layout">-->
 <!--                <t t-call="web.internal_layout">-->
                     <div class="page">
-                        <div class="container iransans_font" style="font-size: .9rem">
-                                <div class="container mt-2">
+                        <div class="container iransans_font">
+                                <div class="container mt-2" style="page-break-inside: avoid; page-break-after: always;">
                                          <div class="container iransans_font">
                                             <div style="direction:rtl">
                                                 <div class="text-center">
@@ -116,10 +138,11 @@
                                                     <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
                                                     <div class="h5 mt-2 mb-4">گزارش ماهیانه قراردادهای بارگیری نفتکش های زمینی میعانات گازی</div>
                                                 </div>
-                                                <div class="row my-1">
-                                                    <div class="col-6"></div>
+                                                <div class="row mb-3">
                                                     <div class="col-3" ><span>تاریخ شروع : </span><span t-esc="dates[0]"></span></div>
                                                     <div class="col-3"><span> تاریخ پایان : </span><span t-esc="dates[1]"></span></div>
+                                                    <div class="col-4"></div>
+                                                    <div class="col-2"><span> صفحه  </span><span t-esc="page_index"></span><span> از </span><span t-esc="page_count"></span></div>
 
                                                 </div>
                                                 <div >
@@ -134,21 +157,17 @@
                                                             </t>
                                                         </tbody>
                                                         <tfoot>
-                                                            <t t-call="sd_payaneh_nafti.monthly_report_table_footer"/>
+                                                            <t t-if="page_index == page_count" t-call="sd_payaneh_nafti.monthly_report_table_footer"/>
                                                         </tfoot>
+
                                                     </table>
-
-
                                                 </div>
+                                                    <t t-call="sd_payaneh_nafti.sign_area"/>
                                             </div>
                                         </div>
                                     <div class="mb-5"></div>
                                     <div class="mb-5"></div>
                                 </div>
-
-
-
-
                         </div>
 
                     </div>
@@ -166,7 +185,14 @@
                 </div>
                 <div t-if="errors == []">
                     <t t-foreach="docs" t-as="o">
-                        <t t-call="sd_payaneh_nafti.monthly_report_data"/>
+                        <t t-set="page_index" t-value="0"/>
+                        <t t-foreach="all_page_date" t-as="page_date">
+                            <t t-set="row_data_lines" t-value="page_date[0]"/>
+                            <t t-set="footer_data" t-value="page_date[1]"/>
+                            <t t-set="page_index" t-value="page_index + 1"/>
+
+                            <t t-call="sd_payaneh_nafti.monthly_report_data"/>
+                        </t>
                     </t>
                 </div>
             </t>

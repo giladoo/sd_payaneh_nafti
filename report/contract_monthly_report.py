@@ -6,6 +6,8 @@ import pytz
 import jdatetime
 from odoo import http
 
+BBL_FACTOR = 158.987
+
 
 # ########################################################################################
 class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
@@ -31,6 +33,9 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
         year = form_data.get('year')
         month = form_data.get('month')
         loading_type = form_data.get('loading_type')
+        # input_records_all = self.env['sd_payaneh_nafti.input_info'].search([('registration_no', '=', registration_no)],order='loading_date')
+        # first_loading_date = input_records_all[0].loading_date
+        # last_loading_date = input_records_all[-1].loading_date
 
         if calendar == 'fa_IR':
             first_day = jdatetime.date(int(year), int(month), 1)
@@ -39,6 +44,8 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
             first_day = first_day.togregorian()
             s_first_day = jdatetime.date.fromgregorian(date=first_day).strftime("%Y/%m/%d")
             s_last_day = jdatetime.date.fromgregorian(date=last_day).strftime("%Y/%m/%d")
+            g_first_day = first_day.strftime("%Y%m%d")
+            g_last_day = last_day.strftime("%Y%m%d")
 
         else:
             date_format = '%Y-%m-%d'
@@ -48,17 +55,22 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
             last_day = next_month - timedelta(days=next_month.day)
             s_first_day = first_day.strftime("%Y-%m-%d")
             s_last_day = last_day.strftime("%Y-%m-%d")
+            g_first_day = first_day.strftime("%Y%m%d")
+            g_last_day = last_day.strftime("%Y%m%d")
         date_of_range = [first_day + timedelta(days=delta) for delta in range((last_day - first_day).days + 1)]
+        registration = self.env['sd_payaneh_nafti.contract_registration'].search([('registration_no', '=', registration_no)])
+        input_records = self.env['sd_payaneh_nafti.input_info'].search([('request_date', '>=', first_day),
+                                                                        ('request_date', '<=', last_day),
+                                                                        ('registration_no', '=', registration_no),
+                                                                        ('state', 'in', ['done', 'finished']),],)
 
-        input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '>=', first_day),
-                                                                        ('loading_date', '<=', last_day),
-                                                                        ('registration_no', '=', registration_no)],)
-        if len(input_records) == 0:
-            return{
-                'errors': [_(f'No record have found for selected time duration: {s_first_day} to {s_last_day}')],
-                }
+
+        # if len(input_records) == 0:
+        #     return{
+        #         'errors': [_(f'No record have found for selected time duration: {s_first_day} to {s_last_day}')],
+        #         }
         docids = [input_records.ids]
-        registration = input_records[0].registration_no
+        # registration = input_records[0].registration_no
         if calendar == 'fa_IR':
             s_start_date = jdatetime.date.fromgregorian(date=registration.start_date).strftime("%Y/%m/%d")
             s_end_date = jdatetime.date.fromgregorian(date=registration.end_date).strftime("%Y/%m/%d")
@@ -72,7 +84,7 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
             unit = dict(registration._fields['unit'].selection).get(registration.unit)
 
         header = {
-            'contract_no': registration.contract_no,
+            'contract_no': registration.contract_no + (f'-{registration.order_no}' if registration.order_no else ''),
             'amount': registration.amount,
             'unit': unit,
             'buyer': registration.buyer.name,
@@ -85,17 +97,19 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
                 s_rec_date = jdatetime.date.fromgregorian(date=rec_date).strftime("%Y/%m/%d")
             else:
                 s_rec_date = rec_date.strftime("%Y/%m/%d")
-
+            if len(input_records) > 0:
+                pass
             data = [rec for rec in input_records if rec.loading_date == rec_date]
             final_gsv_l = [rec.final_gsv_l for rec in input_records if rec.loading_date == rec_date]
-            final_gsv_b = [rec.final_gsv_b for rec in input_records if rec.loading_date == rec_date]
             final_mt = [rec.final_mt for rec in input_records if rec.loading_date == rec_date]
             d = data[0] if len(data) > 0 else 0
             total_gsv_l = int(sum(final_gsv_l))
-            total_gsv_b = round(sum(final_gsv_b), 2)
+            final_gsv_b = round(total_gsv_l / BBL_FACTOR, 2)
+            # total_gsv_b = round(sum(final_gsv_b), 2)
+            total_gsv_b = final_gsv_b
             total_mt = round(sum(final_mt), 3)
             total_tankers = len(final_mt)
-
+            # TABLE BODY, cumulative loading data for each day in each row
             row_data_lines.append((index + 1,
                                s_rec_date,
                                d.sp_gr if d else "",
@@ -104,88 +118,42 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
                                total_mt,
                                total_tankers,
                                ))
+            # TABLE FOOTER, this month data
             footer_data['total_gsv_l'] += total_gsv_l
             footer_data['total_gsv_b'] += total_gsv_b
             footer_data['total_mt'] += total_mt
             footer_data['total_tankers'] += total_tankers
 
+        # TABLE FOOTER, last month data
         footer_data['total_gsv_b'] = round(footer_data['total_gsv_b'], 2)
         footer_data['total_mt'] = round(footer_data['total_mt'], 3)
         input_records_past = self.env['sd_payaneh_nafti.input_info'].search([('registration_no', '=', registration_no),
-                                                                             ('loading_date', '<', first_day)],)
-        final_gsv_l_past = [rec.final_gsv_l for rec in input_records_past]
-        final_gsv_b_past = [rec.final_gsv_b for rec in input_records_past]
+                                                                             ('loading_date', '<', first_day),
+                                                                             ('state', 'in', ['done', 'finished']),],)
+        loading_days = list({rec.loading_date for rec in input_records_past})
+        final_gsv_l_past = []
+        for loading_day in loading_days:
+            final_gsv_l_past.append(sum([rec.final_gsv_l for rec in input_records_past if rec.loading_date == loading_day]))
+        final_gsv_b_past = [round(rec / BBL_FACTOR, 2) for rec in final_gsv_l_past]
         final_mt_past = [rec.final_mt for rec in input_records_past]
 
         footer_data['total_gsv_l_past'] = int(sum(final_gsv_l_past))
-        footer_data['total_gsv_b_past'] = round(sum(final_gsv_b_past), 2)
+        footer_data['total_gsv_b_past'] = sum(final_gsv_b_past)
         footer_data['total_mt_past'] = round(sum(final_mt_past), 3)
         footer_data['total_tankers_past'] = len(final_mt_past)
 
+        # TABLE FOOTER, total data of the contract
         footer_data['total_gsv_l_all'] = footer_data['total_gsv_l'] + footer_data['total_gsv_l_past']
         footer_data['total_gsv_b_all'] = round(footer_data['total_gsv_b'] + footer_data['total_gsv_b_past'], 2)
         footer_data['total_mt_all'] = round(footer_data['total_mt'] + footer_data['total_mt_past'], 3)
         footer_data['total_tankers_all'] = footer_data['total_tankers'] + footer_data['total_tankers_past']
 
-        #     # for d in data:
-        #     print(f' | {index + 1: ^2}'
-        #           f' | {s_rec_date: ^8}'
-        #           f' | {d.sp_gr if d else "": ^6}'
-        #           f' | {int(sum(final_gsv_l)): >10}'
-        #           f' | {round(sum(final_gsv_b), 2): >10}'
-        #           f' | {round(sum(final_mt), 3): >10}'
-        #           f' | {len(final_mt): >3}'
-        #           )
 
-
-
-
-
-
-
-
-
-        # if len(input_record) > 1:
-        #     errors.append(_('[ERROR] There is more than one record'))
-        # elif len(input_record) == 1:
-        # for input_record in input_records:
-        #     issue_date = input_record.loading_date
-        #     if calendar == 'fa_IR':
-        #         issue_date = jdatetime.date.fromgregorian(date=issue_date).strftime('%Y/%m/%d')
-        #     tanker_no = {'plate_1': input_record.plate_1,
-        #                  'plate_2': input_record.plate_2,
-        #                  'plate_3': input_record.plate_3,
-        #                  'plate_4': input_record.plate_4,
-        #                  }
-        #     contract_no = str(input_record.registration_no.contract_no)
-        #     if input_record.registration_no.order_no:
-        #         contract_no += '-' + str(input_record.registration_no.order_no)
-        #
-        #     doc_data = {
-        #                 # 'buyer': str(input_record.buyer.name),
-        #                 # 'contractor': str(input_record.contractor.name),
-        #                 'document_no': input_record.document_no,
-        #                 'contract_no': contract_no,
-        #                 'user_name': self.env.user.name,
-        #                 'tanker_no': tanker_no,
-        #                 'driver': input_record.driver,
-        #                 'contract_type': input_record.registration_no.contract_type,
-        #                 'cargo_type': input_record.registration_no.cargo_type.name,
-        #                 'front_container': input_record.front_container,
-        #                 'middle_container': input_record.middle_container,
-        #                 'back_container': input_record.back_container,
-        #                 'total': input_record.total,
-        #                 'issue_date': issue_date,
-        #                 'loading_no': input_record.loading_no,
-        #                 }
-        #     doc_data_list.append((input_record, doc_data))
-        # else:
-        #     input_record = []
-        #     errors.append(_('[ERROR] There is no record'))
         company_logo = f'/web/image/res.partner/{1}/image_128/'
         doc_data_list = [('', '')]
         return {
-            'docs': input_records[0] if input_records else '',
+            # 'docs': input_records[0] if input_records else '',
+            'docs': registration,
             'doc_ids': docids,
             'doc_model': 'sd_payaneh_nafti.input_info',
             # 'document_no': document_no,
@@ -195,7 +163,9 @@ class ReportSdPayanehNaftiContractMonthly(models.AbstractModel):
             'loading_type': loading_type,
 
             'doc_data_list': doc_data_list,
-            'dates': [s_first_day, s_last_day],
+            'registration_no': registration.registration_no,
+            'g_date': f'{g_first_day}_{g_last_day}',
+            'dates': [s_start_date, s_end_date],
 
             # 'input_record': input_record,
             'errors': errors,

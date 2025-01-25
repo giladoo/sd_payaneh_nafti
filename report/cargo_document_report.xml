@@ -8,7 +8,7 @@
     <field name="page_height">297</field>
     <field name="page_width">210</field>
     <field name="orientation">Portrait</field>
-    <field name="margin_top">20</field>
+    <field name="margin_top">5</field>
     <field name="margin_bottom">5</field>
     <field name="margin_left">5</field>
     <field name="margin_right">5</field>
@@ -35,15 +35,27 @@
     <record id="cargo_document_report" model="ir.actions.report">
         <field name="name">Cargo Document</field>
         <field name="model">sd_payaneh_nafti.input_info</field>
-        <field name="report_type">qweb-html</field>
-<!--        <field name="report_type">qweb-pdf</field>-->
+<!--        <field name="report_type">qweb-html</field>-->
+        <field name="report_type">qweb-pdf</field>
         <field name="report_name">sd_payaneh_nafti.cargo_document_report_template</field>
         <field name="report_file">sd_payaneh_nafti.cargo_document_report_template</field>
             <field name="print_report_name">'CargoDocument-%s' % object.document_no</field>
         <field name="paperformat_id" ref="cargo_document_report_a5"/>
         <field name="binding_model_id" ref="model_sd_payaneh_nafti_input_info"/>
         <field name="binding_type">report</field>
+    </record>
 
+    <record id="cargo_document_html_report" model="ir.actions.report">
+        <field name="name">Cargo Document html</field>
+        <field name="model">sd_payaneh_nafti.input_info</field>
+        <field name="report_type">qweb-html</field>
+<!--        <field name="report_type">qweb-pdf</field>-->
+        <field name="report_name">sd_payaneh_nafti.cargo_document_report_template</field>
+        <field name="report_file">sd_payaneh_nafti.cargo_document_report_template</field>
+<!--            <field name="print_report_name">'CargoDocument-%s' % object.document_no</field>-->
+        <field name="paperformat_id" ref="cargo_document_report_a5"/>
+<!--        <field name="binding_model_id" ref="model_sd_payaneh_nafti_input_info"/>-->
+<!--        <field name="binding_type">report</field>-->
     </record>
 
 </odoo>

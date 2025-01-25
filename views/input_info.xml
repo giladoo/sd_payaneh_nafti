@@ -1,7 +1,7 @@
 <odoo>
     <data>
 
-         <!-- ==================================================  sd_payaneh_nafti.input_info ====================-->
+        <!-- ==================================================  sd_payaneh_nafti.input_info ====================-->
 
         <record model="ir.ui.view" id="sd_payaneh_nafti_input_info_list">
             <field name="name">Input Information List</field>
@@ -10,18 +10,70 @@
             <field name="arch" type="xml">
                 <tree>
                     <header>
-<!--                        <button string="drivers" name="drivers_strip" type="object" />-->
-<!--                        <button string="drivers_create" name="drivers_create" type="object" />-->
+                        <!--                        <button string="drivers" name="drivers_strip" type="object" />-->
+                        <!--                        <button string="drivers_create" name="drivers_create" type="object" />-->
                     </header>
-<!--                    <field name="active" invisible="1"/>-->
+                    <!--                    <field name="active" invisible="1"/>-->
 
-                    <field name="document_no" />
-                    <field name="loading_no" />
-                    <field name="loading_date" />
-                    <field name="registration_no" />
-                    <field name="contractor" />
-                    <field name="driver" />
-                    <field name="buyer" />
+                    <field name="document_no"/>
+                    <field name="loading_no"/>
+                    <field name="request_date"/>
+                    <field name="loading_date"/>
+                    <field name="loading_info_date"/>
+                    <field name="registration_no"/>
+                    <field name="contractor"/>
+                    <field name="driver"/>
+                    <field name="buyer"/>
+                    <field name="meter_no" groups="base.group_system" optional="hide"/>
+                    <field name="totalizer_start" groups="base.group_system" optional="hide"/>
+                    <field name="totalizer_end" groups="base.group_system" optional="hide"/>
+                    <field name="temperature" groups="base.group_system" optional="hide"/>
+                    <field name="final_tov_l" groups="base.group_system" optional="hide"/>
+                    <field name="final_gsv_l" groups="base.group_system" optional="hide"/>
+                    <field name="final_gsv_b" groups="base.group_system" optional="hide"/>
+                    <field name="final_mt" groups="base.group_system" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sd_payaneh_nafti_input_info_manage_list">
+            <field name="name">Input Information Mange</field>
+            <field name="model">sd_payaneh_nafti.input_info</field>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <tree editable="top" multi_edit="1">
+                    <header>
+                        <!--                        <button string="drivers" name="drivers_strip" type="object" />-->
+                        <!--                        <button string="drivers_create" name="drivers_create" type="object" />-->
+                    </header>
+                    <!--                    <field name="active" invisible="1"/>-->
+
+                    <!--                    <field name="create_date" />-->
+                    <!--                    <field name="write_date" />-->
+                    <field name="document_no" readonly="0"/>
+                    <field name="loading_no"/>
+                    <field name="request_date"/>
+                    <field name="loading_date"/>
+                    <field name="loading_info_date"/>
+                    <field name="registration_no"/>
+                    <field name="contractor"/>
+                    <field name="driver"/>
+                    <field name="buyer"/>
+                    <field name="temperature"/>
+                    <field name="sp_gr" digits="[4,4]" readonly="0"/>
+                    <field name="centralized_container"/>
+                    <field name="cqq" domain="['|', ('active', '=', False), ('active', '=', True), ]"/>
+                    <field name="temperature_f"/>
+                    <field name="pressure"/>
+                    <field name="pressure_psi"/>
+                    <field name="meter_no"/>
+                    <field name="weighbridge"/>
+                    <field name="totalizer_start"/>
+                    <field name="totalizer_end"/>
+                    <field name="totalizer_difference" sum="Diff"/>
+                    <field name="tanker_empty_weight"/>
+                    <field name="tanker_full_weight"/>
+                    <field name="tanker_pure_weight"/>
                     <field name="temperature" groups="base.group_system" optional="hide"/>
                     <field name="final_tov_l" groups="base.group_system" optional="hide"/>
                     <field name="final_gsv_l" groups="base.group_system" optional="hide"/>
@@ -36,84 +88,88 @@
             <field name="model">sd_payaneh_nafti.input_info</field>
             <field name="priority">20</field>
             <field name="arch" type="xml">
-                <form>
+                <form js_class="remove_action_button">
                     <sheet>
                         <group>
                             <group>
                                 <separator string="General Information"/>
-                                <field name="document_no" />
-                                <field name="loading_no" />
-                                <field name="loading_date" />
+                                <field name="document_no"/>
+                                <field name="loading_no" readonly="0"/>
+                                <field name="loading_date"/>
                                 <field name="registration_no"
                                        options="{'no_quick_create':True, 'no_create_edit': True, 'no_open': True}"/>
 
-                                <field name="buyer" />
-                                <field name="contractors" invisible="1" />
+                                <field name="buyer"/>
+                                <field name="contractors" invisible="1"/>
                                 <field name="contractor" domain="[('id', 'in', contractors )]"
                                        options="{'no_quick_create':True, 'no_create_edit': True, 'no_open': True}"/>
                                 <separator string="Tanker"/>
-                                <field name="driver" />
-                                <field name="card_no" />
+                                <field name="driver"/>
+                                <field name="card_no"/>
 
                                 <label for="plate_1"/>
                                 <div class="o_row text-center">
                                     <div class="col-3 px-2 border border-info rounded">
-<!--                                        <div t-attrs="{'invisible': [('plate_1', '=', '')]}">58</div>-->
-                                        <field name="plate_1" options="{'no_quick_create':True,'no_create_edit': True, 'no_open': True}"/>
+                                        <!--                                        <div t-attrs="{'invisible': [('plate_1', '=', '')]}">58</div>-->
+                                        <field name="plate_1"
+                                               options="{'no_quick_create':True,'no_create_edit': True, 'no_open': True}"/>
                                     </div>
                                     <div class="o_row border border-info rounded">
 
                                         <div class="o_col px-2 ">
-<!--                                            <div>123</div>-->
-                                            <field name="plate_2" />
+                                            <!--                                            <div>123</div>-->
+                                            <field name="plate_2"/>
                                         </div>
                                         <div class="o_col">
-<!--                                            <div>ن</div>-->
+                                            <!--                                            <div>ن</div>-->
                                             <field name="plate_3" options="{'no_create_edit': True, 'no_open': True}"/>
                                         </div>
                                         <div class="o_col px-2 ">
-<!--                                            <div>45</div>-->
-                                            <field name="plate_4" />
+                                            <!--                                            <div>45</div>-->
+                                            <field name="plate_4"/>
                                         </div>
-                                        <div class="o_col text-300" style="background-color: #10109f; align-self: center;">IR</div>
+                                        <div class="o_col text-300"
+                                             style="background-color: #10109f; align-self: center;">IR
+                                        </div>
                                     </div>
 
 
                                 </div>
                                 <separator string="Container"/>
-                                <field name="front_container" />
-                                <field name="middle_container" />
-                                <field name="back_container" />
-                                <field name="total" />
-                                <field name="centralized_container" />
+                                <field name="front_container"/>
+                                <field name="middle_container"/>
+                                <field name="back_container"/>
+                                <field name="total"/>
+                                <field name="centralized_container"/>
                             </group>
                             <group>
                                 <separator string="Tanker Status"/>
                                 <field name="sp_gr" digits="[4,4]"/>
-                                <field name="correction_factor" />
+                                <field name="correction_factor"/>
 
-                                <field name="temperature" />
-                                <field name="temperature_f" invisible="1" />
-                                <field name="pressure" />
-                                <field name="pressure_psi" invisible="1" />
-                                <field name="meter_no" />
-                                <field name="weighbridge" />
+                                <field name="temperature"/>
+                                <field name="temperature_f" invisible="1"/>
+                                <field name="pressure"/>
+                                <field name="pressure_psi" invisible="1"/>
+                                <field name="meter_no"/>
+                                <field name="weighbridge"/>
                                 <field name="totalizer_start" attrs="{'invisible': [('weighbridge', '=', 'yes')]}"/>
                                 <field name="totalizer_end" attrs="{'invisible': [('weighbridge', '=', 'yes')]}"/>
-                                <field name="totalizer_difference" attrs="{'invisible': [('weighbridge', '=', 'yes')]}"/>
+                                <field name="totalizer_difference"
+                                       attrs="{'invisible': [('weighbridge', '=', 'yes')]}"/>
                                 <field name="tanker_empty_weight" attrs="{'invisible': [('weighbridge', '=', 'no')]}"/>
                                 <field name="tanker_full_weight" attrs="{'invisible': [('weighbridge', '=', 'no')]}"/>
                                 <field name="tanker_pure_weight" attrs="{'invisible': [('weighbridge', '=', 'no')]}"/>
                                 <separator string="Lockers"/>
-                                <field name="evacuation_box_seal" />
-                                <field name="compartment_1" />
-                                <field name="compartment_2" />
-                                <field name="compartment_3" />
+                                <field name="evacuation_box_seal"/>
+                                <field name="compartment_1"/>
+                                <field name="compartment_2"/>
+                                <field name="compartment_3"/>
 
-                                <field name="api_box_locker" />
-                                <field name="compartment_locker_1" widget="many2one" />
-                                <field name="compartment_locker_2" widget="many2one" />
-                                <field name="compartment_locker_3" widget="many2one" />
+<!--                                <field name="api_box_locker"/>-->
+<!--                                <field name="compartment_locker_1" widget="many2one"/>-->
+<!--                                <field name="compartment_locker_2" widget="many2one"/>-->
+<!--                                <field name="compartment_locker_3" widget="many2one"/>-->
 
                             </group>
 
@@ -124,7 +180,7 @@
                                 <group>
                                     <group>
                                         <field name="api_a" groups="base.group_system"/>
-                                        <field name="tab_13"  groups="base.group_system"/>
+                                        <field name="tab_13" groups="base.group_system"/>
                                         <field name="ctl" groups="base.group_system"/>
                                         <field name="cpl" groups="base.group_system"/>
 
@@ -158,30 +214,41 @@
             <field name="model">sd_payaneh_nafti.input_info</field>
             <field name="priority">10</field>
             <field name="arch" type="xml">
-                <tree create="1" delete="1" decoration-danger="truck_black_list or driver_black_list">
+                <tree create="1" delete="1" expand="1" decoration-danger="truck_black_list or driver_black_list">
                     <header>
-<!--                        <button string="drivers" name="drivers_strip" type="object" />-->
-<!--                        <button string="drivers_create" name="drivers_create" type="object" />-->
+                        <!--                        <button string="drivers" name="drivers_strip" type="object" />-->
+                        <!--                        <button string="drivers_create" name="drivers_create" type="object" />-->
                     </header>
-<!--                    <field name="active" invisible="1"/>-->
+                    <!--                    <field name="active" invisible="1"/>-->
                     <field name="truck_black_list" invisible="1"/>
                     <field name="driver_black_list" invisible="1"/>
 
-                    <field name="document_no" class="text-center" />
-                    <field name="request_date" class="text-center" />
+                    <field name="document_no" class="text-center"/>
+                    <field name="loading_no" class="text-center"/>
+                    <field name="request_date" class="text-center"/>
+                    <field name="loading_date"/>
+                    <field name="loading_info_date"/>
                     <field name="amount" class="text-center" sum="Total"/>
-                    <field name="registration_no" class="text-center" />
-                    <field name="buyer" />
+                    <field name="registration_no" class="text-center"/>
+                    <field name="buyer"/>
                     <field name="remain_amount" class="text-center"/>
-                    <field name="contractor" />
-                    <field name="driver" />
-                    <field name="truck_no" />
-                    <field name="total" groups="base.group_system" optional="hide" />
+                    <field name="contractor"/>
+                    <field name="driver"/>
+                    <field name="truck_no"/>
+                    <field name="meter_no" optional="show"/>
+                    <field name="totalizer_start" optional="show"/>
+                    <field name="totalizer_end" optional="show"/>
+                    <field name="totalizer_difference" optional="show"/>
+                    <field name="total" optional="hide"/>
                     <field name="temperature" groups="base.group_system" optional="hide"/>
                     <field name="final_tov_l" groups="base.group_system" optional="hide"/>
                     <field name="final_gsv_l" groups="base.group_system" optional="hide"/>
                     <field name="final_gsv_b" groups="base.group_system" optional="hide"/>
                     <field name="final_mt" groups="base.group_system" optional="hide"/>
+                    <field name="evacuation_box_seal" groups="base.group_system" optional="hide"/>
+                    <field name="compartment_1" groups="base.group_system" optional="hide"/>
+                    <field name="compartment_3" groups="base.group_system" optional="hide"/>
+                    <field name="compartment_2" groups="base.group_system" optional="hide"/>
                 </tree>
             </field>
         </record>
@@ -191,18 +258,35 @@
             <field name="model">sd_payaneh_nafti.input_info</field>
             <field name="priority">10</field>
             <field name="arch" type="xml">
-                <form>
+                <form js_class="remove_action_button">
                     <header>
                         <button name="loading_permit" states="draft" string="Loading Permit" type="object"
                                 class="oe_highlight" data-hotkey="l"/>
-                        <button name="print_loading_permit" states="loading_permit,loading_info" string="Print Loading Permit" type="object"
-                                class="oe_highlight" />
-                        <button name="loading_info" states="loading_info,cargo_document" string="Loading Info" type="object"
-                                class="oe_highlight" />
-                        <button name="print_cargo_document" states="cargo_document" string="Print Cargo Document" type="object"
-                                class="oe_highlight" />
-                        <button name="input_done" states="cargo_document" string="Done" type="object"
-                                class="oe_highlight" />
+                        <button name="print_loading_permit" states="loading_permit,loading_info,cargo_document,done"
+                                string="Loading Permit" type="object" icon="fa-print"
+                                class="oe_highlight"/>
+                        <button name="loading_info" states="loading_info,cargo_document,done" string="Loading Info"
+                                type="object"
+                                class="oe_highlight"/>
+                        <button name="print_cargo_document" states="cargo_document,done" string="Cargo Document"
+                                type="object" icon="fa-print"
+                                class="oe_highlight"/>
+                        <!--                        <button name="set_spgr" states="cargo_document,loading_info" string="Update SPGR" type="object"-->
+                        <!--                                class="oe_highlight" groups="sd_payaneh_nafti.group_sd_payaneh_nafti_admins" />-->
+                        <button name="input_canceled" states="loading_permit,loading_info,done" string="Canceled"
+                                type="object"
+                                class="oe_highlight" groups="sd_payaneh_nafti.group_sd_payaneh_nafti_admins"/>
+                        <button name="input_unloaded" states="cargo_document,done" string="Unloaded" type="object"
+                                class="oe_highlight" groups="sd_payaneh_nafti.group_sd_payaneh_nafti_admins"/>
+
+                        <button name="input_done" states="cargo_document,finished" string="Done" type="object"
+                                class="oe_highlight"/>
+
+                        <button name="input_back" states="unloaded,canceled" string="Back" type="object"
+                                class="oe_highlight" groups="sd_payaneh_nafti.group_sd_payaneh_nafti_admins"/>
+
+                        <button name="input_finished" states="not Unloaded" string="Finished" type="object"
+                                class="oe_highlight" groups="sd_payaneh_nafti.group_sd_payaneh_nafti_admins"/>
 
 
                         <field name="state" widget="statusbar"
@@ -214,114 +298,146 @@
                             <button string="Contract" name="get_contract_registration" class="oe_stat_button"
                                     type="object" icon="fa-file-text-o" context="{'registration_no':registration_no}">
                             </button>
-                            <button  class="oe_stat_button" icon="fa-archive">
-                                <field name="remain_amount" string="Remain" class="sd_ltr" widget="statinfo" />
+                            <button class="oe_stat_button" icon="fa-archive">
+                                <field name="remain_amount" string="Remain" class="sd_ltr" widget="statinfo"/>
                             </button>
-                            <button  class="oe_stat_button" icon="fa-archive">
+                            <button class="oe_stat_button" icon="fa-archive">
                                 <field name="remain_amount_approx" string="Approx" class="sd_ltr"
                                        widget="statinfo" decoration-danger="remain_amount_approx &lt; 0"/>
                             </button>
 
                         </div>
                         <div class="text-center bg-danger-light mb-2 py-2 rounded"
-                             attrs="{'invisible': ['|', ('id', '>', 1),('date_validation', '=', True)]}">
+                             attrs="{'invisible': ['|', '|', ('id', '>', 1),('date_validation', '=', True),('registration_no', '=', False)]}">
                             Warning: The contract is out of date.
                         </div>
                         <div class="text-center bg-warning mb-2 py-2 rounded"
                              attrs="{'invisible': [('remain_amount_approx', '&gt;=', 0)]}">
                             Warning: Requested amount is more than approximately calculated remain amount.
                         </div>
-                        <div class="text-center bg-dark mb-2 py-2 rounded"
-                             attrs="{'invisible': [('driver_black_list', '=', False)]}">
-                            Warning: Driver is in BLACK LIST.
-                        </div>
-                        <div class="text-center bg-dark-light mb-2 py-2 rounded"
-                             attrs="{'invisible': [('truck_black_list', '=', False)]}">
-                            Warning: Truck is in BLACK LIST.
-                        </div>
 
-
+                        <div class="text-center bg-danger-light py-3 rounded"
+                             attrs="{'invisible': [('state', '!=', 'finished')]}">
+                            Warning: Finished document is not editable.
+                        </div>
 
                         <div class="oe_title">
                             <label for="document_no"/>
-                            <h3><field name="document_no" placeholder="1111" required="1"/></h3>
+                            <h3>
+                                <field name="document_no" placeholder="1111" required="1"/>
+                            </h3>
                         </div>
+
                         <group string="General Information">
                             <group>
-                                <field name="request_date" attrs="{'readonly': [('state', 'not in', ['draft'] )]}"/>
-                                <field name="registration_no" attrs="{'readonly': [('state', 'not in', ['draft'] )]}"
+                                <field name="truck_in_30_record" invisible="1"/>
+                                <field name="driver_in_30_record" invisible="1"/>
+                                <field name="shift"/>
+                                <field name="request_date" attrs="{'readonly': [('state', 'in', ['finished'])]}"/>
+                                <field name="registration_no"
                                        options="{'no_quick_create':True, 'no_create_edit': True, 'no_open': True}"/>
-                        <field name="date_validation" invisible="1"/>
+                                <field name="date_validation" invisible="1"/>
 
-                                <label for="contract_no" />
+                                <label for="contract_no"/>
                                 <div class="o_row sd_ltr">
-                                    <field name="contract_no" class="mx-2"  attrs="{'invisible': [('contract_no', '=', '')]}"/>
+                                    <field name="contract_no" class="mx-2"
+                                           attrs="{'invisible': [('contract_no', '=', '')]}"/>
                                     <div class="col-1" attrs="{'invisible': [('order_no', '=', '')]}">-</div>
                                     <field name="order_no" class="mx-2" attrs="{'invisible': [('order_no', '=', '')]}"/>
                                 </div>
 
                             </group>
                             <group>
-                                    <field name="buyer" options="{'no_quick_create':True, 'no_create_edit': True, 'no_open': True}"/>
-                                    <field name="contractors" invisible="1" />
-                                    <field name="contractor" domain="[('id', 'in', contractors )]"
-                                           options="{'no_quick_create':True, 'no_create_edit': True, 'no_open': True}"
-                                            attrs="{'readonly': [('state', 'not in', ['draft'] )]}"/>
+                                <field name="buyer"
+                                       options="{'no_quick_create':True, 'no_create_edit': True, 'no_open': True}"/>
+                                <field name="contractors" invisible="1"/>
+                                <field name="contractor" domain="[('id', 'in', contractors )]"
+                                       options="{'no_quick_create':True, 'no_create_edit': True, 'no_open': True}"
+                                />
 
-                                </group>
+                            </group>
                         </group>
+                        <div class="row text-center">
+
+                            <div class="col-5 text-center bg-warning py-1 mx-3 mb-1 rounded"
+                                 attrs="{'invisible': [('truck_in_30_record', '=', False)]}">
+                                Warning: Same TRUCK in last 30 requests.
+                            </div>
+                            <div class="col-5 text-center bg-warning-light py-1 mx-3 mb-1 rounded"
+                                 attrs="{'invisible': [('driver_in_30_record', '=', False)]}">
+                                Warning: Same DRIVER in last 30 requests.
+                            </div>
+                        </div>
+                        <div class="row text-center">
+
+                            <div class="col-5 text-center bg-dark py-1 mx-3 mb-1 rounded"
+                                 attrs="{'invisible': [('truck_black_list', '=', False)]}">
+                                Warning: Truck is in BLACK LIST.
+                            </div>
+                            <div class="col-5 text-center bg-dark-light py-1 mx-3 mb-1 rounded"
+                                 attrs="{'invisible': [('driver_black_list', '=', False)]}">
+                                Warning: Driver is in BLACK LIST.
+                            </div>
+                        </div>
                         <group string="Tanker">
                             <group>
+
                                 <field name="driver" class="sd_ltr"
-                                       />
-<!--                                <field name="driver" class="sd_ltr black_list"-->
-<!--                                       attrs="{'invisible': [('driver_black_list', '=', False)]}" />-->
+                                />
+                                <!--                                <field name="driver" class="sd_ltr black_list"-->
+                                <!--                                       attrs="{'invisible': [('driver_black_list', '=', False)]}" />-->
                                 <field name="driver_black_list" invisible="1"/>
-                                <field name="card_no" />
+                                <field name="card_no"/>
                                 <field name="truck_no" class="sd_ltr oe_edit_only"
-                                        />
-<!--                                <field name="truck_no" class="sd_ltr black_list"-->
-<!--                                       attrs="{'invisible': [('truck_black_list', '=', False)]}" />-->
+                                />
+                                <!--                                <field name="truck_no" class="sd_ltr black_list"-->
+                                <!--                                       attrs="{'invisible': [('truck_black_list', '=', False)]}" />-->
                                 <field name="truck_black_list" invisible="1"/>
 
 
                                 <label for="plate_1"/>
                                 <div class="o_row text-center">
                                     <div class="col-3 px-2 border border-info rounded">
-<!--                                        <div t-attrs="{'invisible': [('plate_1', '=', '')]}">58</div>-->
-                                        <field name="plate_1" options="{'no_quick_create':True,'no_create_edit': True, 'no_open': True}"/>
+                                        <!--                                        <div t-attrs="{'invisible': [('plate_1', '=', '')]}">58</div>-->
+                                        <field name="plate_1"
+                                               options="{'no_quick_create':True,'no_create_edit': True, 'no_open': True}"/>
                                     </div>
                                     <div class="o_row border border-info rounded">
 
                                         <div class="o_col px-2 ">
-<!--                                            <div>123</div>-->
-                                            <field name="plate_2" />
+                                            <!--                                            <div>123</div>-->
+                                            <field name="plate_2"/>
                                         </div>
                                         <div class="o_col">
-<!--                                            <div>ن</div>-->
+                                            <!--                                            <div>ن</div>-->
                                             <field name="plate_3" options="{'no_create_edit': True, 'no_open': True}"/>
                                         </div>
                                         <div class="o_col px-2 ">
-<!--                                            <div>45</div>-->
-                                            <field name="plate_4" />
+                                            <!--                                            <div>45</div>-->
+                                            <field name="plate_4"/>
                                         </div>
-                                        <div class="o_col text-300" style="background-color: #10109f; align-self: center;">IR</div>
+                                        <div class="o_col text-300"
+                                             style="background-color: #10109f; align-self: center;">IR
+                                        </div>
                                     </div>
                                 </div>
-                                </group>
-                                <group>
-                                <field name="front_container" />
-                                <field name="middle_container" />
-                                <field name="back_container" />
-                                <field name="total" />
-                                <field name="centralized_container" />
+                            </group>
+                            <group>
+                                <field name="front_container"/>
+                                <field name="middle_container"/>
+                                <field name="back_container"/>
+                                <field name="total"/>
+                                <!--                                <field name="centralized_container" />-->
                             </group>
                         </group>
-                        <notebook string="More Info" >
+                        <notebook string="More Info">
                             <page string="Loading">
                                 <group>
-                                    <field name="loading_no" />
-                                    <field name="loading_date"/>
+                                    <group>
+                                        <field name="loading_no" readonly="1"/>
+                                        <field name="loading_date"/>
+
+                                    </group>
                                 </group>
                             </page>
                             <page string="Loading Info">
@@ -329,6 +445,8 @@
                                     <group>
                                         <field name="loading_info_date" readonly="1"/>
                                         <field name="sp_gr" digits="[4,4]" readonly="1"/>
+                                        <field name="centralized_container" readonly="1"/>
+                                        <field name="cqq" readonly="1"/>
                                         <field name="correction_factor" readonly="1"/>
                                         <field name="temperature" readonly="1"/>
                                         <field name="temperature_f" readonly="1"/>
@@ -338,61 +456,71 @@
                                     <group>
                                         <field name="meter_no" readonly="1"/>
                                         <field name="weighbridge" readonly="1"/>
-                                        <field name="totalizer_start" attrs="{'invisible': [('weighbridge', '=', 'yes')]}" readonly="1"/>
-                                        <field name="totalizer_end" attrs="{'invisible': [('weighbridge', '=', 'yes')]}" readonly="1"/>
-                                        <field name="totalizer_difference" attrs="{'invisible': [('weighbridge', '=', 'yes')]}" readonly="1"/>
-                                        <field name="tanker_empty_weight" attrs="{'invisible': [('weighbridge', '=', 'no')]}" readonly="1"/>
-                                        <field name="tanker_full_weight" attrs="{'invisible': [('weighbridge', '=', 'no')]}" readonly="1"/>
-                                        <field name="tanker_pure_weight" attrs="{'invisible': [('weighbridge', '=', 'no')]}" readonly="1"/>
+                                        <field name="totalizer_start"
+                                               attrs="{'invisible': [('weighbridge', '=', 'yes')]}" readonly="1"/>
+                                        <field name="totalizer_end" attrs="{'invisible': [('weighbridge', '=', 'yes')]}"
+                                               readonly="1"/>
+                                        <field name="totalizer_difference"
+                                               attrs="{'invisible': [('weighbridge', '=', 'yes')]}" readonly="1"/>
+                                        <field name="tanker_empty_weight"
+                                               attrs="{'invisible': [('weighbridge', '=', 'no')]}" readonly="1"/>
+                                        <field name="tanker_full_weight"
+                                               attrs="{'invisible': [('weighbridge', '=', 'no')]}" readonly="1"/>
+                                        <field name="tanker_pure_weight"
+                                               attrs="{'invisible': [('weighbridge', '=', 'no')]}" readonly="1"/>
                                     </group>
                                 </group>
                             </page>
                             <page string="Lockers">
                                 <group>
                                     <group>
-                                        <field name="evacuation_box_seal"  readonly="1"/>
-                                        <field name="compartment_1" readonly="1" />
-                                        <field name="compartment_2" readonly="1" />
-                                        <field name="compartment_3" readonly="1" />
+                                        <field name="evacuation_box_seal" readonly="1"/>
+                                        <field name="compartment_1" readonly="1"/>
+                                        <field name="compartment_2" readonly="1"/>
+                                        <field name="compartment_3" readonly="1"/>
                                     </group>
                                     <group>
-<!--                                        <field name="api_box_locker" readonly="1"/>-->
-<!--                                        <field name="compartment_locker_1" widget="many2one" readonly="1" />-->
-<!--                                        <field name="compartment_locker_2" widget="many2one" readonly="1" />-->
-<!--                                        <field name="compartment_locker_3" widget="many2one" readonly="1" />-->
+                                        <!--                                        <field name="api_box_locker" readonly="1"/>-->
+                                        <!--                                        <field name="compartment_locker_1" widget="many2one" readonly="1" />-->
+                                        <!--                                        <field name="compartment_locker_2" widget="many2one" readonly="1" />-->
+                                        <!--                                        <field name="compartment_locker_3" widget="many2one" readonly="1" />-->
                                     </group>
                                 </group>
                             </page>
-                            <page string="Params" groups="base.group_system">
+                            <page string="Params">
 
                                 <group>
                                     <group>
-                                        <field name="api_a" groups="base.group_system"/>
-                                        <field name="tab_13"  groups="base.group_system"/>
-                                        <field name="ctl" groups="base.group_system"/>
-                                        <field name="cpl" groups="base.group_system"/>
+                                        <field name="api_a"/>
+                                        <field name="tab_13"/>
+                                        <field name="ctl" digits="[2,5]"/>
+                                        <field name="cpl" digits="[2,5]"/>
 
-<!--                                        <field name="meter_tov_l" groups="base.group_system"/>-->
-<!--                                        <field name="meter_gsv_l" groups="base.group_system"/>-->
-<!--                                        <field name="meter_gsv_b" groups="base.group_system"/>-->
-<!--                                        <field name="meter_mt" groups="base.group_system"/>-->
+                                        <!--                                        <field name="meter_tov_l" groups="base.group_system"/>-->
+                                        <!--                                        <field name="meter_gsv_l" groups="base.group_system"/>-->
+                                        <!--                                        <field name="meter_gsv_b" groups="base.group_system"/>-->
+                                        <!--                                        <field name="meter_mt" groups="base.group_system"/>-->
 
-<!--                                        <field name="wb_tov_l" groups="base.group_system"/>-->
-<!--                                        <field name="wb_gsv_l" groups="base.group_system"/>-->
-<!--                                        <field name="wb_gsv_b" groups="base.group_system"/>-->
-<!--                                        <field name="wb_mt" groups="base.group_system"/>-->
+                                        <!--                                        <field name="wb_tov_l" groups="base.group_system"/>-->
+                                        <!--                                        <field name="wb_gsv_l" groups="base.group_system"/>-->
+                                        <!--                                        <field name="wb_gsv_b" groups="base.group_system"/>-->
+                                        <!--                                        <field name="wb_mt" groups="base.group_system"/>-->
 
-                                        <field name="final_tov_l" groups="base.group_system"/>
-                                        <field name="final_gsv_l" groups="base.group_system"/>
-                                        <field name="final_gsv_b" groups="base.group_system"/>
-                                        <field name="final_mt" groups="base.group_system"/>
+                                        <field name="final_tov_l"/>
+                                        <field name="final_gsv_l"/>
+                                        <field name="final_gsv_b"/>
+                                        <field name="final_mt"/>
 
                                     </group>
                                 </group>
                             </page>
                         </notebook>
                     </sheet>
-
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -403,73 +531,106 @@
             <field name="model">sd_payaneh_nafti.input_info</field>
             <field name="priority">10</field>
             <field name="arch" type="xml">
-                <form create="0">
+                <form  create="0">
                     <div class="oe_title">
-                            <label for="document_no"/>
-                            <h3><field name="document_no" placeholder="1111" required="1"/></h3>
-                        </div>
+                        <label for="document_no"/>
+                        <h3>
+                            <field name="document_no" placeholder="1111" required="1" readonly="1"/>
+                        </h3>
+                    </div>
                     <group>
                         <group>
-                            <field name="loading_info_date"/>
-                            <field name="sp_gr" digits="[4,4]"/>
-                            <field name="correction_factor" />
-                            <field name="temperature" />
-                            <field name="temperature_f" invisible="1" />
-                            <field name="pressure" />
-                            <field name="pressure_psi" invisible="1" />
+                            <field name="loading_info_date" required="1"/>
+                            <field name="sp_gr" digits="[4,4]" readonly="0" required="1"/>
+                            <field name="centralized_container" readonly="0" required="1"/>
+                            <field name="correction_factor"/>
+                            <field name="temperature"/>
+                            <field name="temperature_f" invisible="1"/>
+                            <field name="pressure"/>
+                            <field name="pressure_psi" invisible="1"/>
                             <field name="meter_no" required="1"/>
 
                         </group>
                         <group>
-                                <field name="weighbridge" />
+                            <field name="weighbridge" required="1"/>
+                            <separator/>
+                            <!--                            <label for="totalizer_start"/>-->
+                            <!--                                <div class="row">-->
+                            <field name="totalizer_lasts" readonly="1"/>
 
-                                <field name="totalizer_start"
-                                       attrs="{'invisible': [('weighbridge', '=', 'yes')], 'required':[('weighbridge', '=', 'no')]}"/>
-                                <field name="totalizer_end"
-                                       attrs="{'invisible': [('weighbridge', '=', 'yes')], 'required':[('weighbridge', '=', 'no')]}"/>
-                                <field name="totalizer_difference"
-                                       attrs="{'invisible': [('weighbridge', '=', 'yes')], 'required':[('weighbridge', '=', 'no')]}"/>
+                            <field name="totalizer_start"
+                                   attrs="{'invisible': [('weighbridge', '=', '1')], 'required':[('weighbridge', '=', 'no')]}"/>
+                            <separator/>
+                            <!--                                </div>-->
+                            <field name="totalizer_end"
+                                   attrs="{'invisible': [('weighbridge', '=', '1')], 'required':[('weighbridge', '=', 'no')]}"/>
+                            <field name="totalizer_difference"
+                                   attrs="{'invisible': [('weighbridge', '=', '1')], 'required':[('weighbridge', '=', 'no')]}"/>
 
-                                <field name="tanker_empty_weight"
-                                       attrs="{'invisible': [('weighbridge', '=', 'no')], 'required':[('weighbridge', '=', 'yes')]}"/>
-                                <field name="tanker_full_weight"
-                                       attrs="{'invisible': [('weighbridge', '=', 'no')], 'required':[('weighbridge', '=', 'yes')]}"/>
-                                <field name="tanker_pure_weight"
-                                       attrs="{'invisible': [('weighbridge', '=', 'no')], 'required':[('weighbridge', '=', 'yes')]}"/>
+                            <separator/>
+
+                            <field name="tanker_empty_weight"
+                                   attrs="{'invisible': [('weighbridge', '=', 'no')], 'required':[('weighbridge', '=', 'yes')]}"/>
+                            <field name="tanker_full_weight"
+                                   attrs="{'invisible': [('weighbridge', '=', 'no')], 'required':[('weighbridge', '=', 'yes')]}"/>
+                            <field name="tanker_pure_weight"
+                                   attrs="{'invisible': [('weighbridge', '=', 'no')], 'required':[('weighbridge', '=', 'yes')]}"/>
 
                         </group>
                     </group>
                     <group string="Lockers">
                         <group>
-                                <field name="evacuation_box_seal" required="1"/>
-                                <field name="compartment_1" required="1"/>
-                                <field name="compartment_2" required="1"/>
-                                <field name="compartment_3" required="1"/>
+                            <field name="evacuation_box_seal" required="1" class="sd_ltr"/>
+                            <field name="compartment_1" required="1" class="sd_ltr"/>
+                            <field name="compartment_2" required="1" class="sd_ltr"/>
+                            <field name="compartment_3" required="1" class="sd_ltr"/>
+                            <field name="lockers" class="sd_ltr" groups="base.group_system" readonly="0qq" >
+                                <tree editable="top" create="0" delete="1" default_order="locker_no">
+                                    <field name="locker_no"  class="sd_ltr" style="font-family: Arial !important;" readonly="1"/>
+                                </tree>
+                            </field>
+
+<!--                            <field name="lockers" required="0" readonly="0" class="sd_ltr" groups="base.group_system"-->
+<!--                                   domain="[-->
+<!--                                   ('package_state', '=', 'published'),-->
+<!--                                   ('input_info', '=', False),-->
+<!--                                   ('locker_log', '=', False),-->
+<!--                                   ]">-->
+<!--                                <tree editable="top" edit="1" create="0" delete="1" default_order="locker_no">-->
+<!--                                    <field name="locker_no"  class="sd_ltr" style="font-family: Arial !important;" readonly="1"/>-->
+<!--                                    <field name="locker_type"  class="sd_ltr"-->
+<!--                                           domain="[('code', '=', 'tanker' )]"-->
+<!--                                           options="{'no_open': 1, 'no_create': 1, 'no_edit': 1}"/>-->
+<!--                                </tree>-->
+<!--                            </field>-->
+
+<!--                            <field name="compartment_1" widget="locker_types" required="1" class="sd_ltr"/>-->
+<!--                            <button string="Types" name="set_locker_types" type="object" class="btn btn-outline-primary"></button>-->
+
                         </group>
                         <group>
-<!--                                <field name="api_box_locker" />-->
-<!--                                <field name="compartment_locker_1" widget="many2one" />-->
-<!--                                <field name="compartment_locker_2" widget="many2one" />-->
-<!--                                <field name="compartment_locker_3" widget="many2one" />-->
+                            <!--                                <field name="api_box_locker" />-->
+                            <!--                                <field name="compartment_locker_1" widget="many2one" />-->
+                            <!--                                <field name="compartment_locker_2" widget="many2one" />-->
+                            <!--                                <field name="compartment_locker_3" widget="many2one" />-->
                         </group>
                     </group>
-                <footer>
-                    <button string="Confirm" class="btn-primary" special="save" />
-                    <button string="Cancel" special="cancel" class="btn-secondary"/>
-                </footer>
+                    <footer>
+                        <button string="Confirm" class="btn-primary" special="save"/>
+                        <button string="Cancel" special="cancel" class="btn-secondary"/>
+                    </footer>
                 </form>
             </field>
         </record>
 
-
-         <!-- ==================================================  sd_payaneh_nafti.cargo_types ====================-->
+        <!-- ==================================================  sd_payaneh_nafti.cargo_types ====================-->
 
         <record model="ir.ui.view" id="sd_payaneh_nafti_cargo_types_list">
             <field name="name">Cargo Types List</field>
             <field name="model">sd_payaneh_nafti.cargo_types</field>
             <field name="arch" type="xml">
                 <tree editable="bottom">
-                    <field name="name" />
+                    <field name="name"/>
                 </tree>
             </field>
         </record>
@@ -481,9 +642,9 @@
             <field name="model">sd_payaneh_nafti.input_info</field>
             <field name="arch" type="xml">
                 <graph string="">
-                    <field name="document_no" />
+                    <field name="document_no"/>
                     <field name="registration_no" type="measure"/>
-                    <field name="contractor" />
+                    <field name="contractor"/>
                     <field name="amount" type="measure"/>
 
                 </graph>
@@ -497,28 +658,44 @@
             <field name="model">sd_payaneh_nafti.input_info</field>
             <field name="arch" type="xml">
                 <search string="Dealers">
-                    <field name="document_no" />
-                    <field name="contract_no" />
-                    <field name="loading_no" />
-                    <field name="loading_date" />
-                    <field name="registration_no" />
-                    <field name="contractor" />
-                    <field name="buyer" />
-                    <field name="driver" />
-                    <field name="truck_no" />
-                    <filter string="Last Week" name="last_week" domain="[('loading_date', '&gt;=', datetime.datetime.now() - datetime.timedelta(days=7))]"/>
+                    <field name="document_no"/>
+                    <field name="contract_no"/>
+                    <field name="loading_no"/>
+                    <field name="loading_date"/>
+                    <field name="registration_no"/>
+                    <field name="contractor"/>
+                    <field name="buyer"/>
+                    <field name="driver"/>
+                    <field name="truck_no"/>
+                    <field name="meter_no"/>
+                    <filter string="Last Week" name="last_week"
+                            domain="[('request_date', '&gt;=', datetime.datetime.now() - datetime.timedelta(days=7))]"/>
+                    <filter string="Today" name="today"
+                            domain="[('request_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Yesterday" name="yesterday"
+                            domain="[('request_date', '=', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="2 Days ago" name="2_days_ago"
+                            domain="[('request_date', '=', (context_today() - datetime.timedelta(days=2)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="3 Days ago" name="3_days_ago"
+                            domain="[('request_date', '=', (context_today() - datetime.timedelta(days=3)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="4 Days ago" name="4_days_ago"
+                            domain="[('request_date', '=', (context_today() - datetime.timedelta(days=4)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="5 Days ago" name="5_days_ago"
+                            domain="[('request_date', '=', (context_today() - datetime.timedelta(days=5)).strftime('%Y-%m-%d'))]"/>
                     <group>
-                        <filter string="Registration" name="registration_no_group" context="{'group_by': 'registration_no'}" />
-                        <filter string="Buyer" name="buyer_group" context="{'group_by': 'buyer'}" />
-                        <filter string="Contractor" name="contractors_group" context="{'group_by': 'contractor'}" />
-                        <filter string="Driver" name="driver_group" context="{'group_by': 'driver'}" />
-                        <filter string="Truck" name="truck_no_group" context="{'group_by': 'truck_no'}" />
-                        <filter string="Request Date" name="request_date_group" context="{'group_by': 'request_date'}" />
+                        <filter string="Registration" name="registration_no_group"
+                                context="{'group_by': 'registration_no'}"/>
+                        <filter string="Buyer" name="buyer_group" context="{'group_by': 'buyer'}"/>
+                        <filter string="Contractor" name="contractors_group" context="{'group_by': 'contractor'}"/>
+                        <filter string="Driver" name="driver_group" context="{'group_by': 'driver'}"/>
+                        <filter string="Truck" name="truck_no_group" context="{'group_by': 'truck_no'}"/>
+                        <filter string="Meter No" name="meter_no_group" context="{'group_by': 'meter_no'}"/>
+                        <filter string="Status" name="state_group" context="{'group_by': 'state'}"/>
+                        <filter string="Request Date" name="request_date_group" context="{'group_by': 'request_date'}"/>
                     </group>
                 </search>
             </field>
         </record>
-
 
         <!-- ==================================================  Action Window ====================-->
 
@@ -526,7 +703,7 @@
             <field name="name">Input Information</field>
             <field name="res_model">sd_payaneh_nafti.input_info</field>
             <field name="view_mode">tree,form</field>
-                        <field name="view_ids" eval="[(5, 0, 0),
+            <field name="view_ids" eval="[(5, 0, 0),
                 (0, 0, {'view_mode': 'tree', 'view_id': ref('sd_payaneh_nafti_input_info_list')}),
                 (0, 0, {'view_mode': 'form', 'view_id': ref('sd_payaneh_nafti_input_info_form')})]"/>
         </record>
@@ -538,7 +715,84 @@
             <field name="view_ids" eval="[(5, 0, 0),
                 (0, 0, {'view_mode': 'tree', 'view_id': ref('sd_payaneh_nafti_input_info_list_1')}),
                 (0, 0, {'view_mode': 'form', 'view_id': ref('sd_payaneh_nafti_input_info_form_1')})]"/>
-            <field name="context">{'search_default_registration_no_group': 1}</field>
+            <field name="context">{'search_default_registration_no_group': 0}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_window_input_info_1_today">
+            <field name="name">All Requests of Today</field>
+            <field name="res_model">sd_payaneh_nafti.input_info</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <!--            <field name="domain">[('request_date', '=', datetime.datetime.now())]</field>-->
+            <field name="domain">[('request_date', '=', context_today().strftime('%Y-%m-%d'))]</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('sd_payaneh_nafti_input_info_list_1')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('sd_payaneh_nafti_input_info_form_1')})]"/>
+            <field name="context">{'search_default_meter_no_group': 1}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_window_input_info_1_new">
+            <field name="name">New Request</field>
+            <field name="res_model">sd_payaneh_nafti.input_info</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('state', 'in', ['draft'])]</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('sd_payaneh_nafti_input_info_list_1')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('sd_payaneh_nafti_input_info_form_1')})]"/>
+            <field name="context">{'search_default_registration_no_group': 0}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_window_input_info_1_loading_permit">
+            <field name="name">Loading Permit State</field>
+            <field name="res_model">sd_payaneh_nafti.input_info</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('state', 'in', ['loading_permit'])]</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('sd_payaneh_nafti_input_info_list_1')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('sd_payaneh_nafti_input_info_form_1')})]"/>
+            <field name="context">{'search_default_registration_no_group': 0}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_window_input_info_1_loading_info">
+            <field name="name">Loading Info State</field>
+            <field name="res_model">sd_payaneh_nafti.input_info</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('state', 'in', ['loading_info'])]</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('sd_payaneh_nafti_input_info_list_1')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('sd_payaneh_nafti_input_info_form_1')})]"/>
+            <field name="context">{'search_default_registration_no_group': 0}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_window_input_info_1_cargo">
+            <field name="name">Document Cargo State</field>
+            <field name="res_model">sd_payaneh_nafti.input_info</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('state', 'in', ['cargo_document'])]</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('sd_payaneh_nafti_input_info_list_1')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('sd_payaneh_nafti_input_info_form_1')})]"/>
+            <field name="context">{'search_default_registration_no_group': 0}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_window_input_info_1_done">
+            <field name="name">Done State</field>
+            <field name="res_model">sd_payaneh_nafti.input_info</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('state', 'in', ['done']),('request_date', '&gt;', datetime.datetime.now() -
+                datetime.timedelta(days=5))]
+            </field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('sd_payaneh_nafti_input_info_list_1')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('sd_payaneh_nafti_input_info_form_1')})]"/>
+            <field name="context">{'search_default_registration_no_group': 0}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_window_input_info_manage">
+            <field name="name">Input Information Manage</field>
+            <field name="res_model">sd_payaneh_nafti.input_info</field>
+            <field name="view_mode">tree</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('sd_payaneh_nafti_input_info_manage_list')}),]"/>
         </record>
 
         <record model="ir.actions.act_window" id="action_window_cargo_types">
@@ -547,22 +801,63 @@
             <field name="view_mode">tree</field>
         </record>
 
-
-
         <!-- ==================================================  Menu ====================-->
+
+        <menuitem name="Today"
+                  sequence="30"
+                  id="sd_payaneh_nafti.input_info_1_menu_today"
+                  parent="sd_payaneh_nafti.payaneh_root_menu"
+                  action="action_window_input_info_1_today"/>
+
+        <menuitem name="New Request"
+                  sequence="35"
+                  id="sd_payaneh_nafti.input_info_1_menu_new"
+                  parent="sd_payaneh_nafti.payaneh_root_menu"
+                  action="action_window_input_info_1_new"/>
+
+        <menuitem name="Loading Permit"
+                  sequence="40"
+                  id="sd_payaneh_nafti.input_info_1_menu_loading_permit"
+                  parent="sd_payaneh_nafti.payaneh_root_menu"
+                  action="action_window_input_info_1_loading_permit"/>
+
+        <menuitem name="Loading Info"
+                  sequence="50"
+                  id="sd_payaneh_nafti.input_info_1_menu_loading_info"
+                  parent="sd_payaneh_nafti.payaneh_root_menu"
+                  action="action_window_input_info_1_loading_info"/>
+
+        <menuitem name="Cargo Document"
+                  sequence="60"
+                  id="sd_payaneh_nafti.input_info_1_menu_cargo"
+                  parent="sd_payaneh_nafti.payaneh_root_menu"
+                  action="action_window_input_info_1_cargo"/>
+
+        <menuitem name="Done"
+                  sequence="70"
+                  id="sd_payaneh_nafti.input_info_1_menu_done"
+                  parent="sd_payaneh_nafti.payaneh_root_menu"
+                  action="action_window_input_info_1_done"/>
 
         <menuitem name="Input Info"
                   sequence="20"
                   id="sd_payaneh_nafti.input_info_1_menu"
-                  parent="sd_payaneh_nafti.process_menu"
+                  parent="sd_payaneh_nafti.settings_menu"
                   action="action_window_input_info_1"/>
 
         <menuitem name="Input Info all"
                   sequence="30"
                   id="sd_payaneh_nafti.input_info_menu"
-                  parent="sd_payaneh_nafti.process_menu"
+                  parent="sd_payaneh_nafti.settings_menu"
                   groups="base.group_system"
                   action="action_window_input_info"/>
+
+        <menuitem name="Input Info Manage"
+                  sequence="40"
+                  id="sd_payaneh_nafti.input_info_manage_menu"
+                  parent="sd_payaneh_nafti.settings_menu"
+                  groups="base.group_system"
+                  action="action_window_input_info_manage"/>
 
         <menuitem name="Plate"
                   sequence="300"
@@ -570,15 +865,12 @@
                   parent="settings_menu"
                   groups="sd_payaneh_nafti.group_sd_payaneh_nafti_admins"/>
 
-
         <menuitem name="Cargo Type"
                   sequence="70"
                   id="sd_payaneh_nafti.cargo_type_menu"
                   parent="settings_menu"
                   groups="sd_payaneh_nafti.group_sd_payaneh_nafti_admins"
-                    action="action_window_cargo_types"/>
-
-
+                  action="action_window_cargo_types"/>
 
     </data>
 </odoo>

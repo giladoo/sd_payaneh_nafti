@@ -1,0 +1,95 @@
+<odoo>
+    <data>
+
+         <!-- ==================================================  sd_payaneh_nafti.loading_plan ====================-->
+
+        <record model="ir.ui.view" id="sd_payaneh_nafti_loading_plan_list">
+            <field name="name">Loading Plan List</field>
+            <field name="model">sd_payaneh_nafti.loading_plan</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" create="0" multi_edit="1" class="text-center">
+                    <field name="record_date" string="Date" readonly="1" />
+                    <field name="buyer" string="Buyer" width="300px" />
+                    <field name="destination" string="Destination" width="300px"/>
+                    <field name="registration_no" readonly="1"/>
+                    <field name="contract_no" string="Contract" readonly="1"/>
+                    <field name="contract_unit" />
+                    <field name="contract_amount" />
+                    <field name="contract_remain_amount" class="bg-300" sum="Remain" string="Remain" decoration-bf="1"/>
+                    <field name="days" string="Days"  decoration-bf="1"/>
+                    <field name="remain_tankers" class="bg-300" sum="Tanks" decoration-bf="1"/>
+                    <field name="plan" sum="Plan" decoration-bf="1" />
+                    <field name="load" sum="Load" class="bg-300" decoration-danger="load &gt; plan" decoration-bf="1"/>
+                    <field name="plan_1" sum="Plan 1" />
+                    <field name="load_1" sum="Load 1" class="bg-300" decoration-danger="load_1 &gt; plan_1" decoration-bf="load_1 &gt; plan_1"/>
+                    <field name="plan_2" sum="Plan 2" />
+                    <field name="load_2" sum="Load 2" class="bg-300" decoration-danger="load_2 &gt; plan_2" decoration-bf="load_2 &gt; plan_2"/>
+                    <field name="plan_3" sum="Plan 3" />
+                    <field name="load_3" sum="Load 3" class="bg-300" decoration-danger="load_3 &gt; plan_3" decoration-bf="load_3 &gt; plan_3"/>
+                    <field name="plan_4" sum="Plan 4"  />
+                    <field name="load_4" sum="Load 4" class="bg-300" decoration-danger="load_4 &gt; plan_4" decoration-bf="load_4 &gt; plan_4"/>
+                    <field name="plan_5" sum="Plan 5" />
+                    <field name="load_5" sum="Load 5" class="bg-300" decoration-danger="load_5 &gt; plan_5" decoration-bf="load_5 &gt; plan_5"/>
+                    <field name="plan_6" sum="Plan 6"  />
+                    <field name="load_6" sum="Load 6" class="bg-300" decoration-danger="load_6 &gt; plan_6" decoration-bf="load_6 &gt; plan_6"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sd_payaneh_nafti_loading_plan_form">
+            <field name="name">Loading Plan Form</field>
+            <field name="model">sd_payaneh_nafti.loading_plan</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                    <field name="record_date" />
+                    <field name="registration_no" />
+
+                    </group>
+
+                </form>
+            </field>
+        </record>
+
+        <!-- ==================================================  Search ====================-->
+
+        <record model="ir.ui.view" id="sd_payaneh_nafti_loading_plan_list_search">
+            <field name="name">Loading Plan Search</field>
+            <field name="model">sd_payaneh_nafti.loading_plan</field>
+            <field name="arch" type="xml">
+                <search string="loading_plan">
+                    <field name="record_date" />
+<!--                    <field name="description" />-->
+                    <filter string="Tomorrow" name="tomorrow" domain="[('record_date', '=', (context_today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Today" name="today" domain="[('record_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Yesterday" name="yesterday" domain="[('record_date', '=', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- ==================================================  Action Window ====================-->
+
+        <record model="ir.actions.act_window" id="action_window_loading_plan">
+            <field name="name">Loading Plan</field>
+            <field name="res_model">sd_payaneh_nafti.loading_plan</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{'search_default_today': 1}</field>
+
+        </record>
+
+        <!-- ==================================================  Menu ====================-->
+
+        <menuitem name="Loading Plan"
+                  sequence="50"
+                  id="loading_plan_menu"
+                  parent="settings_menu"
+                  action="action_window_loading_plan"/>
+
+<!--        <menuitem name="Actions"-->
+<!--                  id="sd_payaneh_nafti.actions_setting_menu"-->
+<!--                  parent="sd_payaneh_nafti.settings_menu"/>-->
+
+
+    </data>
+</odoo>

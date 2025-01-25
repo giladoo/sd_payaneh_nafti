@@ -54,7 +54,7 @@
         <!-- ==================================================  Menu ====================-->
 
         <menuitem name="Destinations"
-                  sequence="30"
+                  sequence="60"
                   id="destinations_menu"
                   parent="settings_menu"
                   action="action_window_destinations"/>

@@ -140,14 +140,14 @@
         <menuitem name="Reports"
                   id="sd_payaneh_nafti.reports_menu"
                   parent="sd_payaneh_nafti.payaneh_root_menu"
-                  sequence="20"/>
+                  sequence="980"/>
 
 
         <menuitem name="Settings"
                   id="sd_payaneh_nafti.settings_menu"
                   parent="sd_payaneh_nafti.payaneh_root_menu"
-                  groups="sd_payaneh_nafti.group_sd_payaneh_nafti_admins"
-                  sequence="30"/>
+                  groups="sd_payaneh_nafti.group_sd_payaneh_nafti_operators"
+                  sequence="990"/>
 
     </data>
 </odoo>

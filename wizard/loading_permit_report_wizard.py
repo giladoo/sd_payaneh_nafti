@@ -26,4 +26,11 @@ class SdPayanehNaftiReportLoadingPermit(models.TransientModel):
 
         return self.env.ref('sd_payaneh_nafti.loading_permit_report').report_action(self, data=data)
 
+    # #############################################################################
+    def loading_permit_html_report(self):
+        read_form = self.read()[0]
+        data = {'form_data': read_form}
+
+        return self.env.ref('sd_payaneh_nafti.loading_permit_html_report').report_action(self, data=data)
+
 

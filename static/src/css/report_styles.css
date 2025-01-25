@@ -1,3 +1,20 @@
+.py_border_2{
+    border-width: 2px !important;
+}
+.py_font_7{
+    font-size: .7rem !important;
+}
+.py_font_9{
+    font-size: .9rem !important;
+}
+.py_font_11{
+    font-size: 1.1rem !important;
+}
+
+.multi_page_report{
+    page-break-inside: avoid; page-break-after: always;
+}
+
 .payaneh_incident_report_dir{
     direction: ltr !important;
 }
@@ -58,8 +75,8 @@
 
    padding-right: 0.25rem !important;
    padding-left: 0.25rem !important;
-   padding-top: 0.05rem !important;
-   padding-bottom: 0.05rem !important;
+   padding-top: 0.2rem !important;
+   padding-bottom: 0.2rem !important;
 
 }
 .monthly_report_table tbody{
@@ -91,6 +108,8 @@
    padding-left: 0.25rem !important;
    padding-top: 0.15rem !important;
    padding-bottom: 0.15rem !important;
+       border-left: 1px solid #adb5bd;
+
 }
  .daily_report_table tbody td{
     vertical-align: middle;
@@ -99,6 +118,8 @@
    padding-left: 0.25rem !important;
    padding-top: 0.05rem !important;
    padding-bottom: 0.05rem !important;
+       border-left: 1px solid #adb5bd;
+
 
 }
 .daily_report_table tbody{
@@ -106,7 +127,7 @@
     border-bottom: solid;
 }
 .daily_report_table tfoot tr{
-    border-bottom: outset;
+    //border-bottom: outset;
 }
 
 .outgate_daily_report_table thead th, .outgate_daily_report_table tfoot td{
@@ -134,4 +155,9 @@
 }
 .outgate_daily_report_table tfoot tr{
     border-bottom: outset;
+}
+
+.tr_bottom_dark td{
+    border-bottom: 1px solid black !important;
+    font-size: 1rem;
 }

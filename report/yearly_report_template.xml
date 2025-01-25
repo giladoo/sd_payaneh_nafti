@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="yearly_report_table_header">
+            <tr>
+                <th>ردیف</th>
+                <th><span>شماره</span> <br/> <span>نامه</span> </th>
+                <th><span>شماره</span> <br/> <span>قرارداد</span> </th>
+                <th><span>شماره</span> <br/> <span>حواله</span> </th>
+                <th style="width:25%;">خریدار</th>
+                <th><span>مقدار</span> <br/> <span>قرارداد</span> </th>
+                <th><span>واحد</span> <br/> <span>مقدار</span> </th>
+                <th><span>نوع</span> <br/> <span>ارسال</span> </th>
+                <th><span>نوع</span> <br/> <span>فروش</span> </th>
+                <th style="direction:ltr;"><span>G.S.V.</span> <br/> <span>(LITER)</span> </th>
+                <th style="direction:ltr;"><span>G.S.V.</span> <br/> <span>(BBLS)</span> </th>
+                <th style="direction:ltr;"><span>M.T.</span> </th>
+                <th><span>تعداد</span> <br/> <span>تانکر</span> </th>
+            </tr>
+        </template>
+
+        <template id="yearly_report_table_body">
+            <tr>
+                <t t-foreach="row_data_line" t-as="row_data">
+                    <td t-esc="row_data"></td>
+
+                </t>
+            </tr>
+        </template>
+<!--            'final_gsv_l_stock': int(sum(final_gsv_l_stock)),-->
+<!--            'final_gsv_b_stock': int(sum(final_gsv_b_stock)),-->
+<!--            'final_mt_stock': int(sum(final_mt_stock)),-->
+<!--            'tank_count_stock': len(final_gsv_l_stock),-->
+<!--            -->
+<!--            'final_gsv_l_general': int(sum(final_gsv_l_general)),-->
+<!--            'final_gsv_b_general': int(sum(final_gsv_b_general)),-->
+<!--            'final_mt_general': int(sum(final_mt_general)),-->
+<!--            'tank_count_general': len(final_gsv_l_general),-->
+
+<!--            'final_gsv_l_internal': int(sum(final_gsv_l_internal)),-->
+<!--            'final_gsv_b_internal': int(sum(final_gsv_b_internal)),-->
+<!--            'final_mt_internal': int(sum(final_mt_internal)),-->
+<!--            'tank_count_internal': len(final_gsv_l_internal),-->
+
+<!--            'final_gsv_l_export': int(sum(final_gsv_l_export)),-->
+<!--            'final_gsv_b_export': int(sum(final_gsv_b_export)),-->
+<!--            'final_mt_export': int(sum(final_mt_export)),-->
+<!--            'tank_count_export': len(final_gsv_l_export),-->
+        <template id="sd_payaneh_nafti.yearly_report_table_footer">
+            <tr>
+                <td rowspan="2" colspan="4">بر اساس نوع فروش</td>
+                <td colspan="5">جمع فروش در بورس انرژی</td>
+                <td t-esc="footer_data['final_gsv_l_stock']"></td>
+                <td t-esc="footer_data['final_gsv_b_stock']"></td>
+                <td t-esc="footer_data['final_mt_stock']"></td>
+                <td t-esc="footer_data['tank_count_stock']"></td>
+
+            </tr>
+            <tr>
+                <td colspan="5">جمع فروش عادی</td>
+                <td t-esc="footer_data['final_gsv_l_general']"></td>
+                <td t-esc="footer_data['final_gsv_b_general']"></td>
+                <td t-esc="footer_data['final_mt_general']"></td>
+                <td t-esc="footer_data['tank_count_general']"></td>
+
+            </tr>
+            <tr class="yearly_report_table_total">
+                <td colspan="9">جمع کل ماه جاری</td>
+                <td t-esc="'{:,d}'.format(footer_data['final_gsv_l_stock'] + footer_data['final_gsv_l_general'])"></td>
+                <td t-esc="'%.2f' % (footer_data['final_gsv_b_stock'] + footer_data['final_gsv_b_general'])"></td>
+                <td t-esc="'%.3f' % (footer_data['final_mt_stock'] + footer_data['final_mt_general'])"></td>
+                <td t-esc="footer_data['tank_count_stock'] + footer_data['tank_count_general']"></td>
+
+            </tr>
+            <tr>
+                <td colspan="13" style="height: 10px;"></td>
+            </tr>
+             <tr>
+                <td rowspan="2" colspan="4">بر اساس نوع ارسال</td>
+                <td colspan="5">جمع ارسال داخلی</td>
+                <td t-esc="footer_data['final_gsv_l_internal']"></td>
+                <td t-esc="footer_data['final_gsv_b_internal']"></td>
+                <td t-esc="footer_data['final_mt_internal']"></td>
+                <td t-esc="footer_data['tank_count_internal']"></td>
+            </tr>
+            <tr>
+                <td colspan="5">جمع ارسال صادراتی</td>
+                <td t-esc="footer_data['final_gsv_l_export']"></td>
+                <td t-esc="footer_data['final_gsv_b_export']"></td>
+                <td t-esc="footer_data['final_mt_export']"></td>
+                <td t-esc="footer_data['tank_count_export']"></td>
+
+            </tr>
+
+        </template>
+
+        <template id="yearly_report_data">
+<!--            <t t-call="web.html_container">-->
+<!--                <t t-call="web.basic_layout">-->
+<!--                <t t-call="web.internal_layout">-->
+                    <div class="page">
+                        <div class="container iransans_font" style="font-size: .9rem">
+                                <div class="container mt-2">
+                                         <div class="container iransans_font">
+                                            <div style="direction:rtl">
+                                                <div class="text-center">
+                                                    <!--                        <div style="display:block; position:absolute;padding:0; margin:0px; padding-top:10px; padding-bottom:10px; text-align:center;">-->
+<!--                            <img t-att-src="'/report/barcode/Code128/'+contract_record['contract_no']" style="width:250px;height:25px" t-att-alt="contract_record['contract_no']"/>-->
+<!--                        </div>-->
+                                                    <div>
+                                                        <img alt="Logo" t-att-src="'/logo?company=1'" t-att-alt="''"
+                                                             style=" height: 50px;" height="50"/>
+                                                    </div>
+                                                    <div>شرکت ملی نفت ایران</div>
+                                                    <div>شرکت پایانه های نفتی ایران</div>
+                                                    <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
+                                                    <div class="h5 mt-2 mb-4">گزارش ماهیانه قراردادهای بارگیری نفتکش های زمینی میعانات گازی</div>
+                                                </div>
+                                                <div class="row my-1">
+                                                    <div class="col-6"></div>
+                                                    <div class="col-3" ><span>تاریخ شروع : </span><span t-esc="dates[0]"></span></div>
+                                                    <div class="col-3"><span> تاریخ پایان : </span><span t-esc="dates[1]"></span></div>
+
+                                                </div>
+                                                <div >
+                                                    <table class="table table-bordered border-0 text-center yearly_report_table">
+                                                        <thead class=" text-center">
+                                                            <t t-call="sd_payaneh_nafti.yearly_report_table_header"/>
+                                                        </thead>
+                                                        <tbody>
+                                                            <t t-foreach="row_data_lines" t-as="row_data_line">
+<!--                                                                <t t-set="row_index" t-value="row_index + 1"/>-->
+                                                                <t t-call="sd_payaneh_nafti.yearly_report_table_body"/>
+                                                            </t>
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <t t-call="sd_payaneh_nafti.yearly_report_table_footer"/>
+                                                        </tfoot>
+                                                    </table>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <div class="mb-5"></div>
+                                    <div class="mb-5"></div>
+                                </div>
+
+
+
+
+                        </div>
+
+                    </div>
+
+<!--                </t>-->
+<!--            </t>-->
+        </template>
+
+        <template id="yearly_report_template">
+            <t t-call="web.basic_layout" t-lang="lang">
+                <div t-if="errors != []">
+                    <div class="container mt-2 text-center">
+                        <div class="border border-danger rounded p-3" style="direction: ltr" t-esc="errors[0]"></div>
+                    </div>
+                </div>
+                <div t-if="errors == []">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-call="sd_payaneh_nafti.yearly_report_data"/>
+                    </t>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

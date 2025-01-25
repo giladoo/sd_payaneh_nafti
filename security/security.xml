@@ -12,10 +12,16 @@
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
     </record>
 
+    <record id="group_sd_payaneh_nafti_operators" model="res.groups">
+        <field name="name">Operators</field>
+        <field name="category_id" ref="module_category_sd_payaneh_nafti"/>
+        <field name="implied_ids" eval="[(4, ref('group_sd_payaneh_nafti_users'))]"/>
+    </record>
+
     <record id="group_sd_payaneh_nafti_admins" model="res.groups">
         <field name="name">Administrators</field>
         <field name="category_id" ref="module_category_sd_payaneh_nafti"/>
-        <field name="implied_ids" eval="[(4, ref('group_sd_payaneh_nafti_users'))]"/>
+        <field name="implied_ids" eval="[(4, ref('group_sd_payaneh_nafti_operators'))]"/>
     </record>
 
 

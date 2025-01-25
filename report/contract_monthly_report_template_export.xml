@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="contract_monthly_report_page_header_export">
+            <div class="text-center">
+                <div style="display:block; position:absolute;padding:0; margin:0px; padding-top:10px; padding-bottom:10px; text-align:center;">
+                    <img t-att-src="'/report/barcode/Code128/'+header['contract_no']" style="width:250px;height:25px" t-att-alt="header['contract_no']"/>
+                </div>
+                <div>
+                    <img alt="Logo" t-att-src="'/logo?company=1'" t-att-alt="''"
+                         style=" height: 50px;" height="50"/>
+                </div>
+
+                <div>NATIONAL IRANIAN OIL COMPANY</div>
+                <div>IRANIAN OIL TERMINALS COMPANY</div>
+                <div>SOUTH PARS TERMINAL</div>
+                <div class="h4 mt-2 mb-4">
+                    CONTRACT REPORT
+                </div>
+            </div>
+        </template>
+
+        <template id="contract_monthly_report_table_header_export">
+            <tr style="direction:ltr;">
+                <th>ROW</th>
+                <th>DATE</th>
+                <th>SP.GR.</th>
+                <th>G.S.V. (LITER)</th>
+                <th>G.S.V. (BBLS)</th>
+                <th>M.T.</th>
+                <th>Tanker no.</th>
+            </tr>
+        </template>
+
+        <template id="contract_monthly_report_table_body_export">
+            <tr>
+                <t t-foreach="row_data_line" t-as="row_data">
+                    <td t-esc="row_data"></td>
+                </t>
+            </tr>
+        </template>
+
+        <template id="contract_monthly_report_table_footer_export">
+            <tr>
+                <td colspan="3">CURRENT MONTH</td>
+                <td t-esc="'%.d' % footer_data['total_gsv_l']"></td>
+                <td t-esc="'%.2f' % footer_data['total_gsv_b']"></td>
+                <td t-esc="'%.3f' % footer_data['total_mt']"></td>
+                <td t-esc="footer_data['total_tankers']"></td>
+            </tr>
+            <tr>
+                <td colspan="3">LAST MONTH</td>
+                <td t-esc="'%.d' % footer_data['total_gsv_l_past']"></td>
+                <td t-esc="'%.2f' % footer_data['total_gsv_b_past']"></td>
+                <td t-esc="'%.3f' % footer_data['total_mt_past']"></td>
+                <td t-esc="footer_data['total_tankers_past']"></td>
+            </tr>
+            <tr>
+                <td colspan="3">TOTAL</td>
+                <td t-esc="'%.d' % footer_data['total_gsv_l_all']"></td>
+                <td t-esc="'%.2f' % footer_data['total_gsv_b_all']"></td>
+                <td t-esc="'%.3f' % footer_data['total_mt_all']"></td>
+                <td t-esc="footer_data['total_tankers_all']"></td>
+            </tr>
+        </template>
+
+        <template id="contract_monthly_report_signs_export">
+            <div class="row my-5 text-center">
+                <div class="col-4">SOUTH PARS TERMINAL REP.</div>
+                <div class="col-4">MINISTRY OF PETROLEUM REP.</div>
+                <div class="col-4">CONSIGNEE/AGENCY REP.</div>
+            </div>
+
+        </template>
+
+
+        <template id="contract_monthly_report_data_export">
+            <div class="page roboto" lang="en_US" style="direction: ltr">
+                <div class="container " style="font-size: .9rem">
+                    <div class="container mt-2">
+                        <div class="container">
+                            <div>
+                                <t t-call="sd_payaneh_nafti.contract_monthly_report_page_header_export" t-lang="en_US"/>
+
+                                <div class="row mx-0 mb-4 border border-info rounded ">
+                                    <div class="col-9 ">
+                                        <div class="row border-bottom py-1">
+                                            <div class="col-4">CONSIGNEE:</div>
+                                            <div class="col-8 font-weight-bold text-center">
+                                                <span t-esc="header['buyer']"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row border-bottom py-1">
+                                            <div class="col-4">LOADING TERMINAL:</div>
+                                            <div class="col-8 font-weight-bold text-center">
+                                                <span t-esc="header['destination']"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row py-1">
+                                            <div class="col-4">CARRIED BY:</div>
+                                            <div class="col-8 font-weight-bold text-center">
+                                                <span t-esc="header['contractors']"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row border-bottom py-1">
+                                            <div class="col-4">
+                                                <span>CONTRACT NO:</span>
+                                            </div>
+                                            <div class="col-2 text-center">
+                                                <span class="font-weight-bold text-center" t-esc="header['contract_no']"></span>
+                                            </div>
+                                            <div class="col-4">
+                                                <span class="small">QUANTITY(M.T.):</span>
+                                                <span>(</span>
+                                                <span t-esc="header['unit']"></span>
+                                                <span>):</span>
+                                            </div>
+                                            <div class="col-2 text-center">
+                                                <span class="font-weight-bold" t-esc="header['amount']"></span>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        <div class=" py-1">DATE RANGE</div>
+                                        <div class="font-weight-bold py-1" t-esc="dates[0]"></div>
+                                        <div class="font-weight-bold py-1" t-esc="dates[1]"></div>
+                                        <div class=" py-1">GRADE</div>
+                                        <div class=" py-1">SOUTH PARS CONDENSATE</div>
+
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <table class="table table-bordered border-0 text-center monthly_report_table">
+                                        <thead class=" text-center">
+                                            <t t-call="sd_payaneh_nafti.contract_monthly_report_table_header_export" t-lang="en_US"/>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="row_data_lines" t-as="row_data_line">
+                                                <t t-call="sd_payaneh_nafti.contract_monthly_report_table_body_export"/>
+                                            </t>
+                                        </tbody>
+                                        <tfoot>
+                                            <t t-call="sd_payaneh_nafti.contract_monthly_report_table_footer_export" t-lang="en_US"/>
+                                        </tfoot>
+                                    </table>
+
+                                </div>
+                                <t t-call="sd_payaneh_nafti.contract_monthly_report_signs_export" t-lang="en_US"/>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-5"></div>
+                    <div class="mb-5"></div>
+                </div>
+            </div>
+        </template>
+
+<!--        <template id="report_layout" name="Report layout">&lt;!DOCTYPE html&gt;-->
+<!--            <html t-att-lang="'en-US' or lang and lang.replace('_', '-')"-->
+<!--                  t-att-data-report-margin-top="data_report_margin_top"-->
+<!--                  t-att-data-report-header-spacing="data_report_header_spacing"-->
+<!--                  t-att-data-report-dpi="data_report_dpi"-->
+<!--                  t-att-data-report-landscape="data_report_landscape"-->
+<!--                  t-att-web-base-url="web_base_url">-->
+<!--                <head>-->
+<!--                    <meta charset="utf-8"/>-->
+<!--                    <meta name="viewport" content="initial-scale=1"/>-->
+<!--                    <title>-->
+<!--                        <t t-esc="title or 'Odoo Report '"/>-->
+<!--                    </title>-->
+<!--                    <t t-call-assets="web.report_assets_common" t-js="false"/>-->
+<!--                    &lt;!&ndash;The following is kind of a hack&ndash;&gt;-->
+<!--                    &lt;!&ndash;in an iframe, we don't want the session to perform qweb_templates rpc&ndash;&gt;-->
+<!--                    <script type="text/javascript">-->
+<!--                        window.odoo = {};-->
+<!--                        window.odoo.__session_info__ = {is_report: true};-->
+<!--                    </script>-->
+<!--                    <t t-call-assets="web.assets_common" t-css="false"/>-->
+<!--                    <t t-call-assets="web.report_assets_common" t-css="false"/>-->
+<!--                </head>-->
+<!--                <body t-att-class="'container' if not full_width else 'container-fluid'">-->
+<!--                    <div id="wrapwrap">-->
+<!--                        <main>-->
+<!--                            <t t-out="0"/>-->
+<!--                        </main>-->
+<!--                    </div>-->
+<!--                </body>-->
+<!--            </html>-->
+<!--        </template>-->
+
+<!--        <template id="html_container">-->
+<!--            <t t-set="body_classname" t-value="'container'"/>-->
+<!--            <t t-call="sd_payaneh_nafti.report_layout">-->
+<!--                <t t-out="0"/>-->
+<!--            </t>-->
+<!--        </template>-->
+
+<!--        <template id="basic_layout">-->
+<!--            <t t-call="sd_payaneh_nafti.html_container">-->
+<!--                <t t-if="not o" t-set="o" t-value="doc"/>-->
+<!--                <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"-->
+<!--                     data-oe-lang="en_US">-->
+<!--                    <t t-out="0"/>-->
+<!--                </div>-->
+<!--            </t>-->
+<!--        </template>-->
+
+<!--        <template id="contract_monthly_report_template">-->
+<!--            <t t-if="loading_type == 'internal'" t-call="web.basic_layout" t-lang="fa_IR">-->
+<!--                <div t-if="errors != []">-->
+<!--                    <div class="container mt-2 text-center">-->
+<!--                        <div class="border border-danger rounded p-3" style="direction: ltr" t-esc="errors[0]"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div t-if="errors == []">-->
+<!--                    <t t-foreach="docs" t-as="o">-->
+<!--                         <t  t-call="sd_payaneh_nafti.contract_monthly_report_data"  t-lang="fa_IR"/>-->
+<!--                    </t>-->
+<!--                </div>-->
+<!--            </t>-->
+
+<!--            <t t-if="loading_type == 'export'" t-call="sd_payaneh_nafti.basic_layout" lang="en_US">-->
+<!--                <div t-if="errors != []">-->
+<!--                    <div class="container mt-2 text-center">-->
+<!--                        <div class="border border-danger rounded p-3" style="direction: ltr" t-esc="errors[0]"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div t-if="errors == []">-->
+<!--                    <t t-foreach="docs" t-as="o">-->
+<!--                        <t t-call="sd_payaneh_nafti.contract_monthly_report_data_export"/>-->
+<!--                    </t>-->
+<!--                </div>-->
+<!--            </t>-->
+
+<!--        </template>-->
+    </data>
+</odoo>

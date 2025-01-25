@@ -16,10 +16,10 @@
     # for the full list
     'category': 'Service Desk/Service Desk',
     'application': True,
-    'version': '1.2.1',
+    'version': '15.0.1.2.5',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'web', 'mail'],
+    'depends': ['base', 'web', 'mail', 'barcodes'],
 
     # always loaded
     'data': [
@@ -49,7 +49,18 @@
         'wizard/loading_permit_report_wizard.xml',
         'report/monthly_report_template.xml',
         'report/monthly_report.xml',
-        'wizard/monthly_report_wizard.xml',
+         'wizard/monthly_report_wizard.xml',
+
+        'report/annual_report_template.xml',
+        'report/annual_report.xml',
+        'wizard/annual_report_wizard.xml',
+
+        'report/locker_log_report_template.xml',
+        'report/locker_log_sheet_template.xml',
+        'report/locker_log_report.xml',
+        'wizard/locker_log_report_wizard.xml',
+
+        'report/contract_monthly_report_template_export.xml',
         'report/contract_monthly_report_template.xml',
         'report/contract_monthly_report.xml',
         'wizard/contract_monthly_report_wizard.xml',
@@ -66,14 +77,18 @@
         'report/cargo_document_report_template.xml',
         'report/cargo_document_report.xml',
         'wizard/cargo_document_report_wizard.xml',
+        'report/contract_daily_report_template_export.xml',
         'report/contract_daily_report_template.xml',
         'report/contract_daily_report.xml',
         'wizard/contract_daily_report_wizard.xml',
         # 'wizard/loading_info_wizard.xml',
         'data/registration_sequence.xml',
         'data/input_sequence.xml',
+        'data/spgr_data.xml',
         # 'data/lockers_sequence.xml',
         'data/cargo_types_data.xml',
+        'views/loading_plan.xml',
+        'data/lockers_data.xml',
 
     ],
     'assets': {
@@ -87,9 +102,10 @@
         'web.assets_backend': [
 
             'sd_payaneh_nafti/static/src/css/style.scss',
-            'sd_payaneh_nafti/static/src/js/o_field_x2many_list_row_add_none.js',
+            # 'sd_payaneh_nafti/static/src/js/o_field_x2many_list_row_add_none.js',
             'sd_payaneh_nafti/static/src/components/**/*.js',
             'sd_payaneh_nafti/static/src/components/**/*.css',
+            # 'sd_payaneh_nafti/static/src/web/fields/locker_type.js',
 
         ],
         'web.report_assets_common': [

@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!-- ############################  INTERNAL Daily Report   ############################ -->
+
         <template id="contract_daily_report_page_header">
-            <div class="row mb-1">
+            <div class="row mb-1 mx-0">
                 <div class="col-4">
                     <div style="padding:0; margin:0px; padding-top:0px; padding-bottom:10px; text-align:center;">
-                            <img t-att-src="'/report/barcode/Code128/'+contract_record['contract_no']" style="width:250px;height:25px" t-att-alt="contract_record['contract_no']"/>
-                        </div>
+                            <img t-att-src="'/report/barcode/Code128/220_'+report_date_g+'_'+contract_record['registration_no']" style="width:350px;height:25px" t-att-alt="contract_record['contract_no']"/>
+                        <div style="font-family: sans-serif !important;" t-esc="'Contract Daily: ' + report_date_g + ' ' + contract_record['registration_no']"></div>
+
+                    </div>
                     <div class="row">
                         <div class="col-3">Buyer:</div>
                         <div class="col-9 h4"
@@ -41,9 +45,7 @@
                         <div>شرکت ملی نفت ایران</div>
                         <div>شرکت پایانه های نفتی ایران</div>
                         <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
-                        <div class="h6 mt-2 mb-2">گزارش روزانه بارگیری نفتكش هاي
-                            زمینی میعانات گازی
-                        </div>
+                        <div class="h6 mt-2 mb-2">گزارش روزانه بارگیری نفتكش هاي زمینی میعانات گازی </div>
 
                     </div>
 
@@ -51,7 +53,7 @@
                 <div class="col-4 row">
                     <div class="col-4"></div>
 
-                    <div class="col-8" style="font-size: 10px;">
+                    <div class="col-8" style="font-size: .9rem;">
                         <div class="row border border-dark">
                             <div class="col-6 px-1 ">
                                 Letter No
@@ -119,10 +121,10 @@
 
         <template id="contract_daily_report_table_header">
             <tr>
-                <th>No</th>
-                <th>Plate</th>
+                <th>ردیف</th>
+                <th>پلاک</th>
                 <th>
-                    <div class="th_rotate">Tank No</div>
+                    <div class="th_rotate">مخزن</div>
                 </th>
                 <th>
                     <p>SP.GR</p>
@@ -145,24 +147,27 @@
                     <p>P</p>
                     <p>(PSI)</p>
                 </th>
-                <th>Loading Type</th>
                 <th>
-                    <div class="th_rotate">Miter</div>
+                    <div class="px-0 mx-0 small ">نوع</div>
+                    <div class="px-0 mx-0 small ">بارگیری</div>
                 </th>
                 <th>
-                    <p>First Totalizer</p>
-                    <p>Tanker Emt Weight</p>
+                    <div class="th_rotate">میتر</div>
                 </th>
                 <th>
-                    <p>Last Totalizer</p>
-                    <p>Tanker Full Weight</p>
+                    <div class="px-0 mx-0 small">توالایزر آغازین</div>
+                    <div class="px-0 mx-0 small">وزن خالی نفتکش</div>
                 </th>
                 <th>
-                    <p>Totalizer Difference</p>
-                    <p>Pure Weight</p>
+                    <div class="px-0 mx-0 small">توالایزر پایانی</div>
+                    <div class="px-0 mx-0 small">وزن پر نفتکش</div>
                 </th>
                 <th>
-                    <div class="th_rotate">K-FACTOR</div>
+                    <div class="px-0 mx-0 small">اختلاف توتالایزر</div>
+                    <div class="px-0 mx-0 small">وزن خالص</div>
+                </th>
+                <th>
+                    <div class="th_rotate small">K-FACTOR</div>
                 </th>
 
                 <th>C.T.L 6A</th>
@@ -188,24 +193,31 @@
         </template>
 
         <template id="contract_daily_report_table_body">
-            <tr>
+            <tr class="tr_bottom_dark">
                 <td class="px-1" t-esc="row_index"></td>
-                <td class="px-1 plate_data">
-                    <div class="row mx-0">
-                        <span class="col px-0"
-                              t-esc="row_data_line.plate_1"></span>
-                        <span class="col px-0">-</span>
-                        <span class="col px-0"
-                              t-esc="row_data_line.plate_2"></span>
-                        <span class="col px-0"
-                              t-esc="row_data_line.plate_3"></span>
-                        <span class="col px-0"
-                              t-esc="row_data_line.plate_4"></span>
-
+                <td class="px-0 plate_data">
+                    <div class="row mx-0 p-0 text-center">
+                        <div class="col-3 px-0" t-esc="row_data_line.plate_1"></div>
+                        <div class="border-left my-1"></div>
+                        <div class="border-left my-1"></div>
+                        <div class="col-4 px-0" t-esc="row_data_line.plate_2"></div>
+                        <div class="col-2 px-0" t-esc="row_data_line.plate_3"></div>
+                        <div class="col-3 px-0" t-esc="row_data_line.plate_4"></div>
                     </div>
+<!--                    <div class="row mx-0">-->
+<!--                        <span class="col px-0"-->
+<!--                              t-esc="row_data_line.plate_1"></span>-->
+<!--                        <span class="col px-0">-</span>-->
+<!--                        <span class="col px-0"-->
+<!--                              t-esc="row_data_line.plate_2"></span>-->
+<!--                        <span class="col px-0"-->
+<!--                              t-esc="row_data_line.plate_3"></span>-->
+<!--                        <span class="col px-0"-->
+<!--                              t-esc="row_data_line.plate_4"></span>-->
+<!--                    </div>-->
                 </td>
                 <td class="px-1"
-                    t-esc="row_data_line.centralized_container"></td>
+                    t-esc="(row_data_line.centralized_container).upper() if row_data_line.centralized_container else ''"></td>
                 <td class="px-1" t-esc="row_data_line.sp_gr"></td>
                 <td class="px-1" t-esc="row_data_line.api_a"></td>
                 <td class="px-1" t-esc="row_data_line.temperature"></td>
@@ -246,7 +258,7 @@
                 <td class="px-1" t-esc="'%.5f' % row_data_line.cpl"></td>
                 <td class="px-1" t-esc="'%d' % row_data_line.final_tov_l"></td>
                 <td class="px-1" t-esc="'%d' % row_data_line.final_gsv_l"></td>
-                <td class="px-1" t-esc="'%d' % row_data_line.final_gsv_b"></td>
+                <td class="px-1" t-esc="'%d' % round(row_data_line.final_gsv_b)"></td>
                 <td class="px-1" t-esc="'%.5f' % row_data_line.tab_13"></td>
                 <td class="px-1" t-esc="'%.3f' % row_data_line.final_mt"></td>
                 <td class="px-1" t-esc="row_data_line.loading_no"></td>
@@ -254,50 +266,54 @@
         </template>
 
         <template id="contract_daily_report_table_footer">
-            <tr>
-    <td class="border-0" colspan="6"></td>
-    <td class="border-dark" colspan="7">
-        <span>Sum of page [</span>
-        <span t-esc="page_i + 1"></span>
-        <span>] Totalizer difference of meter loading
-        </span>
-    </td>
+            <tr style="font-size: 1rem;">
+                <td class="border-0" colspan="6"></td>
+                <td class="border-dark" colspan="7">
+                    <div class="row m-0 justify-content-center">
+                        <div class="m-0">جمع صفحه</div>
+                        <div class="my-0 mx-1" t-esc="page_i + 1"></div>
+                        <div class="m-0">اختلاف توتالایزر از بارگیری میتر</div>
 
-    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['pages'][page_i]['totalizer_diff_sum'])"></td>
-    <td class="border-0" ></td>
-    <td class="border-dark" colspan="2">
-        <span>Sum of page</span>
-        <span t-esc="page_i + 1"></span>
-    </td>
-    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['pages'][page_i]['final_tov_l_sum'])"></td>
-    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['pages'][page_i]['final_gsv_l_sum'])"></td>
-    <td class="border-dark" t-esc="'%.2f' % doc_data['pages'][page_i]['final_gsv_b_sum']"></td>
-    <td class="border-0" ></td>
-    <td class="border-dark" t-esc="'%.3f' % doc_data['pages'][page_i]['final_mt_sum']"></td>
-    <td class="border-0" ></td>
-</tr>
+                    </div>
+                </td>
+
+                <td class="border-dark" t-esc="'{:,d}'.format(doc_data['pages'][page_i]['totalizer_diff_sum'])"></td>
+                <td class="border-0" ></td>
+                <td class="border-dark" colspan="2">
+                    <div class="row m-0 justify-content-center">
+                        <div class="m-0">جمع صفحه</div>
+                        <div class="my-0 mx-1" t-esc="page_i + 1"></div>
+
+                    </div>
+                </td>
+                <td class="border-dark" t-esc="'{:,d}'.format(doc_data['pages'][page_i]['final_tov_l_sum'])"></td>
+                <td class="border-dark" t-esc="'{:,d}'.format(doc_data['pages'][page_i]['final_gsv_l_sum'])"></td>
+                <td class="border-dark" t-esc="'%.2f' % doc_data['pages'][page_i]['final_gsv_b_sum']"></td>
+                <td class="border-0" ></td>
+                <td class="border-dark" t-esc="'%.3f' % doc_data['pages'][page_i]['final_mt_sum']"></td>
+                <td class="border-0" ></td>
+            </tr>
         </template>
 
         <template id="contract_daily_report_table_footer_total">
-            <tr>
-    <td class="border-0" colspan="6"></td>
-    <td class="border-dark" colspan="7">
-        <span>Total totalizer difference of meter loading
-        </span>
-    </td>
+            <tr style="font-size: 1rem;">
+                <td class="border-0" colspan="6"></td>
+                <td class="border-dark" colspan="7">
+                    <span>جمع كل اختلاف توتالایزر از بارگیری میتر</span>
+                </td>
 
-    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['total']['totalizer_diff_sum'])"></td>
-    <td class="border-0" ></td>
-    <td class="border-dark" colspan="2">
-        <span>Total</span>
-    </td>
-    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['total']['final_tov_l_sum'])"></td>
-    <td class="border-dark" t-esc="'{:,d}'.format(doc_data['total']['final_gsv_l_sum'])"></td>
-    <td class="border-dark" t-esc="'%.2f' % doc_data['total']['final_gsv_b_sum']"></td>
-    <td class="border-0" ></td>
-    <td class="border-dark" t-esc="'%.3f' % doc_data['total']['final_mt_sum']"></td>
-    <td class="border-0" ></td>
-</tr>
+                <td class="border-dark" t-esc="'{:,d}'.format(doc_data['total']['totalizer_diff_sum'])"></td>
+                <td class="border-0" ></td>
+                <td class="border-dark" colspan="2">
+                    <span>جمع كل</span>
+                </td>
+                <td class="border-dark" t-esc="'{:,d}'.format(doc_data['total']['final_tov_l_sum'])"></td>
+                <td class="border-dark" t-esc="'{:,d}'.format(doc_data['total']['final_gsv_l_sum'])"></td>
+                <td class="border-dark" t-esc="'%.2f' % doc_data['total']['final_gsv_b_sum']"></td>
+                <td class="border-0" ></td>
+                <td class="border-dark" t-esc="'%.3f' % doc_data['total']['final_mt_sum']"></td>
+                <td class="border-0" ></td>
+            </tr>
         </template>
 
         <template id="contract_daily_report_page_footer">
@@ -321,36 +337,34 @@
 <!--                    <div class="mt-2" t-esc="doc_data['buyer_agent']"></div>-->
                 </div>
             </div>
+            <div style="page-break-after: always;"></div>
+
         </template>
 
-        <template id="contract_daily_report_data">
-<!--            <t t-call="web.html_container">-->
-<!--                <t t-call="web.basic_layout">-->
-                    <!--                <t t-call="web.internal_layout">-->
+        <template id="contract_daily_report_data_internal">
                     <div class="page">
-                        <div class=" iransans_font" style="font-size: .9rem">
+                        <div class=" iransans_font" style="font-size: .8rem">
                             <div t-foreach="doc_data_list" t-as="doc_data"
                                  style="page-break-inside: avoid; page-break-after: always;">
                                 <t t-set="contract_record" t-value="doc_data[0]"/>
                                 <t t-set="doc_data" t-value="doc_data[1]"/>
-
-                                <div class=" mt-2">
-                                    <div t-if="errors != []">
-                                        <div style="direction: ltr" t-esc="errors[0]"></div>
+                                <div  t-if="len(doc_data['inputs']) == 0" class=" mt-2">
+                                    <t t-set="page_index" t-value="1"/>
+                                    <t t-call="sd_payaneh_nafti.contract_daily_report_page_header"/>
+                                    <div class="container text-center mt-5 border border-warning">
+                                        بارگیری وجود ندارد
                                     </div>
-
-                                    <div t-if="len(errors) == 0">
+                                </div>
+                                <div class=" mt-2">
                                         <t t-set="page_index" t-value="0"/>
                                         <t t-set="row_index" t-value="0"/>
+
                                         <t t-foreach="doc_data['inputs']" t-as="row_data_lines">
                                             <t t-if="len(row_data_lines) > 0">
                                                 <t t-set="page_index" t-value="page_index + 1"/>
-
-
-                                                <div style="page-break-after: always;"></div>
+<!--                                                <div style="page-break-after: always;"></div>-->
                                                 <t t-call="sd_payaneh_nafti.contract_daily_report_page_header"/>
-                                                <div class="iransans_font" style="direction:rtl">
-                                                    <table class="table table-bordered border-0 text-center contract_daily_report_table">
+                                                <table class="table table-bordered border-0 text-center contract_daily_report_table">
                                                         <thead class=" text-center">
                                                             <t t-call="sd_payaneh_nafti.contract_daily_report_table_header"/>
                                                         </thead>
@@ -361,70 +375,55 @@
                                                             </t>
                                                         </tbody>
                                                         <tfoot>
-                                                            <t t-foreach="page_index" t-as="page_i">
-                                                                <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer"/>
-                                                            </t>
+
 
                                                             <t t-if="page_index == doc_data['page_count']">
+                                                                <t t-foreach="page_index" t-as="page_i">
+                                                                    <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer"/>
+                                                                </t>
                                                                 <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer_total"/>
+                                                            </t>
+                                                            <t t-else="">
+
+                                                                <t t-set="page_i" t-value="page_index - 1"/>
+<!--                                                                <div t-esc="page_i" class="h1 text-danger"></div>-->
+                                                                <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer"/>
                                                             </t>
                                                         </tfoot>
                                                     </table>
-                                                </div>
                                                 <t t-call="sd_payaneh_nafti.contract_daily_report_page_footer"/>
 <!--                                                <t t-call="sd_payaneh_nafti.contract_daily_report_table_footer"/>-->
-
                                             </t>
                                         </t>
-                                    </div>
-
                                     <div class="mb-5"></div>
                                     <div class="mb-5"></div>
                                 </div>
-
-
                             </div>
                         </div>
-
                     </div>
-
-<!--                </t>-->
-<!--            </t>-->
         </template>
 
-<!--        <template id="contract_daily_report_template">-->
-<!--            <t t-call="web.basic_layout">-->
-<!--                <t t-foreach="docs" t-as="o">-->
-<!--                    <t t-call="sd_payaneh_nafti.contract_daily_report_data" t-lang="lang"/>-->
-<!--                </t>-->
-<!--            </t>-->
-<!--        </template>-->
+        <!-- ############################  GENERAL   ######################################### -->
 
         <template id="contract_daily_report_template">
-            <t t-if="loading_type == 'internal'" t-call="web.basic_layout" t-lang="lang">
-<!--            <t t-call="web.report_layout">-->
-                <div t-if="errors != []">
+            <div t-if="errors != []" t-call="web.basic_layout" t-lang="lang">
                     <div class="container mt-2 text-center">
                         <div class="border border-danger rounded p-3" style="direction: ltr" t-esc="errors[0]"></div>
                     </div>
-                </div>
+            </div>
+            <t t-if="loading_type == 'internal'" t-call="web.basic_layout" t-lang="lang">
+<!--            <t t-call="web.report_layout">-->
                 <div t-if="errors == []" class="container" >
                     <t t-foreach="docs" t-as="o">
-                        <t t-call="sd_payaneh_nafti.contract_daily_report_data"/>
+                        <t t-call="sd_payaneh_nafti.contract_daily_report_data_internal"/>
                     </t>
                 </div>
             </t>
-
-            <t t-if="loading_type == 'export'" t-call="web.basic_layout" t-lang="en_US">
+            <t t-if="loading_type == 'export'" t-call="web.basic_layout" >
 <!--            <t t-call="web.report_layout">-->
-                <div t-if="errors != []">
-                    <div class="container mt-2 text-center">
-                        <div class="border border-danger rounded p-3" style="direction: ltr" t-esc="errors[0]"></div>
-                    </div>
-                </div>
-                <div t-if="errors == []" class="container" >
+                <div t-if="errors == []" class="container"  >
                     <t t-foreach="docs" t-as="o">
-                        <t t-call="sd_payaneh_nafti.contract_daily_report_data"/>
+                        <t t-call="sd_payaneh_nafti.contract_daily_report_data_export" t-lang="en_US"/>
                     </t>
                 </div>
             </t>

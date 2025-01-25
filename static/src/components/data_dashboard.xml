@@ -3,18 +3,18 @@
     <t t-name="data_dashboard" owl="1">
         <div class="bg-mute h-100 overflow-auto" >
 <!--        <div class="h1 text-center">Payaneh Data Dashboard</div>-->
-            <div class="row m-3">
-                <div class="col-lg-7">
-                    <div class="row">
+            <div class="row m-1 m-lg-3">
+                <div class="col-lg-8">
+                    <div class="row text-center">
                         <div class="col m-0 p-0">
-                            <div class="shadow border rounded m-2 p-4 bg-white">
+                            <div class="shadow border rounded m-2 p-2 p-lg-4 bg-white text-center">
                                 <div class="d-flex align-items-center">
                                    <div>
                                        <img alt="Logo" t-att-src="'/logo?company=1'" t-att-alt="''"
                                                         style=" height: 40px;" height="40"/>
                                    </div>
                                     <div>
-                                    <h1 class="text-primary fw-bold mx-4 my-0">Payaneh Data Dashboard</h1>
+                                    <h1 class="text-primary fw-bold mx-4 my-0" t-esc="state.title.name"></h1>
 
                                     </div>
                                 </div>
@@ -22,27 +22,47 @@
                         </div>
                     </div>
                     <div class="row">
-                        <DataCards onClick="viewSpgr" name="'SP.GR.'" status="state.spgr.status" value="state.spgr.value"/>
+                        <DataCards  name="''" status="state.username.status"  />
+                        <DataCards onClick="viewSpgr" name="'SP.GR.'" status="state.spgr.status" value="state.spgr.value" />
+                        <DataCards name="state.load_plan.name" link="state.load_plan.link" class="loading_plan_card"/>
+                        <DataCards onClick="viewContracts" name="state.contracts.name" status="state.contracts.status" value="state.contracts.value" />
+                    </div>
+                    <div class="row">
+                        <InputCards onSubmit="toOpenInputInfo" name="state.openInputInfo.name"
+                                    view="state.openInputInfo.view"
+                                    onChange="onChange"
+                                    status="state.openInputInfo.status" />
+                        <DataCards onClick="()=>newRequestCreation()"   status="state.newRequest.status"   />
+                        <DataLockers onClick="()=>viewLockerPackage()"   name="state.lockers.name"   status="state.lockers.status"   />
 
                     </div>
                     <div class="row">
-                        <DataCards onClick="viewContracts" name="'Open Contracts'" status="state.contracts.status" value="state.contracts.value"/>
-                        <DataCards name="'Remain Amount'" status="state.remain_amount.status" value="state.remain_amount.value"/>
-<!--                        <DataCards onClick="viewThisDayRequests"  name="'This day requests'" status="state.this_day_requests_count.status" value="state.this_day_requests_count.value"/>-->
-                        <DataCards name="'Open Requests'" status="state.open_requests.status" value="state.open_requests.value"/>
-                        <DataCards name="'This day amount'" status="state.this_day_requests_amount.status" value="state.this_day_requests_amount.value"/>
+<!--                        <DataCards name="'Remain Amount'" status="state.remain_amount.status" value="state.remain_amount.value"/>-->
+                        <DataCards onClick="()=>viewThisDayRequests(0)"   status="state.this_day_requests_count.status" value="state.this_day_requests_count.value"  />
+                        <DataCards onClick="()=>viewThisDayRequests(-1)"  status="state.one_day_ago_count.status" value="state.one_day_ago_count.value"  />
+                        <DataCards onClick="()=>viewThisDayRequests(-2)"  status="state.two_days_ago_count.status" value="state.two_days_ago_count.value"  />
+                        <DataCards onClick="()=>viewThisDayRequests(-3)"  status="state.three_days_ago_count.status" value="state.three_days_ago_count.value"  />
+<!--                        <DataCards name="'Open Requests'" status="state.open_requests.status" value="state.open_requests.value"/>-->
+<!--                        <DataCards name="'This day amount'" status="state.this_day_requests_amount.status" value="state.this_day_requests_amount.value"/>-->
 
                     </div>
                     <div class="row">
-                        <DataCards onClick="viewNewRequests" name="'New Requests'" status="state.new_requests.status" value="state.new_requests.value"/>
-                        <DataCards onClick="viewLoadingPermit" name="'Loading Permits'" status="state.loading_permit.status" value="state.loading_permit.value"/>
-                        <DataCards onClick="viewLoadingInfo" name="'Loading Info'" status="state.loading_info.status" value="state.loading_info.value"/>
-                        <DataCards onClick="viewCargoDocument" name="'Cargo Document'" status="state.cargo_document.status" value="state.cargo_document.value"/>
+                        <DataCards onClick="viewNewRequests" name="state.new_requests.name" status="state.new_requests.status" value="state.new_requests.value" lang="lang"/>
+                        <DataCards onClick="viewLoadingPermit" name="state.loading_permit.name" status="state.loading_permit.status" value="state.loading_permit.value" />
+                        <DataCards onClick="viewLoadingInfo" name="state.loading_info.name" status="state.loading_info.status" value="state.loading_info.value" />
+                        <DataCards onClick="viewCargoDocument" name="state.cargo_document.name" status="state.cargo_document.status" value="state.cargo_document.value" />
 
                     </div>
 
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-4">
+                    <div class="col m-0 p-0">
+                        <div class="shadow border m-2 p-4 bg-white sd_payaneh_input_plans ">
+                            <div class="mx-3" t-raw="state.meter_data.value.meter_data"></div>
+<!--                            <div t-raw="state.meter_data.value.mismatch_data"></div>-->
+                        </div>
+                    </div>
+                    <DataPlans onClick="viewTodayLoadingPlan" name="state.plan_detail.name" status="state.plan_detail.status"  />
 
                 </div>
             </div>

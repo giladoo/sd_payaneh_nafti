@@ -38,7 +38,12 @@ class ReportSdPayanehNaftiLoadingPermit(models.AbstractModel):
         #     errors.append(_('[ERROR] There is more than one record'))
         # elif len(input_record) == 1:
         for input_record in input_records:
+            if not input_record.loading_date:
+                errors = [_(f'There is no Loading Data for {input_record.registration_no.registration_no} on {date_time.get("date", "")}')]
+                continue
+            #     raise ValidationError(_(f'There is no Loading Date for {input_record.registration_no.registration_no}'))
             issue_date = input_record.loading_date
+
             if calendar == 'fa_IR':
                 issue_date = jdatetime.date.fromgregorian(date=issue_date).strftime('%Y/%m/%d')
             tanker_no = {'plate_1': input_record.plate_1,
@@ -55,7 +60,7 @@ class ReportSdPayanehNaftiLoadingPermit(models.AbstractModel):
             doc_data = {
                         # 'buyer': str(input_record.buyer.name),
                         # 'contractor': str(input_record.contractor.name),
-                        'document_no': input_record.document_no,
+                        'document_no': str(input_record.document_no),
                         'contract_no': contract_no,
                         'user_name': self.env.user.name,
                         'tanker_no': tanker_no,
@@ -75,7 +80,7 @@ class ReportSdPayanehNaftiLoadingPermit(models.AbstractModel):
         #     errors.append(_('[ERROR] There is no record'))
         company_logo = f'/web/image/res.partner/{1}/image_128/'
         return {
-            'docs': input_records,
+            'docs': input_records[0],
             'doc_ids': docids,
             'doc_model': 'sd_payaneh_nafti.input_info',
             # 'document_no': document_no,

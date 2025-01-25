@@ -2,319 +2,727 @@
 <odoo>
     <data>
         <template id="cargo_document_report_data">
-<!--                <t t-call="web.html_container" >-->
-<!--                                <t t-set="o" t-value="o.with_context(lang=lang)" />-->
-
-                    <div class="page">
-                        <div t-if="errors != []">
-                            <div style="direction: ltr" t-esc="errors[0]"></div>
-                        </div>
-                        <div t-if="errors == []" class="container mt4" style="font-size: .7rem">
-                            <div class="container iransans_font">
-                            <div t-foreach="doc_data_list" t-as="doc_data">
-                                <t t-set="input_record" t-value="doc_data[0]"/>
-                                <t t-set="doc_data" t-value="doc_data[1]"/>
-
-                                <div style="direction:rtl">
-                                    <div t-foreach="['نسخه اصلی', 'نسخه مقصد', 'نسخه مبدأ', 'نسخه حراست']" t-as="version"
-                                         class="mt-0" style="page-break-after: always;">
-                                        <div class="text-center">
-
-                        <div style="display:block; position:absolute;padding:0; margin:0px; padding-top:10px; padding-bottom:10px; text-align:center;">
-                            <img t-att-src="'/report/barcode/Code128/'+doc_data['contract_no']" style="width:250px;height:25px" t-att-alt="doc_data['contract_no']"/>
-                        </div>
-                                            <div class="mt-0">
-                                                <img alt="Logo" t-att-src="'/logo?company=1'" t-att-alt="''"
-                                                     style=" height: 50px;" height="50"/>
-                                            </div>
-
-                                            <div>شرکت ملی نفت ایران</div>
-                                            <div>شرکت پایانه های نفتی ایران</div>
-                                            <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
-                                            <div class="h2 ">بارنامه</div>
-
+            <div class="page">
+                <div class="container " style="font-size: .8rem">
+                    <div class="container iransans_font">
+                        <div t-foreach="doc_data_list" t-as="doc_datas">
+                            <t t-set="input_record" t-value="doc_datas[0]"/>
+                            <t t-set="doc_data" t-value="doc_datas[1]"/>
+                            <div style="direction:rtl">
+                                <div t-foreach="['نسخه مبدأ', 'نسخه اصلی', 'نسخه مقصد', 'نسخه حراست']" t-as="version"
+                                     class="mt-0" style="page-break-after: always;">
+                                    <div class="text-center">
+                                        <div style="display:block; position:absolute;padding:0; margin:0px;
+                                            padding-top:10px; padding-bottom:10px; text-align:center;">
+                                            <img t-att-src="'/report/barcode/Code128/210_'+doc_data['document_no']"
+                                                 style="width:350px;height:25px" t-att-alt="doc_data['document_no']"/>
+                                            <div style="font-family: sans-serif !important;"
+                                                 t-esc="'cargo: ' + doc_data['document_no']"></div>
                                         </div>
-
-                                        <div class="row border border-primary py-0 text-left">
-                                            <div class="col-4">
-                                                <div class="row mx-0 py-1">
-                                                    <div class="col-4">
-                                                        Buyer
-                                                    </div>
-                                                    <div class="text-nowrap font-weight-bold"
-                                                         t-esc="input_record.buyer.name"></div>
-
-                                                </div>
-                                            </div>
-                                            <div class="col-4 ">
-                                                <div class="row mx-0 py-1">
-                                                    <div class="col-4">
-                                                        Document No
-                                                    </div>
-                                                    <div class="col-8 font-weight-bold lead" t-esc="doc_data['document_no']">
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-4 badge-dark p-1 text-center lead" t-esc="version">
-                                            </div>
+                                        <div class="mt-0">
+                                            <img alt="Logo" t-att-src="'/logo?company=1'" t-att-alt="''"
+                                                 style=" height: 50px;" height="50"/>
                                         </div>
-
-                                        <div class="row border">
-                                            <div class="col-4  ">
-                                                <div class="row border-bottom border-info   mx-0 py-1">
-                                                    <div class="col-4">
-                                                        Issue Date
+                                        <div>شرکت ملی نفت ایران</div>
+                                        <div>شرکت پایانه های نفتی ایران</div>
+                                        <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
+                                        <div class="h2 ">بارنامه</div>
+                                        <div class="container text-left mx-auto mt-1 iransans_font "
+                                             style="direction:rtl; ">
+                                            <div class="  ">
+                                                <div class="row mx-0 text-center py-1">
+                                                    <div class="col-6 px-0 ">
+                                                        <div class="row mx-0 ">
+                                                            <div class="col-2 px-1 py-1">Buyer</div>
+                                                            <div class="col-10 px-1 text-left py_font_11 font-weight-bold" t-esc="input_record.buyer.name">
+<!--                                                                <div class="text-nowrap font-weight-bold"></div>-->
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-8 font-weight-bold" t-esc="doc_data['issue_date']">
-
+                                                    <div class="col-3 px-0 ">
+                                                        <div class="row mx-0 text-center ">
+                                                            <div class="col-4 px-1 py-1">Document No</div>
+                                                            <div class="col-8 text-left  px-1 py_font_11 font-weight-bold"
+                                                                 t-esc="doc_data['document_no']">
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="row border-bottom border-info   mx-0 py-1">
-                                                    <div class="col-4">
-                                                        Issue Time
-                                                    </div>
-                                                    <div class="col-8 font-weight-bold" t-esc="doc_data['issue_time']">
-
-                                                    </div>
-                                                </div>
-                                                <div class="row mx-0 py-1">
-                                                    <div class="col-4">
-                                                        Cargo No.
-                                                    </div>
-                                                    <div class="col-8 font-weight-bold" t-esc="input_record.loading_no">
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-4 border-left border-right ">
-                                                <div class="row border-bottom border-info   mx-0 py-1">
-                                                    <div class="col-4">
-                                                        Contract No
-                                                    </div>
-                                                    <div class="col-8 font-weight-bold" t-esc="doc_data['contract_no']">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row border-bottom border-info mx-0 py-1">
-                                                    <div class="col-4">
-                                                        Contractor
-                                                    </div>
-                                                    <div class="col-8 font-weight-bold "
-                                                         t-esc="input_record.contractor.name">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mx-0 py-1">
-                                                    <div class="col-4">
-                                                        Destination
-                                                    </div>
-                                                    <div class="col-8 font-weight-bold"
-                                                         t-esc="input_record.registration_no.destination.name">
+                                                    <div class="col-3 px-0 py-1 text-center bg-dark text-white rounded "
+                                                         t-esc="version">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-4 ">
-                                                <div class="row border-bottom border-info   mx-0 py-1">
-                                                    <div class="col-4">
-                                                        Tanker No
+                                            <div class="border border-dark rounded py_border_2 ">
+                                                <div class="row mx-0 p-1">
+                                                    <div class="col-4  px-0 ">
+                                                        <div class="row mx-0 ">
+                                                            <div class="col-4  px-1">Issue Date</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
+                                                                 t-esc="doc_data['issue_date']"></div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-8 p-0">
-                                                        <div class="row mx-0">
-
-                                                            <div class="border border-secondary rounded p-1  font-weight-bold"
-                                                                 t-esc="doc_data['tanker_no']['plate_1']"></div>
-                                                            <div class="p-0">
-                                                                <div class="row border border-secondary rounded mx-0 px-1">
-                                                                    <div class="p-1 font-weight-bold"
-                                                                         t-esc="doc_data['tanker_no']['plate_2']"></div>
-                                                                    <div class="p-1 font-weight-bold"
-                                                                         t-esc="doc_data['tanker_no']['plate_3']"></div>
-                                                                    <div class="p-1 font-weight-bold"
-                                                                         t-esc="doc_data['tanker_no']['plate_4']"></div>
+                                                    <div class="col-4  px-0 ">
+                                                        <div class="row mx-0 ">
+                                                            <div class="col-4  px-1">Contract No</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
+                                                                 t-esc="doc_data['contract_no']"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4  px-0 ">
+                                                        <div class="row mx-0 ">
+                                                            <div class="col-4  px-1">Tanker No</div>
+                                                            <div class="col-8  px-1">
+                                                                <div class="row mx-0">
+                                                                    <div class="border border-secondary rounded px-1 py-0  font-weight-bold"
+                                                                         t-esc="doc_data['tanker_no']['plate_1']"></div>
+                                                                    <div class="p-0">
+                                                                        <div class="row border border-secondary rounded mx-0 px-1">
+                                                                            <div class="px-1 py-0 font-weight-bold"
+                                                                                 t-esc="doc_data['tanker_no']['plate_2']"></div>
+                                                                            <div class="px-1 py-0 font-weight-bold"
+                                                                                 t-esc="doc_data['tanker_no']['plate_3']"></div>
+                                                                            <div class="px-1 py-0 font-weight-bold"
+                                                                                 t-esc="doc_data['tanker_no']['plate_4']"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="border rounded bg-primary text-light px-1 py-0 ">
+                                                                        IR
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="border rounded bg-primary text-light">IR</div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row border-bottom border-info   mx-0 py-1">
-                                                    <div class="col-4">
-                                                        Driver
+                                                <div class="border-bottom border-dark mx-1"></div>
+
+                                                <div class="row mx-0 p-1">
+                                                    <div class="col-4  px-0 ">
+                                                        <div class="row mx-0 ">
+                                                            <div class="col-4  px-1">Issue Time</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
+                                                                 t-esc="doc_data['issue_time']"></div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-8 font-weight-bold" t-esc="doc_data['driver']">
+                                                    <div class="col-4  px-0 ">
+                                                        <div class="row mx-0 ">
+                                                            <div class="col-4  px-1">Contractor</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
+                                                                 t-esc="input_record.contractor.name"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4  px-0 ">
+                                                        <div class="row mx-0 ">
+                                                            <div class="col-4  px-1">Driver</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
+                                                                 t-esc="doc_data['driver']"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="row   mx-0 py-1">
-                                                    <div class="col-4">
-                                                        Card No.
+                                                <div class="border-bottom border-dark mx-1"></div>
+
+                                                <div class="row mx-0 border-dark p-1">
+                                                    <div class="col-4  px-0 ">
+                                                        <div class="row mx-0 ">
+                                                            <div class="col-4  px-1">Cargo No.</div>
+                                                            <div class="col-8  px-1 font-weight-bold"
+                                                                 t-esc="input_record.loading_no"></div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-8 font-weight-bold" t-esc="input_record.card_no">
+                                                    <div class="col-4  px-0 ">
+                                                        <div class="row mx-0 ">
+                                                            <div class="col-2  px-1">Destination</div>
+                                                            <div class="col-10 py_font_7 px-0 font-weight-bold"
+                                                                 t-esc="input_record.registration_no.destination.name">
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    <div class="col-4  px-0 ">
+                                                        <div class="row mx-0 ">
+                                                            <div class="col-4 px-1">
+                                                                Card No.
+                                                            </div>
+                                                            <div class="col-8  px-1 font-weight-bold"
+                                                                 t-esc="input_record.card_no"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="border border-dark py_border_2 rounded mt-1 ">
+                                                <div class="row mx-0  ">
+                                                    <div class="col-9 mt-1   mx-0 px-0 py-2 text-center">
+                                                        <div class="col mx-0 p-0">
+                                                            <div class="row  mx-0">
+                                                                <div class="col-2 px-1 mx-0">
+                                                                    <div class="mb-4">Cargo Type</div>
+                                                                    <div class="py_font_11 font-weight-bold"
+                                                                         t-esc="input_record.registration_no.cargo_type.name"></div>
+                                                                </div>
+                                                                <div class="col-2 px-1 mx-0">
+                                                                    <div>
+                                                                        Temprature
+                                                                    </div>
+                                                                    <div class="mb-1">
+                                                                        (F)
+                                                                    </div>
+                                                                    <div class="py_font_11 font-weight-bold"
+                                                                         t-esc="round(input_record.temperature_f, 1)">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-2 px-1 mx-0">
+                                                                    <div>
+                                                                        Natural Amount
+                                                                    </div>
+                                                                    <div class="mb-1">
+                                                                        (Liter)
+                                                                    </div>
+                                                                    <div class="py_font_11 font-weight-bold"
+                                                                         t-esc="doc_data['final_tov_l']">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-3 px-1 mx-0">
+                                                                    <div>
+                                                                        60 degree Amount
+                                                                    </div>
+                                                                    <div class="mb-1">
+                                                                        (Liter)
+                                                                    </div>
+                                                                    <div class="py_font_11 font-weight-bold"
+                                                                         t-esc="doc_data['final_gsv_l']">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-3 px-1 mx-0">
+                                                                    <div>
+                                                                        Cargo Weight
+                                                                    </div>
+                                                                    <div class="mb-1">
+                                                                        (Metric Tone)
+                                                                    </div>
+                                                                    <div class="py_font_11 font-weight-bold"
+                                                                         t-esc="'%.3f' % round(input_record.final_mt,3)">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="border-left border-dark my-1"></div>
+                                                    <div class="col-3 mt-1   mx-0 px-0 py-2 text-center">
+                                                        <div class="col px-1">
+                                                            <div class="col mb-4" style="direction: ltr">
+                                                                SP.GR. - API - Tank No.
+                                                            </div>
+                                                            <div class="col py_font_11 font-weight-bold"
+                                                                 style="direction:ltr !important"
+                                                                 t-esc="str(input_record.sp_gr) + ' - ' + str(input_record.api_a) + ' - ' + (input_record.centralized_container).upper()">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="border-bottom border-dark mx-1"></div>
+                                                <div class="row mx-0 ">
+                                                    <div class="col-9 mx-0 mt-1 px-0  ">
+                                                        <div class="col mx-0 px-0">
+                                                            <div class="row mx-0 text-center"
+                                                                 style="font-size: .7rem; direction: ltr;">
+                                                                <div class="col-2 p-1 ">
+                                                                    <div class="mb-2">WATER<br/>CONTENT<br/>(%VOL)
+                                                                    </div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="(input_record.cqq.water_content).upper() if input_record.cqq else ''"></div>
+                                                                </div>
+                                                                <div class="border-left"></div>
+
+                                                                <div class="col-2 p-1 ">
+                                                                    <div class="mb-4">H2S(PPM)
+                                                                        <br/>
+                                                                        <br/>
+                                                                    </div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="(input_record.cqq.h2s).upper() if input_record.cqq else ''"></div>
+                                                                </div>
+                                                                <div class="border-left"></div>
+                                                                <div class="col-2 p-1 ">
+                                                                    <div class="mb-4">SALT CONTENT<br/>(P.T.B)
+                                                                    </div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="input_record.cqq.salt_content if input_record.cqq else ''"></div>
+                                                                </div>
+                                                                <div class="border-left"></div>
+                                                                <div class="col-2 p-1 ">
+                                                                    <div class="mb-4">MERCAPTANCS<br/>CONTENT(PPM)
+                                                                    </div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="input_record.cqq.mercaptans if input_record.cqq else ''"></div>
+                                                                </div>
+                                                                <div class="border-left"></div>
+                                                                <div class="col-2 p-1 ">
+                                                                    <div class="mb-2">TOTAL<br/>SULPHOR<br/>(%WT)
+                                                                    </div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="input_record.cqq.sulphur if input_record.cqq else ''"></div>
+                                                                </div>
+                                                                <div class="border-left"></div>
+                                                                <div class="col-2 p-1 ">
+                                                                    <div class="mb-4">VAPOUR<br/>PRESURE(PSI)
+                                                                    </div>
+                                                                    <div class="py_font_9 font-weight-bold"
+                                                                         t-esc="input_record.cqq.vapour_pressure if input_record.cqq else ''"></div>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="border-bottom border-dark mx-1"></div>
+
+                                                            <div class="row mx-0 p-1" style="font-size: .6rem;">
+
+<!--                                                                <div class="col-4">-->
+<!--                                                                    <t t-foreach="input_record.lockers" t-as="locker">-->
+<!--                                                                        <div class="row border-bottom ">-->
+<!--                                                                            <div class="col-6 px-1 "  t-esc="locker.locker_type.name">-->
+<!--                                                                                Locker-->
+<!--                                                                            </div>-->
+<!--                                                                            <div class="col-6 px-1 py_font_7 font-weight-bold text-right"-->
+<!--                                                                                 style="font-family: Arial !important;"-->
+<!--                                                                                 t-esc="locker.locker_no">-->
+<!--                                                                            </div>-->
+<!--                                                                        </div>-->
+
+<!--                                                                    </t>-->
+
+<!--                                                                </div>-->
+
+                                                                <div class="col-4">
+                                                                    <div class="row border-bottom ">
+                                                                        <div class="col-6 px-1 ">
+                                                                            Evacuation Box Seal
+                                                                        </div>
+                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold text-right"
+                                                                             t-esc="input_record.evacuation_box_seal">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row border-bottom ">
+                                                                        <div class="col-6 px-1 ">
+                                                                            compartment_1
+                                                                        </div>
+                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold text-right"
+                                                                             t-esc="input_record.compartment_1">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row border-bottom ">
+                                                                        <div class="col-6 px-1">
+                                                                            compartment_2
+                                                                        </div>
+                                                                        <div class="col-6 px-1 py_font_9 font-weight-bold text-right"
+                                                                             t-esc="input_record.compartment_2">
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row  ">
+                                                                        <div class="col-6 px-1">
+                                                                            compartment_3
+                                                                        </div>
+                                                                        <div class="col-6 px-1  py_font_9 font-weight-bold text-right"
+                                                                             t-esc="input_record.compartment_3">
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-8" style="font-size: .6rem;">
+                                                                    <div class="row">
+
+
+                                                                        <div class="col-9 text-left">
+                                                                            <span>اینجانب</span>
+                                                                            <span class="p-1" style="font-weight: bold"
+                                                                                  t-esc="doc_data['driver']"></span>
+                                                                            <p class="p-1" style="font-size: .5rem;"
+                                                                               t-esc="doc_data['driver_promise']"></p>
+                                                                        </div>
+                                                                        <div class="col-3 text-center p-1 ">
+                                                                            <div class="">
+                                                                                نام و امضاء راننده
+                                                                            </div>
+                                                                            <!--                                                <div t-esc="doc_data['driver']"> </div>-->
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="border-left border-dark my-2 "></div>
+                                                    <div class="col-3 mx-0 mt-1 px-0  ">
+                                                        <div class="col-12 text-center p-1 ">
+                                                            <div class="">
+                                                                نام و امضاء کاربر صادرکننده
+                                                            </div>
+                                                            <div class="font-weight-bold" t-esc="doc_data['user_name']">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+
+                                            <div class="row my-1">
+                                        <div class="col-2">
+                                            توزیع نسخ :
+                                        </div>
+                                        <div class="col-10">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    نسخه اصلی : خریدار
+                                                </div>
+                                                <div class="col-3">
+                                                    نسخه مقصد : پیمانکار حمل
+                                                </div>
+                                                <div class="col-3">
+                                                    نسخه مبدأ : بایگانی
+                                                </div>
+                                                <div class="col-3">
+                                                    نسخه حراست
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="cargo_document_report_data1">
+            <!--                <t t-call="web.html_container" >-->
+            <!--                                <t t-set="o" t-value="o.with_context(lang=lang)" />-->
+
+            <div class="page">
+
+                <div class="container mt4" style="font-size: .7rem">
+                    <div class="container iransans_font">
+                        <div t-foreach="doc_data_list" t-as="doc_datas">
+                            <t t-set="input_record" t-value="doc_datas[0]"/>
+                            <t t-set="doc_data" t-value="doc_datas[1]"/>
+
+                            <div style="direction:rtl">
+                                <div t-foreach="['نسخه مبدأ', 'نسخه اصلی', 'نسخه مقصد', 'نسخه حراست']" t-as="version"
+                                     class="mt-0" style="page-break-after: always;">
+                                    <div class="text-center">
+                                        <div style="display:block; position:absolute;padding:0; margin:0px;
+                                            padding-top:10px; padding-bottom:10px; text-align:center;">
+                                            <img t-att-src="'/report/barcode/Code128/210_'+doc_data['document_no']"
+                                                 style="width:350px;height:25px" t-att-alt="doc_data['document_no']"/>
+                                            <div style="font-family: sans-serif !important;"
+                                                 t-esc="'cargo: ' + doc_data['document_no']"></div>
+                                        </div>
+
+                                        <div class="mt-0">
+                                            <img alt="Logo" t-att-src="'/logo?company=1'" t-att-alt="''"
+                                                 style=" height: 50px;" height="50"/>
+                                        </div>
+
+                                        <div>شرکت ملی نفت ایران</div>
+                                        <div>شرکت پایانه های نفتی ایران</div>
+                                        <div>تاسیسات بارگیری زمینی میعانات گازی پارس جنوبی</div>
+                                        <div class="h2 ">بارنامه</div>
+
+                                    </div>
+
+                                    <div class="row border border-primary py-0 text-left">
+                                        <div class="col-4">
+                                            <div class="row mx-0 py-1">
+                                                <div class="col-4">
+                                                    Buyer
+                                                </div>
+                                                <div class="text-nowrap font-weight-bold"
+                                                     t-esc="input_record.buyer.name"></div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-4 ">
+                                            <div class="row mx-0 py-1">
+                                                <div class="col-4">
+                                                    Document No
+                                                </div>
+                                                <div class="col-8 font-weight-bold lead"
+                                                     t-esc="doc_data['document_no']">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 badge-dark p-1 text-center lead" t-esc="version">
+                                        </div>
+                                    </div>
+
+                                    <div class="row border">
+                                        <div class="col-4  ">
+                                            <div class="row border-bottom border-info   mx-0 py-1">
+                                                <div class="col-4">
+                                                    Issue Date
+                                                </div>
+                                                <div class="col-8 font-weight-bold" t-esc="doc_data['issue_date']">
+
+                                                </div>
+                                            </div>
+                                            <div class="row border-bottom border-info   mx-0 py-1">
+                                                <div class="col-4">
+                                                    Issue Time
+                                                </div>
+                                                <div class="col-8 font-weight-bold" t-esc="doc_data['issue_time']">
+
+                                                </div>
+                                            </div>
+                                            <div class="row mx-0 py-1">
+                                                <div class="col-4">
+                                                    Cargo No.
+                                                </div>
+                                                <div class="col-8 font-weight-bold" t-esc="input_record.loading_no">
+
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="row border-left border-right text-center pt-2">
-                                            <div class="col-2 px-1">
-                                                Cargo Type
-                                            </div>
-                                            <div class="col-2 px-1">
-                                                <div>
-                                                    Temprature
+                                        <div class="col-4 border-left border-right ">
+                                            <div class="row border-bottom border-info   mx-0 py-1">
+                                                <div class="col-4">
+                                                    Contract No
                                                 </div>
-                                                <div>
-                                                    (F)
-                                                </div>
-                                            </div>
-                                            <div class="col-2 px-1">
-                                                <div>
-                                                    Natural Amount
-                                                </div>
-                                                <div>
-                                                    (Liter)
-                                                </div>
-                                            </div>
-                                            <div class="col-2 px-1">
-                                                <div>
-                                                    60 degree Amount
-                                                </div>
-                                                <div>
-                                                    (Liter)
-                                                </div>
-                                            </div>
-                                            <div class="col-2 px-1">
-                                                Specific Gravity
-                                            </div>
-                                            <div class="col-2 px-1">
-                                                <div>
-                                                    Cargo Weight
-                                                </div>
-                                                <div>
-                                                    (Metric Tone)
+                                                <div class="col-8 font-weight-bold" t-esc="doc_data['contract_no']">
                                                 </div>
                                             </div>
 
-                                        </div>
-                                        <div class="row border-left border-right text-center pt-2 pb-3">
-                                            <div class="col-2 font-weight-bold"
-                                                 t-esc="input_record.registration_no.cargo_type.name"></div>
-                                            <div class="col-2 font-weight-bold"
-                                                 t-esc="round(input_record.temperature_f, 1)"></div>
-                                            <div class="col-2 font-weight-bold lead" t-esc="doc_data['final_tov_l']"></div>
-                                            <div class="col-2 font-weight-bold lead" t-esc="doc_data['final_gsv_l']"></div>
-                                            <div class="col-2 font-weight-bold" t-esc="input_record.sp_gr"></div>
-                                            <div class="col-2 font-weight-bold lead" t-esc="round(input_record.final_mt,3)"></div>
-
-
-                                        </div>
-
-                                        <div class="row border ">
-                                            <div class="col-3 px-0 ">
-                                                <div class="row border-bottom border-info   mx-0 py-1">
-                                                    <div class="col-7 px-1">
-                                                        Evacuation Box Seal
-                                                    </div>
-                                                    <div class="col-5 px-1 font-weight-bold"
-                                                         t-esc="input_record.evacuation_box_seal"></div>
+                                            <div class="row border-bottom border-info mx-0 py-1">
+                                                <div class="col-4">
+                                                    Contractor
                                                 </div>
-                                                <div class="row border-bottom border-info   mx-0 py-1">
-                                                    <div class="col-7 px-1">
-                                                        compartment_1
-                                                    </div>
-                                                    <div class="col-5 px-1 font-weight-bold"
-                                                         t-esc="input_record.compartment_1"></div>
-                                                </div>
-                                                <div class="row border-bottom border-info   mx-0 py-1">
-                                                    <div class="col-7 px-1">
-                                                        compartment_2
-                                                    </div>
-                                                    <div class="col-5 px-1 font-weight-bold"
-                                                         t-esc="input_record.compartment_2"></div>
-
-                                                </div>
-                                                <div class="row  border-info   mx-0 py-1">
-                                                    <div class="col-7 px-1">
-                                                        compartment_3
-                                                    </div>
-                                                    <div class="col-5 px-1 font-weight-bold"
-                                                         t-esc="input_record.compartment_3"></div>
-
+                                                <div class="col-8 font-weight-bold "
+                                                     t-esc="input_record.contractor.name">
                                                 </div>
                                             </div>
 
-                                            <div class="col-5 px-0 border-left border-right">
-                                                <div>
-                                                    <span>اینجانب</span>
-                                                    <!--                                            <span class="p-1" style="font-weight: bold" t-esc="doc_data['driver']"> </span>-->
-
-                                                    <span class="p-1" style="font-weight: bold"
-                                                          t-esc="doc_data['driver']"></span>
-                                                    <p class="p-1"
-                                                       t-esc="doc_data['driver_promise']"></p>
-
-                                                    <!--                                                   <p class="m-0">متعهد می شوم محموله مذکور را طبق مشخصات بالا تحویل گرفته و به مقصد برسانم در صورت </p>-->
-                                                    <!--                                                   <p class="m-0">انحراف و جابجایی و هرگونه تخلف دیگر بنا بر تشخیص شرکت، موظف به پرداخت خسارت  </p>-->
-                                                    <!--                                                   <p class="m-0"> و جرائم تعیین شده می باشم و بدینوسیله حق هرگونه ادعا و یا اعتراض در هر زمینه را </p>-->
-                                                    <!--                                                   <p class="m-0"> را از خود سلب می نمایم</p>-->
-
+                                            <div class="row mx-0 py-1">
+                                                <div class="col-4">
+                                                    Destination
                                                 </div>
-                                            </div>
-
-                                            <div class="col-2 p-0">
-                                                <div class="col-12 text-center p-1 ">
-                                                    <div class="">
-                                                        نام و امضاء راننده
-                                                    </div>
-                                                    <!--                                                <div t-esc="doc_data['driver']"> </div>-->
-                                                </div>
-                                            </div>
-                                            <div class="col-2 p-0">
-                                                <div class="col-12 text-center p-1 ">
-                                                    <div class="">
-                                                        نام و امضاء کاربر صادرکننده
-                                                    </div>
-                                                    <div class="font-weight-bold" t-esc="doc_data['user_name']">
-                                                    </div>
-<!---->
+                                                <div class="col-8 font-weight-bold px-0"
+                                                     t-esc="input_record.registration_no.destination.name">
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row my-2">
+                                        <div class="col-4 ">
+                                            <div class="row border-bottom border-info   mx-0 py-1">
+                                                <div class="col-4">
+                                                    Tanker No
+                                                </div>
+                                                <div class="col-8 p-0">
+                                                    <div class="row mx-0">
+                                                        <div class="border border-secondary rounded p-1  font-weight-bold"
+                                                             t-esc="doc_data['tanker_no']['plate_1']"></div>
+                                                        <div class="p-0">
+                                                            <div class="row border border-secondary rounded mx-0 px-1">
+                                                                <div class="p-1 font-weight-bold"
+                                                                     t-esc="doc_data['tanker_no']['plate_2']"></div>
+                                                                <div class="p-1 font-weight-bold"
+                                                                     t-esc="doc_data['tanker_no']['plate_3']"></div>
+                                                                <div class="p-1 font-weight-bold"
+                                                                     t-esc="doc_data['tanker_no']['plate_4']"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="border rounded bg-primary text-light">IR</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row border-bottom border-info   mx-0 py-1">
+                                                <div class="col-4">
+                                                    Driver
+                                                </div>
+                                                <div class="col-8 font-weight-bold" t-esc="doc_data['driver']">
+                                                </div>
+                                            </div>
+                                            <div class="row   mx-0 py-1">
+                                                <div class="col-4">
+                                                    Card No.
+                                                </div>
+                                                <div class="col-8 font-weight-bold" t-esc="input_record.card_no">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                            <div class="col-2">
-                                                توزیع نسخ :
+                                    <div class="row border-left border-right text-center pt-2">
+                                        <div class="col-2 px-1">
+                                            Cargo Type
+                                        </div>
+                                        <div class="col-2 px-1">
+                                            <div>
+                                                Temprature
                                             </div>
-                                            <div class="col-2">
-                                                نسخه اصلی : خریدار
+                                            <div>
+                                                (F)
                                             </div>
-                                            <div class="col-2">
-                                                نسخه مقصد : پیمانکار حمل
+                                        </div>
+                                        <div class="col-2 px-1">
+                                            <div>
+                                                Natural Amount
                                             </div>
-                                            <div class="col-2">
-                                                نسخه مبدأ : بایگانی
+                                            <div>
+                                                (Liter)
                                             </div>
-                                            <div class="col-2">
-                                                نسخه حراست
+                                        </div>
+                                        <div class="col-2 px-1">
+                                            <div>
+                                                60 degree Amount
+                                            </div>
+                                            <div>
+                                                (Liter)
+                                            </div>
+                                        </div>
+                                        <div class="col-2 px-1">
+                                            Specific Gravity
+                                        </div>
+                                        <div class="col-2 px-1">
+                                            <div>
+                                                Cargo Weight
+                                            </div>
+                                            <div>
+                                                (Metric Tone)
                                             </div>
                                         </div>
 
                                     </div>
-                                </div>
+                                    <div class="row border-left border-right text-center pt-2 pb-3">
+                                        <div class="col-2 font-weight-bold"
+                                             t-esc="input_record.registration_no.cargo_type.name"></div>
+                                        <div class="col-2 font-weight-bold"
+                                             t-esc="round(input_record.temperature_f, 1)"></div>
+                                        <div class="col-2 font-weight-bold lead" t-esc="doc_data['final_tov_l']"></div>
+                                        <div class="col-2 font-weight-bold lead" t-esc="doc_data['final_gsv_l']"></div>
+                                        <div class="col-2 font-weight-bold" t-esc="input_record.sp_gr"></div>
+                                        <div class="col-2 font-weight-bold lead"
+                                             t-esc="'%.3f' % round(input_record.final_mt,3)"></div>
 
-                            </div>
+
+                                    </div>
+
+                                    <div class="row border ">
+                                        <div class="col-3 px-0 ">
+                                            <div class="row border-bottom border-info   mx-0 py-1">
+                                                <div class="col-7 px-1">
+                                                    Evacuation Box Seal
+                                                </div>
+                                                <div class="col-5 px-1 font-weight-bold"
+                                                     t-esc="input_record.evacuation_box_seal"></div>
+                                            </div>
+                                            <div class="row border-bottom border-info   mx-0 py-1">
+                                                <div class="col-7 px-1">
+                                                    compartment_1
+                                                </div>
+                                                <div class="col-5 px-1 font-weight-bold"
+                                                     t-esc="input_record.compartment_1"></div>
+                                            </div>
+                                            <div class="row border-bottom border-info   mx-0 py-1">
+                                                <div class="col-7 px-1">
+                                                    compartment_2
+                                                </div>
+                                                <div class="col-5 px-1 font-weight-bold"
+                                                     t-esc="input_record.compartment_2"></div>
+
+                                            </div>
+                                            <div class="row  border-info   mx-0 py-1">
+                                                <div class="col-7 px-1">
+                                                    compartment_3
+                                                </div>
+                                                <div class="col-5 px-1 font-weight-bold"
+                                                     t-esc="input_record.compartment_3"></div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-5 px-0 border-left border-right">
+                                            <div>
+                                                <span>اینجانب</span>
+                                                <span class="p-1" style="font-weight: bold"
+                                                      t-esc="doc_data['driver']"></span>
+                                                <p class="p-1"
+                                                   t-esc="doc_data['driver_promise']"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-2 p-0">
+                                            <div class="col-12 text-center p-1 ">
+                                                <div class="">
+                                                    نام و امضاء راننده
+                                                </div>
+                                                <!--                                                <div t-esc="doc_data['driver']"> </div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-2 p-0">
+                                            <div class="col-12 text-center p-1 ">
+                                                <div class="">
+                                                    نام و امضاء کاربر صادرکننده
+                                                </div>
+                                                <div class="font-weight-bold" t-esc="doc_data['user_name']">
+                                                </div>
+                                                <!---->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row my-2 border">
+                                        <div class="col-2 border border-info">
+                                            توزیع نسخ :
+                                        </div>
+                                        <div class="com-10">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    نسخه اصلی : خریدار
+                                                </div>
+                                                <div class="col-3">
+                                                    نسخه مقصد : پیمانکار حمل
+                                                </div>
+                                                <div class="col-3">
+                                                    نسخه مبدأ : بایگانی
+                                                </div>
+                                                <div class="col-3 border border-danger">
+                                                    نسخه حراست
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
                             </div>
 
                         </div>
                     </div>
-<!--            </t>-->
+
+                </div>
+            </div>
+            <!--            </t>-->
         </template>
 
         <template id="cargo_document_report_template">
+
             <t t-call="web.basic_layout" t-lang="lang">
-                <t t-foreach="docs" t-as="o">
-                    <t t-call="sd_payaneh_nafti.cargo_document_report_data"/>
+                <t t-foreach="docs[0]" t-as="o">
+                    <div t-if="errors != []" class="mx-auto text-center mt-5">
+                        <div style="direction: ltr" t-esc="errors[0]"></div>
+                    </div>
+                    <t t-if="errors == []" t-call="sd_payaneh_nafti.cargo_document_report_data"/>
                 </t>
             </t>
         </template>

@@ -11,8 +11,9 @@
                     <header>
 <!--                        <button string="copy order_no" name="copy_order_no" type="object" class="btn btn-primary px2"/>-->
                     </header>
-                    <field name="registration_no" />
+                    <field name="registration_no" class="sd_en1" />
                     <field name="contract_no" />
+                    <field name="letter_no" />
                     <field name="order_no" />
                     <field name="buyer" />
                     <field name="unit" />
@@ -24,6 +25,8 @@
                     <field name="end_date" />
                     <field name="first_extend_end_date" />
                     <field name="second_extend_end_date" />
+                    <field name="destination" />
+                    <field name="contractors" widget="many2many_tags" />
 
                 </tree>
             </field>
@@ -33,10 +36,10 @@
             <field name="name">Basic Registration List</field>
             <field name="model">sd_payaneh_nafti.contract_registration</field>
             <field name="arch" type="xml">
-                <form>
+                <form js_class="remove_action_button">
                     <header>
                         <button name="create_loading_request"  string="Create Loading Request" type="object"
-                                class="oe_highlight" data-hotkey="l"/>
+                                class="oe_highlight" data-hotkey="l" groups="sd_payaneh_nafti.group_sd_payaneh_nafti_operators"/>
                     </header>
                     <sheet>
                         <div name="button_box" class="oe_button_box">
@@ -106,7 +109,11 @@
                             </group>
                         </group>
                     </sheet>
-
+                   <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
 
                 </form>
             </field>
@@ -145,6 +152,20 @@
 
         <!-- ==================================================  Action Window ====================-->
 
+        <record model="ir.actions.act_window" id="action_window_contract_registration_open">
+            <field name="name">Open Contracts</field>
+            <field name="res_model">sd_payaneh_nafti.contract_registration</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">['|','|',
+                ('end_date', '&gt;=', datetime.datetime.now()),
+                '&amp;', ('first_extend_end_date', '!=', False), ('first_extend_end_date', '&gt;=', datetime.datetime.now()),
+                '&amp;',('first_extend_end_date', '!=', False), ('second_extend_end_date', '&gt;=', datetime.datetime.now()),
+                ]
+            </field>
+            <field name="context">{'search_default_live_contracts': 0,'search_default_buyer_group': 1,}</field>
+
+        </record>
+
         <record model="ir.actions.act_window" id="action_window_contract_registration">
             <field name="name">Contract Registration</field>
             <field name="res_model">sd_payaneh_nafti.contract_registration</field>
@@ -155,10 +176,16 @@
 
         <!-- ==================================================  Menu ====================-->
 
+        <menuitem name="Open Contracts"
+                  sequence = "10"
+                  id="sd_payaneh_nafti.contract_registration_menu_open"
+                  parent="sd_payaneh_nafti.payaneh_root_menu"
+                  action="action_window_contract_registration_open"/>
+
         <menuitem name="Contract Registration"
                   sequence = "10"
                   id="sd_payaneh_nafti.contract_registration_menu"
-                  parent="sd_payaneh_nafti.process_menu"
+                  parent="sd_payaneh_nafti.settings_menu"
                   action="action_window_contract_registration"/>
 
 <!--        <menuitem name="Actions"-->

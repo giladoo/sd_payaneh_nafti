@@ -30,7 +30,9 @@ class ReportSdPayanehNaftiOutgateDaily(models.AbstractModel):
         start_date = datetime.strptime(start_date, date_format).date()
         calendar = form_data.get('calendar')
 
-        input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '=', start_date)], order='id')
+        input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '=', start_date),
+                                                                        ('state', 'in', ['done', 'finished']),
+                                                                        ], order='loading_no')
         docids = [input_records.ids]
 
         if calendar == 'fa_IR':
@@ -60,13 +62,13 @@ class ReportSdPayanehNaftiOutgateDaily(models.AbstractModel):
             #       )
 
             row_data_lines.append((index + 1,
-                                   rec.loading_no,
-                                   plate,
-                                   rec.driver.name,
-                                   rec.card_no,
-                                   rec.contractor.name,
-                                   rec.registration_no.buyer.name,
-                                   int(rec.final_gsv_l),
+                                   rec.loading_no or '',
+                                   plate or '',
+                                   rec.driver.name or '',
+                                   rec.card_no or '',
+                                   rec.contractor.name or '',
+                                   rec.registration_no.buyer.name or '',
+                                   int(rec.final_gsv_l) or 0,
 
                                    ))
 

@@ -6,7 +6,7 @@ from colorama import Fore
 from datetime import datetime, date
 from datetime import timedelta
 from odoo.exceptions import ValidationError, UserError
-
+import pytz
 # #############################################################################
 class SdPayanehNaftiReportDaily(models.TransientModel):
     _name = 'sd_payaneh_nafti.report.daily_report'
@@ -14,7 +14,7 @@ class SdPayanehNaftiReportDaily(models.TransientModel):
 
 
 
-    start_date = fields.Date(required=True, default=lambda self: date.today() )
+    start_date = fields.Date(required=True, default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz'))) )
     calendar = fields.Selection([('fa_IR', 'Persian'), ('en_US', 'Gregorian')],
                                 default=lambda self: 'fa_IR' if self.env.context.get('lang') == 'fa_IR' else 'en_US')
 

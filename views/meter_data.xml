@@ -1,6 +1,18 @@
 <odoo>
     <data>
 
+         <!-- ==================================================  sd_payaneh_nafti.meter_comments ====================-->
+
+        <record model="ir.ui.view" id="sd_payaneh_nafti_meter_comments_list">
+            <field name="name">Meter Comments List</field>
+            <field name="model">sd_payaneh_nafti.meter_comments</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" delete="1" multi_edit="1" >
+                        <field name="comment_date" />
+                        <field name="comments" />
+                </tree>
+            </field>
+        </record>
          <!-- ==================================================  sd_payaneh_nafti.meter_data ====================-->
 
         <record model="ir.ui.view" id="sd_payaneh_nafti_meter_data_list">
@@ -64,6 +76,12 @@
             <field name="view_mode">tree</field>
 
         </record>
+        <record model="ir.actions.act_window" id="action_window_meter_comments">
+            <field name="name">Meter comments</field>
+            <field name="res_model">sd_payaneh_nafti.meter_comments</field>
+            <field name="view_mode">tree</field>
+
+        </record>
 
         <!-- ==================================================  Menu ====================-->
 
@@ -73,6 +91,13 @@
                   parent="settings_menu"
                   groups="base.group_system"
                   action="action_window_meter_data"/>
+
+        <menuitem name="Meter Comments"
+                  sequence="400"
+                  id="meter_comments_menu"
+                  parent="settings_menu"
+                  groups="base.group_system"
+                  action="action_window_meter_comments"/>
 
 <!--        <menuitem name="Actions"-->
 <!--                  id="sd_payaneh_nafti.actions_setting_menu"-->

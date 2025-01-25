@@ -21,17 +21,27 @@ class ReportSdPayanehNaftiCargoDocument(models.AbstractModel):
         time_z = pytz.timezone(context.get('tz'))
         date_time = datetime.now(time_z)
         date_time = self.date_converter(date_time, context.get('lang'))
+        # print(f'>>>>  TOP  >>\n data: {data}  >>> docids: {docids}')
+
         if docids:
             input_records = self.env['sd_payaneh_nafti.input_info'].browse(docids)
             calendar = context.get('lang')
+            # print(f'>>>   docids >>> {docids}  >>> {input_records}')
+
         else:
+
             form_data = data.get('form_data')
+            calendar = form_data.get('calendar')
             document_no = form_data.get('document_no')[1]
             input_records = self.env['sd_payaneh_nafti.input_info'].search([('document_no', '=', document_no)])
-            calendar = form_data.get('calendar')
-            docids = [input_records.id]
 
+        spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
+        docids = list([rec.id for rec in input_records])
+        # print(f'>>>>  no docids  >> {docids}  >>> {input_records}')
         for input_record in input_records:
+            if not input_record.loading_date:
+                errors = [_(f'There is no Loading Data for {input_record.registration_no.registration_no} on {date_time.get("date", "")}')]
+                continue
             issue_date = input_record.loading_date
             # print(f'\n {form_data.get("calendar")}')
             if calendar == 'fa_IR':
@@ -54,7 +64,7 @@ class ReportSdPayanehNaftiCargoDocument(models.AbstractModel):
                 contract_no += '-' + str(input_record.registration_no.order_no)
 
             doc_data = {
-                'document_no': input_record.document_no,
+                'document_no': str(input_record.document_no),
                 'contract_no': contract_no,
                 'issue_date': issue_date,
                 'issue_time': date_time['time'],
@@ -73,15 +83,16 @@ class ReportSdPayanehNaftiCargoDocument(models.AbstractModel):
                 'front_container': input_record.front_container,
                 'middle_container': input_record.middle_container,
                 'back_container': input_record.back_container,
-                'total': input_record.total ,
+                'total': input_record.total,
                 'loading_no': input_record.loading_no,
             }
             doc_data_list.append((input_record, doc_data))
 
-        print('***' * 30, 'doc_data_list\n', context.get('lang'),  doc_data_list)
+        # print('***' * 30, 'doc_data_list\n', context.get('lang'),  doc_data_list)
         company_logo = f'/web/image/res.partner/{1}/image_128/'
         return {
             'docs': input_records,
+            'spgr': spgr,
             'doc_ids': docids,
             'doc_model': 'sd_payaneh_nafti.input_info',
             # 'document_no': document_no,

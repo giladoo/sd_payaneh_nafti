@@ -13,7 +13,7 @@ class SdPayanehNaftiContractors(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'name'
 
-    name = fields.Char(required=True,)
+    name = fields.Char(required=True, tracking=True,)
     description = fields.Char()
 
 

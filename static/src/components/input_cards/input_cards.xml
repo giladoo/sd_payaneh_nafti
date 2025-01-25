@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="input_cards" owl="1">
+        <div class="col-sm-3 m-0 p-0">
+            <div class="shadow border m-2 p-4 bg-white sd_payaneh_input_cards "
+                 t-on-click="props.hasOwnProperty('onClick') ? ()=>props.onClick() : ''"
+                 t-attf-style=" {{props.hasOwnProperty('onClick') ? 'cursor: pointer;' : ''}}">
+                <div class="h3 text-justify text-muted" t-esc="props.name"></div>
+                <input  t-on-change="e=>props.onChange(e)"
+                       class="form-control" type="text" value="" ref="input_ref" placeholder="Document"/>
+                <div class="text-right">
+<!--                    <button class="btn btn-primary my-2" t-on-click="e=>props.onSubmit(e)" t-esc="props.view"></button>-->
+
+                </div>
+                <span class="h3 mx-2 text-muted"><span t-esc="props.status"></span></span>
+
+            </div>
+        </div>
+
+    </t>
+</templates>

@@ -23,6 +23,17 @@ class SdPayanehNaftiReportCargoDocument(models.TransientModel):
     def cargo_document_report(self):
         read_form = self.read()[0]
         data = {'form_data': read_form}
+        # read_form.get("document_no")
+        # docids = read_form.get("document_no")[0]
+        docids = self.env['sd_payaneh_nafti.input_info'].browse(read_form.get("document_no")[0])
+        print(f'=======================\n docids: {docids}')
+        return self.env.ref('sd_payaneh_nafti.cargo_document_report').report_action(docids, data=data)
+
+
+    # #############################################################################
+    def cargo_document_html_report(self):
+        read_form = self.read()[0]
+        data = {'form_data': read_form}
         # print(f'\n {read_form.get("calendar")}')
-        return self.env.ref('sd_payaneh_nafti.cargo_document_report').report_action(self, data=data)
+        return self.env.ref('sd_payaneh_nafti.cargo_document_html_report').report_action(self, data=data)
 

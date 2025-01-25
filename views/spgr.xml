@@ -7,8 +7,17 @@
             <field name="name">spgr List</field>
             <field name="model">sd_payaneh_nafti.spgr</field>
             <field name="arch" type="xml">
-                <tree delete="0" edit="0" >
+                <tree delete="0" edit="0" decoration-bf="active" decoration-muted="not active" >
+                        <field name="active" invisible="1" />
                         <field name="spgr" />
+                        <field name="centralized_container" />
+                        <field name="api_a" />
+                        <field name="vapour_pressure" />
+                        <field name="salt_content" />
+                        <field name="mercaptans" />
+                        <field name="h2s" />
+                        <field name="sulphur" />
+                        <field name="water_content" />
                         <field name="spgr_date" />
                     <field name="description" />
 
@@ -24,6 +33,14 @@
                         <group>
                             <group>
                                 <field name="spgr" />
+                                <field name="centralized_container" />
+                                <field name="api_a" />
+                                <field name="vapour_pressure" />
+                                <field name="salt_content" />
+                                <field name="mercaptans" />
+                                <field name="h2s" />
+                                <field name="sulphur" />
+                                <field name="water_content" />
                                 <field name="spgr_date" readonly="1"/>
                                 <field name="description" />
 
@@ -31,7 +48,11 @@
 
                         </group>
                     </sheet>
-
+                   <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -43,10 +64,13 @@
             <field name="model">sd_payaneh_nafti.spgr</field>
             <field name="arch" type="xml">
                 <search string="spgr">
-                        <field name="spgr" />
-                        <field name="spgr_date" />
+                    <field name="spgr"/>
+                    <field name="spgr_date"/>
+                    <field name="active"/>
                     <field name="description" />
-<!--                    <filger name="last_spgr" String="Last SPGR" domain="[]"/>-->
+<!--                    <filter name="show_all" string="All" domain="['|', ('active', '=', True), ('active', '=', False), ]"/>-->
+                    <filter name="show_active" string="Active" domain="[('active', '=', True)]"/>
+<!--                    <filter name="show_all" string="All" domain="[ ]" context="{}"/>-->
                 </search>
             </field>
         </record>
@@ -55,18 +79,19 @@
         <!-- ==================================================  Action Window ====================-->
 
         <record model="ir.actions.act_window" id="action_window_spgr">
-            <field name="name">spgr</field>
+            <field name="name">SPGR</field>
             <field name="res_model">sd_payaneh_nafti.spgr</field>
             <field name="view_mode">tree,form</field>
-
+            <field name="domain">['|', ('active', '=', True), ('active', '=', False)]</field>
+            <field name="context">{'search_default_show_active': True}</field>
         </record>
 
         <!-- ==================================================  Menu ====================-->
 
-        <menuitem name="spgr"
-                  sequence="20"
+        <menuitem name="SPGR"
+                  sequence="50"
                   id="spgr_menu"
-                  parent="process_menu"
+                  parent="settings_menu"
                   action="action_window_spgr"/>
 
 <!--        <menuitem name="Actions"-->

@@ -5,6 +5,7 @@ from odoo import Command
 from colorama import Fore
 from datetime import datetime, date
 import jdatetime
+import pytz
 from odoo.exceptions import ValidationError, UserError
 from . import get_calendare as gc
 # #############################################################################
@@ -35,7 +36,7 @@ class SdPayanehNaftiReportExportContractMonthly(models.TransientModel):
 
     def _year_selector(self):
         # todo: timezone is needed to make sure date after 8 pm is correct
-        this_date = datetime.now()
+        this_date = datetime.now(pytz.timezone(self.env.context.get('tz')))
         if self.env.context.get('lang') == 'fa_IR':
             s_this_year = jdatetime.date.fromgregorian(date=this_date).strftime("%Y")
         else:
@@ -43,7 +44,7 @@ class SdPayanehNaftiReportExportContractMonthly(models.TransientModel):
         return s_this_year
     def _month_selector(self):
         # todo: timezone is needed to make sure date after 8 pm is correct
-        this_date = datetime.now()
+        this_date = datetime.now(pytz.timezone(self.env.context.get('tz')))
         if self.env.context.get('lang') == 'fa_IR':
             s_this_month = jdatetime.date.fromgregorian(date=this_date).strftime("%m")
         else:

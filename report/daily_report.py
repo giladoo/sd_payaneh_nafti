@@ -34,7 +34,12 @@ class ReportSdPayanehNaftiDaily(models.AbstractModel):
         date_format = '%Y-%m-%d'
         start_date = datetime.strptime(start_date, date_format).date()
 
-        input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '=', start_date)])
+        input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '=', start_date),
+                                                                        ('state', 'in', ['done', 'finished']),])
+        # input_records = self.env['sd_payaneh_nafti.input_info'].search([('loading_date', '=', start_date),])
+
+        # print(f'++++++++++++++>>> {start_date} \n  len(input_records) {len(input_records)}\n')
+
         calendar = context.get('lang')
         if calendar == 'fa_IR':
             s_start_date = jdatetime.date.fromgregorian(date=start_date).strftime("%Y/%m/%d")
@@ -67,16 +72,17 @@ class ReportSdPayanehNaftiDaily(models.AbstractModel):
                 d_end_date = d.registration_no.end_date.strftime("%Y/%m/%d")
 
             reg_inputs_all = self.env['sd_payaneh_nafti.input_info'].search([('registration_no', '=', d.registration_no.id),
-                                                                             ('loading_date', '<=', start_date)])
+                                                                             ('loading_date', '<=', start_date),
+                                                                             ('state', 'in', ['done', 'finished']),])
 
             final_gsv_b_all = [rec.final_gsv_b for rec in reg_inputs_all ]
-            sum_final_gsv_b = int(sum(final_gsv_b))
+            sum_final_gsv_b = round(sum(final_gsv_b))
             tanks_count = len(data)
-            remain_amount = d.registration_no.amount - int(sum(final_gsv_b_all))
-            remain_tanks = int((d.registration_no.amount - int(sum(final_gsv_b_all)) )/200)
+            remain_amount = d.registration_no.amount - round(sum(final_gsv_b_all))
+            remain_tanks = round(remain_amount/200)
             row_data_lines.append((index + 1,
                                    d.registration_no.contract_no,
-                                   d.registration_no.order_no,
+                                   d.registration_no.order_no if d.registration_no.order_no else '',
                                    d.registration_no.buyer.name,
                                    d_start_date,
                                    d_end_date,
@@ -86,10 +92,17 @@ class ReportSdPayanehNaftiDaily(models.AbstractModel):
                                    remain_amount,
                                    remain_tanks,
                                    ))
-            footer_data['total_gsv_l'] += sum_final_gsv_b
+            footer_data['total_gsv_l'] += sum(final_gsv_b)
             footer_data['total_tanks'] += tanks_count
-            footer_data['total_remain'] += remain_amount
-            footer_data['total_remain_tanks'] += remain_tanks
+            footer_data['total_remain'] += d.registration_no.amount - (sum(final_gsv_b_all))
+            footer_data['total_remain_tanks'] += remain_amount/200
+
+        footer_data['total_gsv_l'] = round(footer_data['total_gsv_l'])
+        footer_data['total_remain'] = round(footer_data['total_remain'])
+        footer_data['total_remain_tanks'] = round(footer_data['total_remain_tanks'])
+
+
+
         # print(footer_data)
             # print(f' | {index + 1: ^2}'
             #       f' | {reg_no: ^4}'

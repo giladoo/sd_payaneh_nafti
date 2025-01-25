@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from datetime import  datetime, timedelta
+import time
+from datetime import datetime, timedelta
 import json
 
 from odoo import models, fields, api, _
@@ -9,17 +10,22 @@ from colorama import Fore
 import jdatetime
 import math
 import logging
-
+import pytz
+from icecream import ic
 cpl_counter = 0
+
+
 def _cpl_counter():
     global cpl_counter
     cpl_counter += 1
     return cpl_counter
+
+
 class SdPayanehNaftiInputInfo(models.Model):
     _name = 'sd_payaneh_nafti.input_info'
     _description = 'sd_payaneh_nafti.input_info'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'id desc, document_no desc'
+    _order = 'document_no desc'
     _rec_name = 'document_no'
 
     state = fields.Selection([
@@ -28,38 +34,60 @@ class SdPayanehNaftiInputInfo(models.Model):
         ('loading_info', 'Loading Info'),
         ('cargo_document', 'Cargo Doc'),
         ('done', 'Done'),
+        ('canceled', 'Canceled'),
+        ('unloaded', 'Unloaded'),
         ('driver_block_list', 'Driver'),
         ('truck_black_list', 'Truck'),
         ('out_of_date', 'Out of Date'),
         ('amount_limit', 'Amount Limit'),
-        ],
+        ('finished', 'Finished'),
+    ],
         string='Status', index=True, readonly=True, tracking=True,
-        copy=False, default='draft', required=True, group_expand='_expand_groups', )
+        copy=False, default='draft', required=True, )
+    shift = fields.Selection([
+        ('shift_1', 'Shift 1'),
+        ('shift_2', 'Shift 2'),
+        ('shift_3', 'Shift 3'),
+        ('shift_4', 'Shift 4'),
+        ('shift_5', 'Shift 5'),
+        ('shift_6', 'Shift 6'),
+
+    ],
+        string='Shift', index=True, tracking=True,
+        copy=False, default=lambda self: self.shift_selector(), required=True, )
     remain_amount = fields.Float(compute='_remain_amount')
     remain_amount_approx = fields.Float(compute='_remain_amount')
     amount = fields.Float()
-    document_no = fields.Integer(required=True, copy=False, readonly=True, default=lambda self: 0)
-    request_date = fields.Date(default=lambda self: date.today(), required=True,)
-    registration_no = fields.Many2one('sd_payaneh_nafti.contract_registration', required=True,
+    document_no = fields.Integer(required=True, copy=False, readonly=True, tracking=True,
+                                 default=lambda self: 0)
+    # document_no = fields.Integer(required=True, copy=False, readonly=False, tracking=True,
+    #                              default=lambda self: self.search([], order='document_no desc', limit=1).document_no + 1)
+    request_date = fields.Date(
+        default=lambda self: datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))),
+        required=True, tracking=True)
+    registration_no = fields.Many2one('sd_payaneh_nafti.contract_registration', required=True, tracking=True,
                                       default=lambda self: self.env.context.get('registration_no', False))
     date_validation = fields.Boolean(related='registration_no.date_validation', store=False)
-    contract_no = fields.Char(related='registration_no.contract_no',)
+    contract_no = fields.Char(related='registration_no.contract_no', tracking=True, )
     order_no = fields.Char(related='registration_no.order_no')
     buyer = fields.Many2one(related='registration_no.buyer')
     contractors = fields.Many2many(related='registration_no.contractors')
-    contractor = fields.Many2one('sd_payaneh_nafti.contractors', required=True,)
-    driver = fields.Many2one('sd_payaneh_nafti.drivers', required=True,)
+    contractor = fields.Many2one('sd_payaneh_nafti.contractors', required=True, tracking=True, )
+    driver = fields.Many2one('sd_payaneh_nafti.drivers', required=True, tracking=True, )
     driver_black_list = fields.Boolean(related='driver.black_list')
     card_no = fields.Char(related='driver.card_no')
-    truck_no = fields.Many2one('sd_payaneh_nafti.trucks', required=True,)
+    truck_no = fields.Many2one('sd_payaneh_nafti.trucks', required=True, tracking=True, )
     truck_black_list = fields.Boolean(related='truck_no.black_list')
-    plate_1 = fields.Char(related='truck_no.plate_1',)
-    plate_2 = fields.Char(related='truck_no.plate_2',)
-    plate_3 = fields.Char(related='truck_no.plate_3',)
-    plate_4 = fields.Char(related='truck_no.plate_4',)
-    front_container = fields.Integer(required=True,)
-    middle_container = fields.Integer(required=True,)
-    back_container = fields.Integer(required=True,)
+    plate_1 = fields.Char(related='truck_no.plate_1', )
+    plate_2 = fields.Char(related='truck_no.plate_2', )
+    plate_3 = fields.Char(related='truck_no.plate_3', )
+    plate_4 = fields.Char(related='truck_no.plate_4', )
+    # front_container = fields.Integer(related='truck_no.front_container')
+    # middle_container = fields.Integer(related='truck_no.middle_container')
+    # back_container = fields.Integer(related='truck_no.back_container')
+    front_container = fields.Integer(required=True, tracking=True, )
+    middle_container = fields.Integer(required=True, tracking=True, )
+    back_container = fields.Integer(required=True, tracking=True, )
     total = fields.Integer(compute='_total')
     centralized_container = fields.Selection([('a', 'A'),
                                               ('b', 'B'),
@@ -69,58 +97,63 @@ class SdPayanehNaftiInputInfo(models.Model):
                                               ('f', 'F'),
                                               ('g', 'G'),
                                               ('h', 'H'),
-                                              ], required=True,)
+                                              ], required=False, tracking=True, )
 
-    loading_no = fields.Char(copy=False, readonly=True, )
+    loading_no = fields.Char(copy=False, readonly=False, tracking=True, )
     # todo: timezone
-    loading_date = fields.Date(copy=False, readonly=True,)
-    loading_info_date = fields.Date(copy=False, default=lambda self: date.today())
+    loading_date = fields.Date(copy=False, string='Loading Date', readonly=False,
+                               default=lambda self: self.request_date, tracking=True)
+    loading_info_date = fields.Date(copy=False, tracking=True,
+                                    default=lambda self: datetime.now(
+                                        pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))))
     # driver = fields.Char(required=True,)
 
-    sp_gr = fields.Float( string='SP. GR.', required=True, default=0.7252, store=True, readonly=True)
+    sp_gr = fields.Float(string='SP. GR.', required=False, store=True, readonly=False, tracking=True)
     # sp_gr = fields.Many2one('sd_payaneh_nafti.spgr', string='SP. GR.', required=True, default=0.7252)
-    temperature = fields.Integer(string='Temp. (C)', required=True, default=30)
+    temperature = fields.Float(string='Temp. (C)', required=True, default=30, tracking=True, digits=(12, 1))
     temperature_f = fields.Float(string='Temp. (F)', compute='_temperature_f', digits=(12, 1))
-    pressure = fields.Float(string='Pressure (bar)', required=True, default=2.5)
-    pressure_psi = fields.Integer(compute='_pressure_psi')
-    meter_no = fields.Selection([ ('1', '1'),
-                                  ('2', '2'),
-                                  ('3', '3'),
-                                  ('4', '4'),
-                                  ('5', '5'),
-                                  ('6', '6'),
-                                  ('7', '7'),
-                                  ('8', '8'),
-                                  ], required=False,)
-    totalizer_start = fields.Integer(required=False,)
-    totalizer_end = fields.Integer(required=False,)
+    pressure = fields.Float(string='Pressure (bar)', required=True, default=2.5, tracking=True)
+    pressure_psi = fields.Integer(compute='_pressure_psi', digits=(2, 0))
+    meter_no = fields.Selection([('1', '1'),
+                                 ('2', '2'),
+                                 ('3', '3'),
+                                 ('4', '4'),
+                                 ('5', '5'),
+                                 ('6', '6'),
+                                 ('7', '7'),
+                                 ('8', '8'),
+                                 ('0', 'Master'),
+                                 ], required=False, tracking=True, )
+    totalizer_lasts = fields.Html(required=False, readonly=True)
+    totalizer_start = fields.Integer(required=False, tracking=True, )
+    totalizer_end = fields.Integer(required=False, tracking=True, help="The last Totalizer End as start")
     totalizer_difference = fields.Integer(required=False, compute='_totalizer_difference')
-    weighbridge = fields.Selection([('no', 'No'), ('yes', 'Yes')], default='no')
-    tanker_empty_weight = fields.Integer(required=False,)
-    tanker_full_weight = fields.Integer(required=False,)
+    weighbridge = fields.Selection([('no', 'No'), ('yes', 'Yes')], default='no', tracking=True)
+    tanker_empty_weight = fields.Integer(required=False, tracking=True, )
+    tanker_full_weight = fields.Integer(required=False, tracking=True, )
     tanker_pure_weight = fields.Integer(required=False, compute='_tanker_pure_weight')
-    evacuation_box_seal = fields.Char(required=False,)
-    compartment_1 = fields.Char(required=False,)
-    compartment_2 = fields.Char(required=False,)
-    compartment_3 = fields.Char(required=False,)
-    correction_factor = fields.Float(digits=(12, 5), required=True, default=1.0)
+    evacuation_box_seal = fields.Char(required=False, tracking=True)
+    compartment_1 = fields.Char(required=False, tracking=True)
+    compartment_2 = fields.Char(required=False, tracking=True)
+    compartment_3 = fields.Char(required=False, tracking=True)
+    correction_factor = fields.Float(digits=(12, 5), required=True, default=1.0, tracking=True)
     # api_box_locker = fields.Many2one('sd_payaneh_nafti.lockers')
     # compartment_locker_1 = fields.Many2one('sd_payaneh_nafti.lockers')
     # compartment_locker_2 = fields.Many2one('sd_payaneh_nafti.lockers')
     # compartment_locker_3 = fields.Many2one('sd_payaneh_nafti.lockers')
 
     api_a = fields.Float(string='API', compute='_api_a')
-    ctl = fields.Float(string='CTL', compute='_ctl_cpl')
-    cpl = fields.Float(string='CPL', compute='_ctl_cpl')
+    ctl = fields.Float(string='CTL', compute='_ctl_cpl', )
+    cpl = fields.Float(string='CPL', compute='_ctl_cpl', )
     tab_13 = fields.Float(string='TAB.13', digits=(12, 5), compute='_tab_13')
     # this variables are useless
     meter_tov_l = fields.Float(string='Meter T.O.V Liter')
     meter_gsv_l = fields.Float(string='Meter G.S.V Liter')
-    meter_gsv_b = fields.Float(string='Meter G.S.V BBL', digits=[8, 2])
+    meter_gsv_b = fields.Float(string='Meter G.S.V BBL', digits=[8, 4])
     meter_mt = fields.Float(string='Meter M.T.')
     wb_tov_l = fields.Float(string='WB T.O.V Liter')
     wb_gsv_l = fields.Float(string='WB G.S.V Liter')
-    wb_gsv_b = fields.Float(string='WB G.S.V BBL', digits=[8, 2])
+    wb_gsv_b = fields.Float(string='WB G.S.V BBL', digits=[8, 4])
     wb_mt = fields.Float(string='WB M.T.')
 
     final_tov_l = fields.Float(string='Final T.O.V Liter', compute='_finals', digits=[8, 0])
@@ -129,29 +162,90 @@ class SdPayanehNaftiInputInfo(models.Model):
     final_mt = fields.Float(string='Final M.T.', compute='_finals', digits=[8, 3])
     cpl_counter = fields.Integer(default=0)
 
-    # def drivers_strip(self):
-    #     ids = self.env.context.get('active_ids')
-    #     print(f'\n active ids: {ids}')
-        # for rec in self:
-        #     rec.driver = rec.driver.strip()
+    cqq = fields.Many2one('sd_payaneh_nafti.spgr')
+    truck_in_30_record = fields.Boolean(default=False, compute='_truck_in_30_record')
+    driver_in_30_record = fields.Boolean(default=False, compute='_driver_in_30_record')
 
-    # def drivers_create(self):
-    #     ids = self.env.context.get('active_ids')
-    #     print(f'\n active ids: {ids}')
-    #     records = self.browse(ids)
-    #     drivers_model = self.env['sd_payaneh_nafti.drivers']
-        # for rec in records:
-        #     if not drivers_model.search([('name', '=', rec.driver)]):
-        #         drivers_model.create({'name': rec.driver})
-        #     drivers = drivers_model.search([('name', '=', rec.driver)])
-        #     if len(drivers) == 1:
-        #         rec.write({'driver_name': drivers.id})
+    def shift_selector(self):
+        shift = 1
+        the_time = datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))).time()
+        if the_time < the_time.replace(hour=7, minute=0, second=0, microsecond=0):
+            shift = 1
+        elif the_time < the_time.replace(hour=9, minute=30, second=0, microsecond=0):
+            shift = 2
+        elif the_time < the_time.replace(hour=12, minute=0, second=0, microsecond=0):
+            shift = 3
+        elif the_time < the_time.replace(hour=18, minute=0, second=0, microsecond=0):
+            shift = 4
+        elif the_time < the_time.replace(hour=21, minute=0, second=0, microsecond=0):
+            shift = 5
+        elif the_time >= the_time.replace(hour=21, minute=0, second=0, microsecond=0):
+            shift = 6
 
-    @api.onchange('document_no')
-    def onchange_document_no(self):
-        self.set_spgr()
+        return f'shift_{shift}'
 
-    @api.depends('registration_no',)
+    @api.onchange('truck_no')
+    def _truck_changed(self):
+        self.front_container = self.truck_no.front_container
+        self.middle_container = self.truck_no.middle_container
+        self.back_container = self.truck_no.back_container
+        self._truck_in_30_record()
+
+    def _truck_in_30_record(self):
+        inputs_same_truck = self.search([], order='id desc', limit=30)
+        inputs_same_truck = list([rec for rec in inputs_same_truck
+                                  if rec.truck_no == self.truck_no and rec.document_no != self.document_no])
+        self.truck_in_30_record = True if len(inputs_same_truck) > 0 else False
+
+    @api.onchange('driver')
+    def _driver_in_30_record(self):
+        inputs_same_driver = self.search([], order='id desc', limit=30)
+        inputs_same_driver = list([rec for rec in inputs_same_driver
+                                   if rec.driver == self.driver and rec.document_no != self.document_no])
+        self.driver_in_30_record = True if len(inputs_same_driver) > 0 else False
+
+    @api.onchange('evacuation_box_seal')
+    def onchange_evacuation_box_seal(self):
+        locker = self.evacuation_box_seal
+        if locker and len(locker) > 6:
+            locker_base = locker[:3]
+            locker_number = locker[3:]
+            if locker_number.isdigit():
+                locker_number = int(locker_number)
+                self.compartment_1 = f'{locker_base}{locker_number + 1}'
+                self.compartment_2 = f'{locker_base}{locker_number + 2}'
+                self.compartment_3 = f'{locker_base}{locker_number + 3}'
+            else:
+                logging.error(f'[onchange_evacuation_box_seal]: {locker} : {locker_number} is not number ')
+        else:
+            logging.error(f'[onchange_evacuation_box_seal]: Length of [{locker}] is less than 6')
+
+    @api.onchange('meter_no')
+    def onchange_meter_no(self):
+        last_input = self.search([('meter_no', '=', self.meter_no),
+                                  ('totalizer_end', '>', 0)],
+                                 order='document_no desc,totalizer_end desc', limit=5)
+        last_input = sorted(last_input, key=lambda x: x.totalizer_end, reverse=True)
+        if last_input:
+            self.totalizer_start = last_input[0].totalizer_end
+            totalizer_lasts = []
+            totalizer_lasts.append(f'<div class="row border-top border-bottom mx-0 sd_ltr">'
+                                   f'<div class="col px-1">Document No</div>'
+                                   f'<div class="col px-1">Totalizer End</div>'
+                                   f'</div>')
+            for rec in last_input:
+                totalizer_lasts.append(f'<div class="row border-bottom mx-0 sd_ltr">'
+                                       f'<div class="col px-1">{rec.document_no}</div>'
+                                       f'<div class="col px-1">{rec.totalizer_end:,}</div>'
+                                       f'</div>')
+            self.totalizer_lasts = ''.join(totalizer_lasts)
+            self.totalizer_lasts = f'<div class="sd_ltr" style="font-family: sarif">{self.totalizer_lasts}<div>'
+
+    # @api.onchange('document_no')
+    # def onchange_document_no(self):
+    #     self.set_spgr()
+
+    @api.depends('registration_no', )
     @api.onchange('registration_no', 'front_container', 'middle_container', 'back_container')
     def _on_registration_change(self):
         self._remain_amount()
@@ -178,13 +272,24 @@ class SdPayanehNaftiInputInfo(models.Model):
         self._ctl_cpl()
 
     def set_spgr(self):
+        # if not self.env.user.has_group('sd_payaneh_nafti.group_sd_payaneh_nafti_operators'):
+        #     return
         spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
         if len(spgr) == 1:
             self.sp_gr = spgr.spgr
+            self.centralized_container = spgr.centralized_container
+            self.cqq = spgr if (self.request_date > date(2024, 4, 19)) else False
         else:
             raise ValidationError(_('Add a "SP.GR." from the main menu'))
 
+    @api.depends('shift')
     def _remain_amount(self):
+        # select registration_no of this records
+        registration_list = []
+        for rec in self:
+            registration_list.append(rec.registration_no.id)
+
+        all_inputs = self.search([('registration_no', 'in', registration_list)])
         for rec in self:
             final_gsv_b = 0
             final_mt = 0
@@ -195,15 +300,18 @@ class SdPayanehNaftiInputInfo(models.Model):
 
             # In case of new record creation
             if rec.id and str(rec.id).isdigit():
-                inputs = self.search([('id', '!=', False), ('id', '<=', rec.id), ('registration_no', '=', rec.registration_no.id), ])
+                # inputs = self.search([('id', '!=', False), ('id', '<=', rec.id), ('registration_no', '=', rec.registration_no.id), ])
+                inputs = list([re for re in all_inputs if
+                               re.id != False and re.id <= rec.id and re.registration_no.id == rec.registration_no.id])
             else:
-                inputs = self.search([('registration_no', '=', rec.registration_no.id),])
+                # inputs = self.search([('registration_no', '=', rec.registration_no.id),])
+                inputs = list([re for re in all_inputs if re.registration_no.id == rec.registration_no.id])
 
             #  if there is no loading info, calculate based on sum of the containers amount
             if not rec.final_mt:
                 total = rec.front_container + rec.middle_container + rec.back_container
                 # final_tov_l = round((rec.cpl * total * rec.correction_factor), 0 )
-                final_gsv_l = round((rec.cpl * rec.ctl * total * rec.correction_factor), 0 )
+                final_gsv_l = round((rec.cpl * rec.ctl * total * rec.correction_factor), 0)
                 final_gsv_b = final_gsv_l / 158.987
                 final_mt = round(final_gsv_b * rec.tab_13, 3)
 
@@ -214,34 +322,32 @@ class SdPayanehNaftiInputInfo(models.Model):
             elif rec.registration_no.unit == 'metric_ton':
                 used_amounts = sum([ua.final_mt for ua in inputs])
                 requested_approx_amount = final_mt
-
             else:
                 used_amounts = 0
 
             amount = rec.registration_no.amount if rec.registration_no.init_amount == 0 else rec.registration_no.init_amount
             rec.remain_amount = amount - used_amounts
             rec.remain_amount_approx = amount - used_amounts - requested_approx_amount
-            rec.amount = rec.final_gsv_b if rec.registration_no.unit == 'barrel' else rec.final_mt
-
-            # if rec.remain_amount_approx < 0:
-            #     raise ValidationError(_(f'Document No: {rec.document_no}'
-            #                             f'\nRegistration No: {rec.registration_no}'
-            #                             f'\nContract amount: {amount}'
-            #                             f'\nRemain amount: {rec.remain_amount}'
-            #                             f'\nRequested amount: {requested_approx_amount}'
-            #                             f'\nApproximate remain amount: {rec.remain_amount_approx}'))
+            if rec.state != 'finished':
+                rec.amount = rec.final_gsv_b if rec.registration_no.unit == 'barrel' else rec.final_mt
 
     def _finals(self):
         # calculate the final amounts based on the totalizer or the tanker weight
         for rec in self:
             if rec.weighbridge == 'yes':
+                # final_mt = round(rec.tanker_pure_weight / 1000, 3)
+                # final_gsv_b = final_mt / rec.tab_13
+                # final_gsv_l = round(final_gsv_b * 158.987, 0)
+                # final_tov_l = round((final_gsv_l / rec.ctl) / rec.cpl, 0)
+
                 final_mt = round(rec.tanker_pure_weight / 1000, 3)
-                final_gsv_b = final_mt / rec.tab_13
-                final_gsv_l = round(final_gsv_b * 158.987, 0)
+                final_gsv_l = round((rec.tanker_pure_weight / 6.28981) / rec.tab_13, 0)
+
+                final_gsv_b = final_gsv_l / 158.987
                 final_tov_l = round((final_gsv_l / rec.ctl) / rec.cpl, 0)
             else:
-                final_tov_l = round((rec.cpl * rec.totalizer_difference * rec.correction_factor), 0 )
-                final_gsv_l = round((rec.cpl * rec.ctl * rec.totalizer_difference * rec.correction_factor), 0 )
+                final_tov_l = round((rec.cpl * rec.totalizer_difference * rec.correction_factor), 0)
+                final_gsv_l = round((rec.cpl * rec.ctl * rec.totalizer_difference * rec.correction_factor), 0)
                 final_gsv_b = final_gsv_l / 158.987
                 final_mt = round(final_gsv_b * rec.tab_13, 3)
 
@@ -259,18 +365,20 @@ class SdPayanehNaftiInputInfo(models.Model):
         # calculates the API
         for rec in self:
             api_a = 141.5 / rec.sp_gr - 131.5 if rec.sp_gr else 0
-            rec.api_a = round(api_a, 2) if rec.registration_no.loading_type == 'internal' else round(api_a, 1)
+            # The api calculation had changed on 1401 mehr Excel file. The document 3215 is the first one on 1401 mehr.
+            r = 2 if rec.registration_no.loading_type == 'internal' or rec.document_no < 3215 else 1
+            rec.api_a = round(api_a, r)
+
 
     def _tab_13(self):
         # Calculates the TAB.13
         for rec in self:
             rec.tab_13 = ((141.3819577 / (rec.api_a + 131.5)) - 0.001199407795) * 0.1589872949
 
-
     def _pressure_psi(self):
         # Calculates the pressure based on PSI
         for rec in self:
-            rec.pressure_psi = rec.pressure * 14.5038
+            rec.pressure_psi = round(rec.pressure * 14.5038, 0)
 
     def _ctl_cpl(self):
         # takes the constant parameters from setting page
@@ -296,19 +404,56 @@ class SdPayanehNaftiInputInfo(models.Model):
         # Calculates CPL and CTL which they will be used to calculate the other parameters
         for rec in self:
             try:
+                temperature = round(rec.temperature, 0)
+                temperature_f = rec.temperature_f
+
                 rec_pi = (141.5 / (rec.api_a + 131.5)) * 999.016
                 rec_a = (delta_60 / 2) * (((k_0 / rec_pi) + k_1) * (1 / rec_pi) + k_2)
                 rec_b = ((2 * k_0) + (k_1 * rec_pi)) / ((k_0 + ((k_2 * rec_pi) + k_1) * rec_pi))
-                rec_pi_star = rec_pi * (1 + ((math.exp((rec_a * (1 + (0.8 * rec_a)))) - 1) / (1 + rec_a * (1 + (0.6 * rec_a)) * rec_b)))
+                rec_pi_star = rec_pi * (1 + (
+                        (math.exp((rec_a * (1 + (0.8 * rec_a)))) - 1) / (1 + rec_a * (1 + (0.6 * rec_a)) * rec_b)))
                 alpha_60 = (((k_0 / rec_pi_star) + k_1) * (1 / rec_pi_star)) + k_2
-                t_star_prime = ((rec.temperature_f-32)/1.8)/630
-                t_star_zegond = (param_ai1+((param_ai2+((param_ai3+((param_ai4+((param_ai5+((param_ai6+((param_ai7+(param_ai8*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime))*t_star_prime
-                t_star = ((rec.temperature-((param_ai1+(param_ai2+(param_ai3+(param_ai4+(param_ai5+(param_ai6+(param_ai7+param_ai8*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630))*(rec.temperature/630)))*1.8)+32
+                t_star_prime = ((temperature_f - 32) / 1.8) / 630
+                t_star_zegond = (param_ai1 +
+                                 ((param_ai2 +
+                                   ((param_ai3 +
+                                     ((param_ai4 +
+                                       ((param_ai5 +
+                                         ((param_ai6 +
+                                           ((param_ai7 +
+                                             (param_ai8 *
+                                              t_star_prime)) *
+                                            t_star_prime)) *
+                                          t_star_prime)) *
+                                        t_star_prime)) *
+                                      t_star_prime)) *
+                                    t_star_prime)) *
+                                  t_star_prime)) * t_star_prime
+                # caculation sheet, T* column
+                t_star = (((((temperature_f - 32) / 1.8) -
+                            ((param_ai1 +
+                              (param_ai2 +
+                               (param_ai3 +
+                                (param_ai4 +
+                                 (param_ai5 +
+                                  (param_ai6 +
+                                   (param_ai7 + param_ai8 *
+                                    (((temperature_f - 32) / 1.8) / 630)) *
+                                   (((temperature_f - 32) / 1.8) / 630)) *
+                                  (((temperature_f - 32) / 1.8) / 630)) *
+                                 (((temperature_f - 32) / 1.8) / 630)) *
+                                (((temperature_f - 32) / 1.8) / 630)) *
+                               (((temperature_f - 32) / 1.8) / 630)) *
+                              (((temperature_f - 32) / 1.8) / 630)) *
+                             (((temperature_f - 32) / 1.8) / 630))) *
+                           1.8) +
+                          32)
+
                 delta_t = t_star - tref
-                fp = math.exp((param_a+param_b*t_star+((param_c+param_d*t_star)/(rec_pi_star**2))))
-                rec.ctl = math.exp((-(alpha_60 * delta_t)) * (1 + ((0.8 * alpha_60) * (delta_t + delta_60))))
-                rec.cpl = 1 / (1-((10 ** -5) * (fp * rec.pressure_psi)))
-                # print(f'\nrec_pi: {rec_pi}\nrec_a: {rec_a}\nrec_b: {rec_b}\nrec_pi_star: {rec_pi_star}\nalpha_60: {alpha_60}\n  ')
+                fp = math.exp((param_a + param_b * t_star + ((param_c + param_d * t_star) / (rec_pi_star ** 2))))
+                rec.ctl = round(math.exp((-(alpha_60 * delta_t)) * (1 + ((0.8 * alpha_60) * (delta_t + delta_60)))), 15)
+                rec.cpl = round(1 / (1 - ((10 ** -5) * (fp * rec.pressure_psi))), 13)
+
             except Exception as e:
                 logging.error(f'_ctl_cpl : {e}')
                 logging.error(f'_ctl_cpl : You might needed to save system parameters')
@@ -316,6 +461,7 @@ class SdPayanehNaftiInputInfo(models.Model):
                 rec.cpl = 1
                 raise ValidationError(_('You might needed to save system parameters.'
                                         '\n They get default values but you have to save them to res.config.system.'))
+
 
     def _weighbridge_change(self):
         # It makes sure the tanker weight or the totalizer amount would be zero whenever the weighbridge has changed.
@@ -333,7 +479,12 @@ class SdPayanehNaftiInputInfo(models.Model):
     def _totalizer_difference(self):
         # It calculates the totalizer difference based on totalizer start amount and its end amount
         for rec in self:
-            rec.totalizer_difference = rec.totalizer_end - rec.totalizer_start
+            if rec.totalizer_end == 0:
+                rec.totalizer_difference = 0
+            elif rec.totalizer_end > rec.totalizer_start:
+                rec.totalizer_difference = rec.totalizer_end - rec.totalizer_start
+            else:
+                rec.totalizer_difference = 100000000 + rec.totalizer_end - rec.totalizer_start
 
     @api.onchange('tanker_full_weight', 'tanker_empty_weight')
     def _tanker_pure_weight(self):
@@ -350,22 +501,70 @@ class SdPayanehNaftiInputInfo(models.Model):
 
     @api.model
     def create(self, vals):
-        if vals.get('document_no', 0) == 0:
-            vals['document_no'] = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.input_info') or 0
+        try:
             # todo: timezone, last ours of 29'th of Esfand might show a wrong date, maybe first of next year
             # vals['loading_no'] = str(jdatetime.date.today().year) + f"/{int(vals['document_no']):07d}"
-        spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
-        if len(spgr) == 1:
-            vals['sp_gr'] = spgr.spgr
-        else:
-            raise ValidationError(_('Add a "SP.GR." from the main menu'))
-        return super(SdPayanehNaftiInputInfo, self).create(vals)
+            # doc_no = vals.get('document_no', 0)
+            # if doc_no == 0 or doc_no < 10000 or doc_no > 99999:
+            #     raise ValidationError(_('Document No'))
+
+            # It helps to not generate new loading no if there is already exists.
+            if vals.get('loading_no', '') == '':
+                loading_no = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.loading_no') or 0
+                vals['loading_no'] = str(jdatetime.date.today().year) + f"/{int(loading_no):07d}"
+
+            # spgr = self.env['sd_payaneh_nafti.spgr'].search([], order='id desc', limit=1)
+            # if len(spgr) == 1:
+            #     vals['sp_gr'] = spgr.spgr
+            #     vals['centralized_container'] = spgr.centralized_container
+            # else:
+            #     raise ValidationError(_('Add a "SP.GR." from the main menu'))
+
+            if vals.get('meter_no') and type(vals.get('meter_no')) == str and vals.get('meter_no').lower() == 'master':
+                vals['meter_no'] = '0'
+                # todo: it is disabled for parallel data entry of excel and this system.
+        except Exception as er:
+            res = super(SdPayanehNaftiInputInfo, self).create(vals)
+            logging.info(f'[INPUT_INOF Create] User:[{self.env.user.id}] ID:[{res.id}] ER:{er}')
+            raise ValidationError(f'[INPUT_INOF Create] {er}')
+
+        if vals.get('document_no', 0) == 0:
+            vals['document_no'] = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.input_info') or 0
+
+        res = super(SdPayanehNaftiInputInfo, self).create(vals)
+
+        logging.info(f'[INPUT_INOF Create] User:[{self.env.user.id}] Doc_No:[{vals["document_no"]}] ID:[{res.id}]')
+        self.send_message()
+        return res
+
+    def set_locker_types(self):
+        ic(self.lockers)
+        return True
 
     def write(self, vals):
         # Changing the compartment_1 means that there are loading info entry. So, it moves the state to cargo_document.
-        if vals.get('compartment_1') or vals.get('compartment_locker_1'):
+
+
+        if vals.get('lockers') :
+            ic(self.lockers, vals.get('lockers'))
+
+        if vals.get('meter_no') or vals.get('compartment_locker_1'):
             vals['state'] = 'cargo_document'
+
+        if not (len(vals) == 1 and 'amount' in vals.keys()) and self.state in ['finished', 'canceled', 'unloaded'] and\
+                not self.env.user.has_group('sd_payaneh_nafti.group_sd_payaneh_nafti_admins'):
+            raise ValidationError(_('Finished record is not editable!'))
+
+        doc_no = vals.get('document_no', None)
+        if doc_no is not None and (doc_no == 0 or doc_no > 99999):
+            raise ValidationError(_('Document No'))
+        self.send_message()
         return super(SdPayanehNaftiInputInfo, self).write(vals)
+
+    def unlink(self):
+        for rec in self:
+            logging.warning(f'[INPUT_INOF Unlink] User:[{self.env.user.id}] Doc_No:[{rec.document_no}] ID:[{rec.id}]')
+        return super(SdPayanehNaftiInputInfo, self).unlink()
 
     def get_contract_registration(self):
         # On the input_info form, there is a button named "Contract" which it shows the related contract of this input
@@ -375,7 +574,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'Inputs',
-            'views': [ [form_id, 'form']],
+            'views': [[form_id, 'form']],
             'view_mode': 'form',
             'res_id': self.registration_no.id,
             'res_model': 'sd_payaneh_nafti.contract_registration',
@@ -385,21 +584,32 @@ class SdPayanehNaftiInputInfo(models.Model):
     def loading_permit(self):
         # In input info for, there is a button named "Loading Permit" which updates some fields.
         for rec in self:
-            loading_no = str(jdatetime.date.today().year) + f"/{int(rec.document_no):07d}"
-            loading_date = date.today()
-            rec.write({'state': 'loading_permit', 'loading_no': loading_no, 'loading_date': loading_date })
+            # loading_no = self.env['ir.sequence'].next_by_code('sd_payaneh_nafti.loading_no') or 0
+            #
+            # loading_no = str(jdatetime.date.today().year) + f"/{int(loading_no):07d}"
+            loading_date = datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))).date()
+            rec.write({'state': 'loading_permit', 'loading_date': loading_date})
 
     def print_loading_permit(self):
-
         if self.state == 'loading_permit':
             self.write({'state': 'loading_info'})
         data = {'form_data': {'document_no': (0, self.document_no)}}
         return self.env.ref('sd_payaneh_nafti.loading_permit_report').report_action(self, data=data)
 
+        # TODO: print direct dialog box; it had some problems while user wanted to use it.
+        # url = f"/report/html/sd_payaneh_nafti.loading_permit_report_template/{self.id}"
+        # return{
+        #     'type': 'ir.actions.act_url',
+        #     'url': url,
+        #     'target': 'new',
+        # }
+
     def loading_info(self):
         data = {'form_data': {'document_no': (0, self.document_no)}}
+        if self.sp_gr == 0:
+            self.set_spgr()
+
         loading_info_form = self.env.ref('sd_payaneh_nafti.sd_payaneh_nafti_input_info_form_loading_info')
-        # print(f'\n loading info: self: {self} loading_info_form: {loading_info_form}')
         return {
             'type': 'ir.actions.act_window',
             'name': 'Loading Info',
@@ -412,19 +622,49 @@ class SdPayanehNaftiInputInfo(models.Model):
         }
 
     def print_cargo_document(self):
-        data = {'form_data': {'document_no': (0, self.document_no)}}
+        data = {'form_data': {'document_no': (0, self.document_no), 'calendar': 'fa_IR'}}
         return self.env.ref('sd_payaneh_nafti.cargo_document_report').report_action(self, data=data)
+
+        # url = f"/report/html/sd_payaneh_nafti.cargo_document_report_template/{self.id}"
+        # return {
+        #     'type': 'ir.actions.act_url',
+        #     'url': url,
+        #     'target': 'new',
+        # }
 
     def input_done(self):
         for rec in self:
-            rec.write({'state': 'done'})
+            if rec.state not in ['canceled', 'unloaded']:
+                rec.write({'state': 'done'})
+
+    def input_canceled(self):
+        for rec in self:
+            rec.write({'state': 'canceled'})
+
+    def input_unloaded(self):
+        for rec in self:
+            rec.write({'state': 'unloaded'})
+
+    def input_back(self):
+        for rec in self:
+            if rec.loading_date == False:
+                rec.write({'state': 'loading_permit'})
+            elif rec.loading_info_date == False:
+                rec.write({'state': 'loading_info'})
+            else:
+                rec.write({'state': 'done'})
+
+    def input_finished(self):
+        for rec in self:
+            if rec.state not in ['canceled', 'unloaded']:
+                rec.write({'state': 'finished'})
 
     @api.model
     def get_requests(self):
-        today_date = date.today()
-        print(f'------------> today_date: {today_date}')
+        # today_date = date.today()
+        today_date = datetime.now(pytz.timezone(self.env.context.get('tz', 'Asia/Tehran'))).date()
 
-        open_requests = self.search([('state', '!=', 'done')])
+        open_requests = self.search([('state', 'not in', ['done', 'finished'])])
         this_day_requests = self.search([('request_date', '=', today_date)])
 
         # todo: amount is not comparable between contracts with different unit type.
@@ -432,7 +672,10 @@ class SdPayanehNaftiInputInfo(models.Model):
         #   amount for metric tone is calculated based on final_mt
         #   so the remain amount of this two type of contracts should not be sum up.
         this_day_loaded = self.search([('loading_info_date', '=', today_date)])
-        this_day_requests_amount = round(sum([rec.amount for rec in this_day_loaded ]), 2)
+        one_day_ago_loaded = self.search([('loading_info_date', '=', today_date - timedelta(days=1))])
+        two_days_ago_loaded = self.search([('loading_info_date', '=', today_date - timedelta(days=2))])
+        three_days_ago_loaded = self.search([('loading_info_date', '=', today_date - timedelta(days=3))])
+        this_day_requests_amount = round(sum([rec.amount for rec in this_day_loaded]), 2)
         this_day_requests_amount = 0
 
         this_day_requests_count = len(this_day_requests)
@@ -440,47 +683,155 @@ class SdPayanehNaftiInputInfo(models.Model):
         loading_permit = len([rec for rec in open_requests if rec.state == 'loading_permit'])
         loading_info = len([rec for rec in open_requests if rec.state == 'loading_info'])
 
-
         cargo_document = len([rec for rec in open_requests if rec.state == 'cargo_document'])
-
 
         data = {
             'open_requests': len(open_requests),
             'this_day_requests_count': this_day_requests_count,
+            'one_day_ago_count': len(one_day_ago_loaded),
+            'two_days_ago_count': len(two_days_ago_loaded),
+            'three_days_ago_count': len(three_days_ago_loaded),
             'this_day_requests_amount': this_day_requests_amount,
             'new_requests': new_requests,
             'loading_permit': loading_permit,
             'loading_info': loading_info,
             'cargo_document': cargo_document,
+            'meter_data': self.meter_data(today_date),
         }
         return json.dumps(data)
 
+    # ########################################################################################
+    @api.model
+    def send_message(self, data={}):
+        # channel = 'restaurant_gate_device_' + str(self.id)
+        channel = 'payaneh_operation_channel'
+        message = {'data': data}
+        bus_type = 'payaneh_operation'
+        self.env['bus.bus'].sudo()._sendone(channel, bus_type, message)
 
+    # ########################################################################################
+    def meter_data(self, meter_report_date):
+        this_date_input = self.search(
+            [('loading_info_date', '=', meter_report_date), ])
+        meter_no_list = ['1', '2', '3', '4', '5', '6', '7', '8', '0']
+        mismatch = ''
+        mismatch_data = ''
+        # create meter report preview
+        meter_data = f'''
+                        <div class="row bg-300 text-center">
+                            <div class="col-2">Meter No</div>
+                            <div class="col-3">First Totalizer</div>
+                            <div class="col-3">Last Totalizer</div>
+                            <div class="col-2">Amount</div>
+                            <div class="col-2">Trucks</div>
+                        </div>
+                        '''
+        meter_amount_sum = 0
+        truck_count_sum = 0
+        meter_data_inputs = list(filter(lambda r: r.weighbridge == 'no', this_date_input))
 
-class SdPayanehNaftiPlate1(models.Model):
-    _name = 'sd_payaneh_nafti.plate1'
-    _description = 'sd_payaneh_nafti.plate1'
+        for meter_no in meter_no_list:
+            truck_count = len(list([ii.totalizer_start for ii in meter_data_inputs if ii.meter_no == meter_no]))
+            truck_count_sum = truck_count_sum + truck_count
+            totalizer_start = sorted(list([ii.totalizer_start for ii in meter_data_inputs if ii.meter_no == meter_no]))
+            totalizer_end = sorted(list([ii.totalizer_end for ii in meter_data_inputs if ii.meter_no == meter_no]))
+            first_totalizer = min(totalizer_start) if totalizer_start else 0
+            last_totalizer = max(totalizer_end) if totalizer_end else 0
+            meter_amounts = last_totalizer - first_totalizer
+            meter_amount_sum = meter_amount_sum + meter_amounts
+            data = {'meter_no': int(meter_no),
+                    'first_totalizer': first_totalizer,
+                    'last_totalizer': last_totalizer,
+                    'meter_amounts': meter_amounts,
+                    }
+            data = f'''
+                            <div class="row border-bottom">
+                                <div class="col-2 text-center">{meter_no if meter_no != '0' else 'Master'}</div>
+                                <div class="col-3">{first_totalizer}</div>
+                                <div class="col-3">{last_totalizer}</div>
+                                <div class="col-2">{meter_amounts}</div>
+                                <div class="col-2">{truck_count}</div>
+                            </div>
+                            '''
+            meter_data = meter_data + data
 
-    name = fields.Char(translate=True)
+        totalizer_weighbridge = list([t for t in this_date_input if t.weighbridge == 'yes'])
+        totalizer_weighbridge_count = len(totalizer_weighbridge)
+        totalizer_weighbridge_sum = sum(list([r.totalizer_difference for r in totalizer_weighbridge]))
+        totalizer_sum = sum(list([t.totalizer_difference for t in this_date_input]))
 
+        metre_weighbridget_deff = meter_amount_sum + totalizer_weighbridge_sum - totalizer_sum
+        deff_class = 'text-danger font-weight-bold' if metre_weighbridget_deff else ''
+        total = f'''
+                        <div class="row border-dark border-bottom border-top">
+                            <div class="col-8 text-right">جمع خالص بارگیری شده از میتر</div>
+                            <div class="col-2">{meter_amount_sum}</div>
+                            <div class="col-2">{truck_count_sum}</div>
+                        </div>
+                        <div class="row border-dark border-bottom">
+                            <div class="col-8 text-right">جمع خالص میتر در بارگیری از باسکول</div>
+                            <div class="col-2">{totalizer_weighbridge_sum}</div>
+                            <div class="col-2">{totalizer_weighbridge_count}</div>
+                        </div>
+                        <div class="row border-dark border-bottom">
+                            <div class="col-8 text-right">مقدار اسناد بارگیری توسط میتر و باسکول</div>
+                            <div class="col-2">{totalizer_sum}</div>
+                        </div>
+                        <div class="row border-dark border-bottom">
+                            <div class="col-8 text-right {deff_class}">اختلاف بارگیری میتر و باسکول با اسناد صادر شده</div>
+                            <div class="col-2 {deff_class}">{metre_weighbridget_deff}</div>
+                        </div>
+                        '''
+        for meter_no in meter_no_list:
+            mismatch_record = sorted(list([[meter_no, rec.totalizer_start, rec.totalizer_end, rec.document_no]
+                                           for rec in this_date_input
+                                           if rec.meter_no == meter_no]),
+                                     key=lambda r: r[1])
+            for index in range(len(mismatch_record) - 1):
+                if abs(mismatch_record[index][2] - mismatch_record[index + 1][1]) > 1:
+                    r1 = mismatch_record[index]
+                    r2 = mismatch_record[index + 1]
+                    r_12 = self.env['sd_payaneh_nafti.input_info'].search(
+                        [('meter_no', '=', meter_no), ('totalizer_start', '>', r1[2]), ('totalizer_end', '<', r2[1])],
+                        order='totalizer_start')
+                    mismatch = mismatch + f'''
+                                        <div class="row border-bottom"> 
+                                            <div class="col-3">  {r1[0]} </div>
+                                            <div class="col-3">  {r1[1]} </div>
+                                            <div class="col-3">  {r1[2]} </div>
+                                            <div class="col-3">  {r1[3]} </div>           
+                                        </div>
+                                        <div class="row border-bottom"> 
+                                            <div class="col-3">  {r2[0]} </div>
+                                            <div class="col-3">  {r2[1]} </div>
+                                            <div class="col-3">  {r2[2]} </div>
+                                            <div class="col-3">  {r2[3]} </div>           
+                                        </div>
+                                        '''
+                    for r in r_12:
+                        mismatch = mismatch + f'''
+                                        <div class="row border-bottom"> 
+                                            <div class="col-3">  {meter_no} </div>
+                                            <div class="col-3 text-danger">  {r.totalizer_start} </div>
+                                            <div class="col-3 text-danger">  {r.totalizer_end} </div>
+                                            <div class="col-3">  {r.document_no} </div>           
+                                        </div>
+                                        '''
+                    mismatch = mismatch + f'''
+                                    <div class="row border-bottom"> 
+                                        <div class="col-12 border border-dark">  </div>      
+                                    </div>
+                                    '''
 
-class SdPayanehNaftiPlate2(models.Model):
-    _name = 'sd_payaneh_nafti.plate2'
-    _description = 'sd_payaneh_nafti.plate2'
+            if mismatch != '':
+                mismatch_data = f'''
+                                    <div class="row mt-4 bg-warning"> 
+                                        <div class="col-3">Meter No</div>
+                                        <div class="col-3">First Totalizer</div>
+                                        <div class="col-3">Last Totalizer</div>
+                                        <div class="col-3">Document No</div>           
+                                    </div>
+                                    {mismatch}
+                                    '''
 
-    name = fields.Char(translate=True)
-
-
-class SdPayanehNaftiPlate3(models.Model):
-    _name = 'sd_payaneh_nafti.plate3'
-    _description = 'sd_payaneh_nafti.plate3'
-
-    name = fields.Char(translate=True)
-
-class SdPayanehNaftiPlate4(models.Model):
-    _name = 'sd_payaneh_nafti.plate4'
-    _description = 'sd_payaneh_nafti.plate4'
-
-    name = fields.Char(translate=True)
-
-
+        return {'meter_data': meter_data + total, 'mismatch_data': mismatch_data}

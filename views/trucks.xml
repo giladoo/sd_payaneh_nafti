@@ -58,6 +58,10 @@
                         </group>
                         <group>
                             <field name="card_no" />
+                            <field name="front_container" />
+                            <field name="middle_container" />
+                            <field name="back_container" />
+                            <field name="total" />
 
                         </group>
 
@@ -69,6 +73,11 @@
                         </group>
 
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
                 </form>
             </field>
         </record>
