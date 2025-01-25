@@ -8,12 +8,16 @@ from odoo.exceptions import UserError, ValidationError
 from datetime import date
 from colorama import Fore
 import jdatetime
+from jdatetimext import j_start_end, jdatejs
 import math
 import logging
 import pytz
 from icecream import ic
-cpl_counter = 0
+from collections import Counter
 
+
+cpl_counter = 0
+DATE_FORMAT = '%Y-%m-%d'
 
 def _cpl_counter():
     global cpl_counter
@@ -538,7 +542,7 @@ class SdPayanehNaftiInputInfo(models.Model):
         return res
 
     def set_locker_types(self):
-        ic(self.lockers)
+        # ic(self.lockers)
         return True
 
     def write(self, vals):
@@ -719,13 +723,16 @@ class SdPayanehNaftiInputInfo(models.Model):
         # create meter report preview
         meter_data = f'''
                         <div class="row bg-300 text-center">
-                            <div class="col-2">Meter No</div>
-                            <div class="col-3">First Totalizer</div>
-                            <div class="col-3">Last Totalizer</div>
-                            <div class="col-2">Amount</div>
-                            <div class="col-2">Trucks</div>
+                            <div class="col-2">{_("Meter No")}</div>
+                            <div class="col-3">{_("First Totalizer")}</div>
+                            <div class="col-3">{_("Last Totalizer")}</div>
+                            <div class="col-2">{_("Amount")}</div>
+                            <div class="col-2">{_("Trucks1")}</div>
                         </div>
                         '''
+        # todo: it moved to the template
+        meter_data = ''
+
         meter_amount_sum = 0
         truck_count_sum = 0
         meter_data_inputs = list(filter(lambda r: r.weighbridge == 'no', this_date_input))
@@ -826,12 +833,183 @@ class SdPayanehNaftiInputInfo(models.Model):
             if mismatch != '':
                 mismatch_data = f'''
                                     <div class="row mt-4 bg-warning"> 
-                                        <div class="col-3">Meter No</div>
-                                        <div class="col-3">First Totalizer</div>
-                                        <div class="col-3">Last Totalizer</div>
-                                        <div class="col-3">Document No</div>           
+                                        <div class="col-3">{_("Meter No")}</div>
+                                        <div class="col-3">{_("First Totalizer")}</div>
+                                        <div class="col-3">{_("Last Totalizer")}</div>
+                                        <div class="col-3">{_("Document No")}</div>           
                                     </div>
                                     {mismatch}
                                     '''
 
         return {'meter_data': meter_data + total, 'mismatch_data': mismatch_data}
+
+    def data_analysis_get_charts(self):
+        data = {'meters': '<div class="h2 text-danger">Meters</div>'}
+        return json.dumps(data)
+
+    def get_meter_charts(self, ):
+        meters = dict(self._fields['meter_no']._description_selection(self.env))
+        meters_no = list(meters.keys())
+        meters_name = list(meters.values())
+        lang = self.env.context.get('lang', 'en_US')
+        # ic(fields.date.today(), meters)
+        '''
+        meters: {
+                '0': 'Master',
+                '1': '1',
+                '2': '2',
+                '3': '3',
+                '4': '4',
+                '5': '5',
+                '6': '6',
+                '7': '7',
+                '8': '8'
+                }
+        '''
+
+        # ############ DAYS ##############
+
+        meters_this_day = self.search_read([('request_date', '=', fields.date.today())], ['meter_no'])
+        meters_this_day_list = list([rec.get('meter_no') for rec in meters_this_day])
+        counter = Counter(meters_this_day_list)
+        # ic(counter)
+        '''
+        Counter({'2': 1, '1': 1})
+        '''
+        # counter = {key: counter[key] for key in sorted(counter)}
+        meters_count = list([counter.get(rec, 0) for rec in meters_no])
+
+        # ic(meters_no, meters_count)
+        trace1_y = {
+            'x': meters_name,
+            'y': meters_count,
+            'type': "bar",
+            # 'name': "MEG",
+            # 'xaxis': 'x1',
+            # 'width': 0.2,
+            # 'offset': 0.05,
+            # 'marker': {'color': 'rgb(30,80,120)'},
+        }
+        data_this_day = {
+            'data': [trace1_y ],
+            'layout': {
+                'autosize': True,
+                'xaxis': {
+                    'type': 'category',
+                    'dtick': 1,
+                    'tickangle': 0,
+                    'tickfont': {
+                        'size': 12
+                        },
+                    },
+                'yaxis': {
+                    'tickvals': meters_count,
+                    # 'tickformat': 'd',
+                },                },
+            'config': {'responsive': True, 'displayModeBar': True}
+        }
+
+        # ############ WEEKS ##############
+
+        meters_weeks = []
+        week_end_days = []
+        for week in range(6):
+            week_days = j_start_end('week', fields.date.today() - timedelta(days=7 * week))
+            if lang == 'fa_IR':
+                week_end_days.append(jdatejs(week_days[1] - timedelta(days=1)))
+            else:
+                week_end_days.append((week_days[1] - timedelta(days=1)).strftime(DATE_FORMAT))
+            # ic(week_days)
+            meters_week = self.search_read([('request_date', '>=', week_days[0]),
+                                            ('request_date', '<', week_days[1]), ], ['meter_no'])
+            meters_week_list = list([rec.get('meter_no') for rec in meters_week])
+            counter = Counter(meters_week_list)
+            meters_count = list([counter.get(rec, 0) for rec in meters_no])
+
+            meters_weeks.append(meters_count)
+        week_end_days.reverse()
+        meters_weeks.reverse()
+        # ic(meters_weeks)
+        transposed = list(zip(*meters_weeks))
+        transposed_lists = [list(t) for t in transposed]
+        week_traces = []
+        for i, meters_on_date in enumerate(transposed_lists):
+            week_traces.append({
+                'x': week_end_days,
+                'y': meters_on_date,
+                'name': meters_name[i],
+                'mode': 'lines',
+            })
+        data_weeks = {
+            'data': week_traces,
+            'layout': {
+                'autosize': True,
+                'xaxis': {
+                    'type': 'category',
+                    'dtick': 1,
+                    'tickangle': 45,
+                    'tickfont': {
+                        'size': 12
+                    },
+                },
+                'yaxis': {
+                    # 'tickvals': meters_count,
+                    # 'tickformat': 'd',
+                }, },
+            'config': {'responsive': True, 'displayModeBar': True}
+        }
+       # ############ MONTHS ##############
+
+        meters_months = []
+        month_end_days = []
+        for month in range(6):
+            # TODO: it must be based on months instead of 30 days
+            month_days = j_start_end('month', fields.date.today() - timedelta(days=30 * month))
+            if lang == 'fa_IR':
+                month_end_days.append(jdatejs(month_days[1] - timedelta(days=1)))
+            else:
+                month_end_days.append((month_days[1] - timedelta(days=1)).strftime(DATE_FORMAT))
+            # ic(month_days)
+            meters_month = self.search_read([('request_date', '>=', month_days[0]),
+                                            ('request_date', '<', month_days[1]), ], ['meter_no'])
+            meters_month_list = list([rec.get('meter_no') for rec in meters_month])
+            counter = Counter(meters_month_list)
+            meters_count = list([counter.get(rec, 0) for rec in meters_no])
+
+            meters_months.append(meters_count)
+        month_end_days.reverse()
+        meters_months.reverse()
+        # ic(meters_months)
+        transposed = list(zip(*meters_months))
+        transposed_lists = [list(t) for t in transposed]
+        month_traces = []
+        for i, meters_on_date in enumerate(transposed_lists):
+            month_traces.append({
+                'x': month_end_days,
+                'y': meters_on_date,
+                'name': meters_name[i],
+                'mode': 'lines',
+            })
+        data_months = {
+            'data': month_traces,
+            'layout': {
+                'autosize': True,
+                'xaxis': {
+                    'type': 'category',
+                    'dtick': 1,
+                    'tickangle': 45,
+                    'tickfont': {
+                        'size': 12
+                    },
+                },
+                'yaxis': {
+                    # 'tickvals': meters_count,
+                    # 'tickformat': 'd',
+                }, },
+            'config': {'responsive': True, 'displayModeBar': True}
+        }
+
+        # ic(data_weeks)
+        data = {'data_this_day': data_this_day, 'data_weeks': data_weeks, 'data_months': data_months}
+        return json.dumps(data)
+

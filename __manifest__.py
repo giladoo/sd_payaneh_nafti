@@ -16,7 +16,7 @@
     # for the full list
     'category': 'Service Desk/Service Desk',
     'application': True,
-    'version': '15.0.1.2.5',
+    'version': '15.0.1.2.6',
 
     # any module necessary for this one to work correctly
     'depends': ['base', 'web', 'mail', 'barcodes'],
@@ -102,10 +102,10 @@
         'web.assets_backend': [
 
             'sd_payaneh_nafti/static/src/css/style.scss',
-            # 'sd_payaneh_nafti/static/src/js/o_field_x2many_list_row_add_none.js',
+            'sd_payaneh_nafti/static/src/js/o_field_x2many_list_row_add_none.js',
             'sd_payaneh_nafti/static/src/components/**/*.js',
             'sd_payaneh_nafti/static/src/components/**/*.css',
-            # 'sd_payaneh_nafti/static/src/web/fields/locker_type.js',
+            'sd_payaneh_nafti/static/src/web/fields/many2many_button.js',
 
         ],
         'web.report_assets_common': [

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="chart_renderer" owl="1">
+<!--        <canvas t-ref="chart"/>-->
+        <div class="m-2 shadow rounded border text-center bg-white">
+            <div class="h5 mt-2">
+                <t t-esc="props.title"/>
+            </div>
+            <div class="border p-3">
+                <div  t-ref="chart"/>
+
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="meters_dashboard_template" owl="1">
+        <div class="bg-mute h-100 overflow-auto" >
+            <div class="h3 shadow border m-2 p-3 bg-white text-center">
+                Meters
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                    <ChartRenderer title="state.meter_this_day.title" config="state.meter_this_day.config"/>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                    <ChartRenderer title="state.meter_weeks.title" config="state.meter_weeks.config"/>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                    <ChartRenderer title="state.meter_months.title" config="state.meter_months.config"/>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

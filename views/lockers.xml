@@ -6,15 +6,15 @@
             <field name="name">Lockers List 2</field>
             <field name="model">sd_payaneh_nafti.lockers</field>
             <field name="arch" type="xml">
-                <tree editable="top" delete="1" create="0">
+                <tree editable="top" delete="1" create="0" default_order="package_sequence,locker_no">
                     <field name="locker_no" class="sd_ltr"/>
                     <field name="package_sequence" invisible="1"/>
                     <field name="package_id"  class="sd_ltr" widget="badge"/>
+                    <field name="batch_id"/>
 
                     <field name="locker_type"/>
                     <field name="input_info"/>
                     <field name="locker_log"/>
-<!--                    <field name="package_id"/>-->
                     <field name="package_state" />
                     <field name="batch_group"/>
                 </tree>
@@ -74,10 +74,10 @@
                                 attrs="{'invisible': ['|', ('is_inuse', '=', True),('state', '=', 'draft')]}"
                                 context="{'locker_btn':'draft'}"/>
 
-                        <button string="View"
-                                name="lockers_button" type="object" class="btn btn-outline-info"
+<!--                        <button string="View"-->
+<!--                                name="lockers_button" type="object" class="btn btn-outline-info"-->
 
-                                context="{'locker_btn':'view'}"/>
+<!--                                context="{'locker_btn':'view'}"/>-->
                     </header>
                     <sheet>
 
@@ -119,6 +119,23 @@
                                     <field name="package_count"/>
                                     <field name="state" widget="badge"/>
                                 </tree>
+                                <form>
+                                    <group>
+
+                                    <field name="start_no" readonly="1"/>
+                                    <field name="end_no" readonly="1"/>
+                                    <field name="lockers" readonly="1">
+                                        <tree>
+                                            <field name="locker_no" readonly="1"/>
+                                            <field name="locker_type" readonly="1"/>
+                                            <field name="input_info" readonly="1"/>
+
+                                        </tree>
+                                        <form></form>
+                                    </field>
+
+                                    </group>
+                                </form>
                             </field>
 
                         </group>
@@ -189,6 +206,12 @@
             <field name="priority">10</field>
             <field name="arch" type="xml">
                 <tree editable="top" create="0" delete="0">
+                    <header>
+                        <button string="Generate Lockers"
+                                name="package_button" type="object" class="btn btn-success mx-1"
+
+                                context="{'package_btn':'create_lockers'}"/>
+                    </header>
                     <field name="sequence" widget="handle"/>
                     <field name="box_no" class="text-center" readonly="1"/>
                     <field name="start_no" class="sd_ltr" readonly="1"/>
@@ -209,6 +232,11 @@
             <field name="priority">20</field>
             <field name="arch" type="xml">
                 <tree editable="top">
+                                        <header>
+                        <button string="Generate Lockers"
+                                name="package_button" type="object" class="btn btn-success mx-1"
+                                context="{'package_btn':'create_lockers'}"/>
+                    </header>
                     <field name="sequence" widget="handle"/>
 <!--                    <field name="sequence" class="text-center"/>-->
                     <field name="box_no" class="text-center"/>

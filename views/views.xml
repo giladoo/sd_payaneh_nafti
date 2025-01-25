@@ -112,6 +112,12 @@
             <field name="tag">data_dashboard</field>
         </record>
 
+        <record model="ir.actions.client" id="action_data_analysis">
+            <field name="name">Data Analysis</field>
+            <field name="res_model">sd_payaneh_nafti.settings</field>
+            <field name="tag">data_analysis</field>
+        </record>
+
         <menuitem
             name="Payaneh"
             id="payaneh_root_menu"

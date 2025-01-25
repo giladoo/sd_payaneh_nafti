@@ -2,7 +2,7 @@
 import json
 from datetime import  datetime, timedelta
 from time import time
-# from icecream import ic
+from icecream import ic
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
@@ -22,17 +22,13 @@ class SdPayanehNaftiLockers(models.Model):
 
     input_info = fields.Many2one('sd_payaneh_nafti.input_info')
     locker_log = fields.Many2one('sd_payaneh_nafti.locker_log')
-
-    # input_info_ids = fields.One2many('sd_payaneh_nafti.input_info', 'lockers')
     locker_type = fields.Many2one('sd_payaneh_nafti.locker_type')
-
-    batch_id = fields.Many2one('sd_payaneh_nafti.locker_batch')
     batch_state = fields.Selection(related='batch_id.state')
     batch_group = fields.Char(store=True, compute='_batch_group')
-
     package_id = fields.Many2one('sd_payaneh_nafti.locker_package')
     package_state = fields.Selection(related='package_id.state')
-    package_sequence = fields.Integer(related='package_id.sequence')
+    package_sequence = fields.Integer(related='package_id.sequence', store=True)
+    batch_id = fields.Many2one(related='package_id.batch_id')
 
     @api.depends('locker_no')
     def _batch_group(self):
@@ -136,21 +132,36 @@ class SdPayanehNaftiLockerPackage(models.Model):
                                             ])
             # ic(rec.available)
 
+    def package_button(self):
+        ic(self.env.context)
+        package_button = self.env.context.get('package_button', 'create_lockers')
+
+        if package_button == 'create_lockers':
+            active_ids = self.env.context.get('active_ids', False)
+            ic(active_ids)
+            lockers_model = self.env['sd_payaneh_nafti.lockers']
+            batch_model = self.env['sd_payaneh_nafti.locker_batch']
+            if active_ids:
+                packages = self.search([('id', 'in', active_ids), ('state', '=', 'published')], order='sequence',
+                                       limit=3)
+                ic(packages)
+                for record in packages:
+                    if record and not record.lockers:
+                        prefix, start_no = batch_model._get_prefix_number(record.start_no)
+                        _, end_no = batch_model._get_prefix_number(record.end_no)
+                        for number in range(start_no, end_no):
+                            lockers_model.create({
+                                'locker_no': f"{prefix}{number}",
+                                'package_id': record.id,
+                                'batch_group': prefix,
+                            })
+            else:
+                pass
+
+
     def get_locker_package(self):
         lockers_model = self.env['sd_payaneh_nafti.lockers']
-        batch_model = self.env['sd_payaneh_nafti.locker_batch']
-
-        packages = self.search([('state', '=', 'published')])
-        for record in packages[:2]:
-            if record and not record.lockers:
-                prefix, start_no = batch_model._get_prefix_number(record.start_no)
-                _, end_no = batch_model._get_prefix_number(record.end_no)
-                for number in range(start_no, end_no):
-                    lockers_model.create({
-                        'locker_no': f"{prefix}{number}",
-                        'package_id': record.id,
-                        'batch_group': prefix,
-                    })
+        packages = self.search([('state', '=', 'published')], order='sequence', limit=2)
         ids = []
         for rec in packages:
             lockers_count = lockers_model.search_count([('package_id', '=', rec.id),
@@ -164,9 +175,6 @@ class SdPayanehNaftiLockerPackage(models.Model):
                             'end_no': rec.end_no,
                             'available': lockers_count,
                             })
-                if len(ids) == 2:
-                    break
-        # ic(ids)
         data = {'ids': ids}
         return json.dumps(data)
 
@@ -255,11 +263,13 @@ class SdPayanehNaftiLockerBatch(models.Model):
         return prefix, number
 
     def lockers_button(self):
-        lockers_model = self.env['sd_payaneh_nafti.lockers']
         package_model = self.env['sd_payaneh_nafti.locker_package']
+        lockers_model = self.env['sd_payaneh_nafti.lockers']
         locker_btn = self.env.context.get('locker_btn', 'state_btn')
         lockers = lockers_model.search([('batch_id', '=', self.id)])
         packages = package_model.search([('batch_id', '=', self.id)])
+        used_lockers = lockers_model.search_count([('batch_id', '=', self.id), ('input_info', '!=', False), ])
+        is_inuse = True if used_lockers > 0 else False
         # used_lockers = list([rec for rec in lockers if rec.input_info != False])
         if locker_btn == 'publish':
             if self.state == 'draft' and not self.count:
@@ -268,12 +278,12 @@ class SdPayanehNaftiLockerBatch(models.Model):
             self.state = 'published'
 
         elif locker_btn == 'cancel':
-            if self.is_inuse:
+            if is_inuse:
                 raise ValidationError(_("Some lockers are in use"))
             self.state = 'canceled'
 
         elif locker_btn == 'draft':
-            if self.is_inuse:
+            if is_inuse:
                 raise ValidationError(_("Some lockers are in use"))
             self.state = 'draft'
 
@@ -293,16 +303,19 @@ class SdPayanehNaftiLockerBatch(models.Model):
                 # 'context': dict(self._context),
             }
 
+
     def write(self, vals):
         lockers_model = self.env['sd_payaneh_nafti.lockers']
         package_model = self.env['sd_payaneh_nafti.locker_package']
+        used_lockers = lockers_model.search_count([('batch_id', '=', self.id), ('input_info', '!=', False), ])
+        is_inuse = True if used_lockers > 0 else False
 
         if vals.get('start_no', False) or vals.get('end_no', False):
             lockers = lockers_model.search([('batch_id', '=', self.id)])
             for rec in lockers:
                 rec.unlink()
 
-        if vals.get('state', '') == 'published':
+        if vals.get('state', '') == 'published' and not is_inuse:
             packages = package_model.search([('batch_id', '=', self.id)])
 
             # ic(self.count // self.package_count, self.count % self.package_count)
@@ -371,23 +384,27 @@ class SdPayanehNaftiLockerBatch(models.Model):
         return super(SdPayanehNaftiLockerBatch, self).unlink()
 
 
+
+
+
 class SdPayanehNaftiLockersInputInfo(models.Model):
     _inherit = 'sd_payaneh_nafti.input_info'
 
+
     lockers = fields.One2many('sd_payaneh_nafti.lockers', 'input_info')
 
-    @api.onchange('api_box_locker')
-    def change_api_box_locker(self):
-        # print(f'\n {self.api_box_locker}')
-        pass
+    # @api.onchange('api_box_locker')
+    # def change_api_box_locker(self):
+    #     # print(f'\n {self.api_box_locker}')
+    #     pass
 
-    def write(self, vals):
-        # vlas.get('rec', 0) =>
-        #       0 : No change
-        #   False : removed
-        # Integer : changed
-        # print(f'\n write {vals}, {self.api_box_locker}')
-        if vals.get('api_box_locker'):
-            pass
-            # print(f'\n api_box_locker: {vals.get("api_box_locker")}')
-        return super(SdPayanehNaftiLockersInputInfo, self).write(vals)
+    # def write(self, vals):
+    #     # vlas.get('rec', 0) =>
+    #     #       0 : No change
+    #     #   False : removed
+    #     # Integer : changed
+    #     # print(f'\n write {vals}, {self.api_box_locker}')
+    #     if vals.get('api_box_locker'):
+    #         pass
+    #         # print(f'\n api_box_locker: {vals.get("api_box_locker")}')
+    #     return super(SdPayanehNaftiLockersInputInfo, self).write(vals)

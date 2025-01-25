@@ -46,7 +46,7 @@ patch(DataDashboard.prototype, 'data_dashboard',{
             res_id = await this.orm.searchRead("sd_payaneh_nafti.input_info", [['document_no', '=', code_no]],['id'])
             console.log('res_id:', res_id)
             if (res_id.length == 0){
-                this.state.openInputInfo.status = `${code_no} Not found`;
+                this.state.openInputInfo.status = `${code_no} ${_t("Not found")}`;
                 return
             }
 //            domain = [['document_no', '=', document_no]]

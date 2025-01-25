@@ -42,10 +42,23 @@ class SdPayanehNaftiContractInfo(models.Model):
     second_extend_no = fields.Char(tracking=True)
     second_extend_star_date = fields.Date(string='Second Start Date', tracking=True)
     second_extend_end_date = fields.Date(string='Second End Date', tracking=True)
+    last_end_date = fields.Date(compute="_last_end_date", store=True)
     input_count = fields.Integer(compute='compute_count')
     remain_amount = fields.Integer(compute='compute_remain_amount')
     date_validation = fields.Boolean(default=True, compute='_date_validation')
     description = fields.Char(tracking=True)
+
+    @api.depends('end_date', 'first_extend_end_date', 'second_extend_end_date' )
+    @api.onchange('end_date', 'first_extend_end_date', 'second_extend_end_date' )
+    def _last_end_date(self):
+        for rec in self:
+            if rec.second_extend_end_date:
+                rec.last_end_date = rec.second_extend_end_date
+            elif rec.first_extend_end_date:
+                rec.last_end_date = rec.first_extend_end_date
+            else:
+                rec.last_end_date = rec.end_date
+
 
     @api.constrains('registration_no')
     def _check_registration_no_unique(self):

@@ -78,10 +78,10 @@ patch(DataDashboard.prototype, 'data_dashboard_input',{
                         target: "new",
                     });
                 }else{
-                    this.state.openInputInfo.status = `${value} Not found`
+                    this.state.openInputInfo.status = `${value} ${_t("Not found")}`
                 }
             }else{
-                this.state.openInputInfo.status = `${value} Not found`
+                this.state.openInputInfo.status = `${value} ${_t("Not found")}`
             }
 
 //            console.log('openInputInfo value:', e.target.value, this)

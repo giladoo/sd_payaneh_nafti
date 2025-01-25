@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="data_analysis" owl="1">
+        <div class="bg-mute h-100 overflow-auto" >
+            <div class="h3 shadow border m-2 p-3 bg-white text-center">
+                Data Analysis
+            </div>
+            <DataAnalysisChart chart="state.charts.meters"/>
+            <ChartRenderer type="'bar'" title="'Monthly Sales Report'"/>
+        </div>
+    </t>
+</templates>

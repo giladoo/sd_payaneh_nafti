@@ -1,17 +1,17 @@
 /** @odoo-module */
-    import { registry } from "@web/core/registry"
-    const { Component, useRef, useState } = owl
-    const { useEnv, onWillStart, onMounted, onWillUnmount } = owl.hooks;
-    import { session } from "@web/session";
-    import { useService } from "@web/core/utils/hooks"
-    import { DataCards } from "./data_cards/data_cards"
-    import { DataPlans } from "./data_plans/data_plans"
-    import { DataLockers } from "./data_lockers/data_lockers"
-    import Bus from 'web.Bus';
-    const { DateTime, Settings } = luxon;
-    import core from 'web.core';
-    const _t = core._t;
-    const SERVER_DATE_FORMAT = "yyyy-MM-dd";
+import { registry } from "@web/core/registry"
+const { Component, useRef, useState } = owl
+const { useEnv, onWillStart, onMounted, onWillUnmount } = owl.hooks;
+import { session } from "@web/session";
+import { useService } from "@web/core/utils/hooks"
+import { DataCards } from "./data_cards/data_cards"
+import { DataPlans } from "./data_plans/data_plans"
+import { DataLockers } from "./data_lockers/data_lockers"
+import Bus from 'web.Bus';
+const { DateTime, Settings } = luxon;
+import core from 'web.core';
+const _t = core._t;
+const SERVER_DATE_FORMAT = "yyyy-MM-dd";
 
 export class DataDashboard extends Component {
     setup(){
@@ -54,7 +54,7 @@ export class DataDashboard extends Component {
                 status: "",
             },
             newRequest: {
-                status: "Create",
+                status: _t("Create Loading"),
             },
             lockers: {
                 name: _t('Lockers'),
@@ -88,7 +88,7 @@ export class DataDashboard extends Component {
                 status: "",
             },
             new_requests: {
-                name: _t('New Request'),
+                name: _t('New Loadings'),
                 value: 0,
                 status: "",
             },
@@ -110,10 +110,6 @@ export class DataDashboard extends Component {
             meter_data: {
                 value: 0,
             },
-//            openInputInfo: {
-//                value: 0,
-//                status: "",
-//            },
         })
         this.orm = useService("orm")
         this.actionService = useService("action")
@@ -124,7 +120,6 @@ export class DataDashboard extends Component {
             await this.getContracts()
             await this.getRequests()
             await this.getLockerPackage()
-//            getRequestsInterval = setInterval(this.getRequests, 30000)
         })
         onMounted(()=> {
             loadingPlanCard = document.querySelector('.loading_plan_card')
@@ -134,8 +129,6 @@ export class DataDashboard extends Component {
                 .on('notification', 'payaneh_operation' , notifications => self._onNotif(notifications));
         })
         onWillUnmount(function(){
-//            console.log('onWillUnmount self.legacyEnv:', self.legacyEnv)
-//            clearInterval(getRequestsInterval)
             loadingPlanCard.removeEventListener('click', loadingEvent)
             self.legacyEnv.services.bus_service.call( 'bus_service', 'deleteChannel', 'payaneh_operation_channel');
             self.legacyEnv.services.bus_service.off('notification', self._onNotif);
@@ -152,7 +145,6 @@ export class DataDashboard extends Component {
         this.viewLoadingPermit = this.viewLoadingPermit.bind(this);
         this.viewLoadingInfo = this.viewLoadingInfo.bind(this);
         this.viewCargoDocument = this.viewCargoDocument.bind(this);
-//        this.toOpenInputInfo = this.toOpenInputInfo.bind(this);
         this._onLoadingPlanCard = this._onLoadingPlanCard.bind(this);
         this.viewTodayLoadingPlan = this.viewTodayLoadingPlan.bind(this);
         this.viewLockerPackage = this.viewLockerPackage.bind(this);
@@ -162,25 +154,11 @@ export class DataDashboard extends Component {
     async getLockerPackage(){
         const packages = await this.orm.call("sd_payaneh_nafti.locker_package", "get_locker_package", [[]])
         this.state.lockers.status = JSON.parse(packages).ids
-        console.log('packages:', packages, this.state.lockers.status)
     }
     async viewLockerPackage(){
-
-//        const views = await this.orm.searchRead(
-//            "ir.ui.view",
-//            [["xml_id", "=", "sd_payaneh_nafti_locker_package_list"]],
-//            ["name"],
-//            { limit: 3 }
-//        );
-//        console.log('views:', views)
-//        const view = views[0];
-//        view.type = view.type === "tree" ? "list" : view.type; // ignore tree view
-
-
-
         let domain = [['state', '=', 'published']]
         this.actionService.doAction({
-            name: "Locker Package",
+            name: _t("Locker Package"),
             res_model: "sd_payaneh_nafti.locker_package",
             views: [[false, "list"]],
             type: "ir.actions.act_window",
@@ -196,24 +174,16 @@ export class DataDashboard extends Component {
         this.state.spgr.status = moment(spgr[0].spgr_date).format(dateFormat);
         this.state.spgr.value = spgr[0].spgr;
     }
-
-//    async loading_plan_detail(){
-//        let loadingPlanDetail = document.querySelector('.loading_plan_detail')
-//        let plans = await this.orm.call("sd_payaneh_nafti.loading_plan", "loading_plans_detail", [],{})
-//    }
-
     viewTodayLoadingPlan(theDate){
         let today = moment().locale('en').format('YYYY/MM/DD')
         let domain = [['record_date', '=', today]]
         this.actionService.doAction({
-            name: "Loading Plan",
+            name: _t("Loading Plan"),
             res_model: "sd_payaneh_nafti.loading_plan",
-//            res_id: this.actionId,
             views: [[false, "list"],],
             type: "ir.actions.act_window",
             view_mode: "list",
             domain: domain,
-//                    context: {'search_default_meter_no_group': 1},
             target: "current",
         });
 
@@ -223,14 +193,12 @@ export class DataDashboard extends Component {
             if(ev.target.parentElement.dataset.date){
                 let domain = [['record_date', '=', ev.target.parentElement.dataset.date]]
                 this.actionService.doAction({
-                    name: "Loading Plan",
+                    name: _t("Loading Plan"),
                     res_model: "sd_payaneh_nafti.loading_plan",
-        //            res_id: this.actionId,
                     views: [[false, "list"],],
                     type: "ir.actions.act_window",
                     view_mode: "list",
                     domain: domain,
-//                    context: {'search_default_meter_no_group': 1},
                     target: "current",
                 });
             }
@@ -241,7 +209,6 @@ export class DataDashboard extends Component {
         let self = this;
         let plans = await this.orm.call("sd_payaneh_nafti.loading_plan", "loading_plans", [],{})
         plans = JSON.parse(plans)
-//        console.log('plans:', plans)
         this.state.plan_detail.status = plans.plan_detail
         let link = ''
             link += `
@@ -264,14 +231,11 @@ export class DataDashboard extends Component {
             </div>
             `;
         } )
-//        this.state.load_plan.link = `<div class="row">${link}</div>`
         this.state.load_plan.link = link
     }
     async getContracts(){
         let contracts = await this.orm.call("sd_payaneh_nafti.contract_registration", "get_contracts", [],{})
         contracts = JSON.parse(contracts)
-//        console.log('contracts:', contracts, typeof contracts, )
-//        this.state.spgr.status = moment(spgr[0].spgr_date).format("jYYYY/jMM/jDD");
         this.state.contracts.value = contracts.open_contracts;
         this.state.remain_amount.value = contracts.remain_amount;
     }
@@ -289,6 +253,7 @@ export class DataDashboard extends Component {
         this.state.loading_permit.value = requests.loading_permit;
         this.state.loading_info.value = requests.loading_info;
         this.state.cargo_document.value = requests.cargo_document;
+        this.state.meter_data.name = [_t("Meter No"), _t("First Totalizer"), _t("Last Totalizer"), _t("Amount"), _t("Trucks")];
         this.state.meter_data.value = requests.meter_data;
         this.state.this_day_requests_count.status = moment().format(dateFormat);
         this.state.one_day_ago_count.status = moment().subtract(1, 'days').format(dateFormat);
@@ -309,11 +274,9 @@ export class DataDashboard extends Component {
     viewSpgr(){
         let domain = ['|',['active', '=', true], ['active', '=', false], ]
         let context = {'search_default_show_active': 1}
-
         this.actionService.doAction({
-            name: "SPGR",
+            name: _t("SPGR"),
             res_model: "sd_payaneh_nafti.spgr",
-//            res_id: this.actionId,
             views: [[false, "list"], [false, "form"]],
             type: "ir.actions.act_window",
             view_mode: "list",
@@ -323,21 +286,15 @@ export class DataDashboard extends Component {
         });
     }
     viewContracts(){
-//        this.actionService = useService("action")
         let today = moment().locale('en').format('YYYY/MM/DD')
-        console.log('today:',  today, moment.locale())
         let domain = ['|','|',['end_date', '>=', today],
         ['first_extend_end_date', '>=', today],
         ['second_extend_end_date', '>=', today],
         ]
-//        this.orm = useService("orm")
-//        this.orm.call("sd_payaneh_nafti.contract_registration", "dash_get_inputs", [],{})
-//        console.log('viewContracts', this.orm, this.actionService, )
-//          this.actionService.doAction("sd_payaneh_nafti.action_window_contract_registration")
+
         this.actionService.doAction({
-            name: "Ongoing Contracts",
+            name: _t("Ongoing Contracts"),
             res_model: "sd_payaneh_nafti.contract_registration",
-//            res_id: this.actionId,
             views: [[false, "list"], [false, "form"]],
             type: "ir.actions.act_window",
             view_mode: "list",
@@ -346,10 +303,8 @@ export class DataDashboard extends Component {
         });
     }
     newRequestCreation(){
-        console.log('newRequestCreation', this)
         this.actionService.doAction({
             res_model: "sd_payaneh_nafti.input_info",
-//            res_id: document[0].id,
             views: [[false, "form"]],
             type: "ir.actions.act_window",
             view_mode: "form",
@@ -357,14 +312,14 @@ export class DataDashboard extends Component {
         });
     }
     viewThisDayRequests(day=0){
-//        this.actionService = useService("action")
-//        console.log('viewThisDayRequests', day)
-        let today = moment().locale('en').add(day, 'days').format('YYYY/MM/DD')
+        let today = moment().locale('en').add(day, 'days')
+        let dateFormat = session.user_context.lang == 'fa_IR' ? "jYYYY/jMM/jDD" : "YYYY-MM-DD"
+        let theDay = today.format(dateFormat)
+        today = today.format('YYYY/MM/DD')
         let domain = [['request_date', '=', today]]
         this.actionService.doAction({
-            name: "This day Requests",
+            name: `${_t("Loadings")} [${theDay}]`,
             res_model: "sd_payaneh_nafti.input_info",
-//            res_id: this.actionId,
             views: [[false, "list"], [false, "form"]],
             type: "ir.actions.act_window",
             view_mode: "list",
@@ -374,13 +329,10 @@ export class DataDashboard extends Component {
         });
     }
     viewNewRequests(){
-//            this.actionService = useService("action")
         let domain = [['state', '=', 'draft']]
-
         this.actionService.doAction({
-            name: "New Requests",
+            name: _t("New Loadings"),
             res_model: "sd_payaneh_nafti.input_info",
-//            res_id: this.actionId,
             views: [[false, "list"], [false, "form"]],
             type: "ir.actions.act_window",
             view_mode: "list",
@@ -389,13 +341,10 @@ export class DataDashboard extends Component {
         });
         }
     viewLoadingPermit(){
-//            this.actionService = useService("action")
         let domain = [['state', '=', 'loading_permit']]
-
         this.actionService.doAction({
-            name: "Loading Permit",
+            name: _t("Loading Permit"),
             res_model: "sd_payaneh_nafti.input_info",
-//            res_id: this.actionId,
             views: [[false, "list"], [false, "form"]],
             type: "ir.actions.act_window",
             view_mode: "list",
@@ -404,13 +353,11 @@ export class DataDashboard extends Component {
         });
         }
     viewLoadingInfo(){
-//            this.actionService = useService("action")
         let domain = [['state', '=', 'loading_info']]
 
         this.actionService.doAction({
-            name: "Loading Permit",
+            name: _t("Loading Info"),
             res_model: "sd_payaneh_nafti.input_info",
-//            res_id: this.actionId,
             views: [[false, "list"], [false, "form"]],
             type: "ir.actions.act_window",
             view_mode: "list",
@@ -419,13 +366,10 @@ export class DataDashboard extends Component {
         });
         }
     viewCargoDocument(){
-//            this.actionService = useService("action")
         let domain = [['state', '=', 'cargo_document']]
-
         this.actionService.doAction({
-            name: "Cargo Document",
+            name: _t("Cargo Document"),
             res_model: "sd_payaneh_nafti.input_info",
-//            res_id: this.actionId,
             views: [[false, "list"], [false, "form"]],
             type: "ir.actions.act_window",
             view_mode: "list,form",
@@ -433,6 +377,14 @@ export class DataDashboard extends Component {
             target: "current",
         });
         }
+    onSubDashboardClick(e){
+        console.log('onSubDashboardClick', e)
+        this.actionService.doAction({
+            type: "ir.actions.client",
+            tag: "meters_dashboard",
+            target: "current",
+        });
+    }
 }
 
 DataDashboard.template = "data_dashboard"

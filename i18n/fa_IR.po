@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-19 11:59+0000\n"
-"PO-Revision-Date: 2025-01-19 15:47+0330\n"
+"POT-Creation-Date: 2025-01-22 21:41+0000\n"
+"PO-Revision-Date: 2025-01-23 01:15+0330\n"
 "Last-Translator: Arash Homayounfar <homayounfar@msn.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -614,7 +614,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_spgr__activity_state
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_trucks__activity_state
 msgid "Activity State"
-msgstr "وضعیت فعالیت: "
+msgstr "وضعیت نظرسنجی: "
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_base_info__activity_type_icon
@@ -656,11 +656,14 @@ msgid "All Requests of Today"
 msgstr "همه درخواست های امروز"
 
 #. module: sd_payaneh_nafti
+#. openerp-web
+#: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_contract_registration__amount
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_input_info__amount
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__contract_amount
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.contract_daily_report_page_header
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.contract_daily_report_page_header_export
+#, python-format
 msgid "Amount"
 msgstr "مقدار"
 
@@ -1167,6 +1170,13 @@ msgid "Cqq"
 msgstr ""
 
 #. module: sd_payaneh_nafti
+#. openerp-web
+#: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
+#, python-format
+msgid "Create Loading"
+msgstr "ایجاد بارگیری"
+
+#. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_contract_registration_form
 msgid "Create Loading Request"
 msgstr "ایجاد درخواست بارگیری"
@@ -1559,7 +1569,6 @@ msgstr "جعبه تخلیه"
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_input_info__evacuation_box_seal
-#: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data1
 msgid "Evacuation Box Seal"
 msgstr "پلمپ جعبه تخلیه"
@@ -1644,9 +1653,12 @@ msgid "First Start Date"
 msgstr "تاریخ شروع اول"
 
 #. module: sd_payaneh_nafti
+#. openerp-web
+#: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_meter_data__first_totalizer
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.contract_daily_report_table_header_export
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.meter_report_data
+#, python-format
 msgid "First Totalizer"
 msgstr "توتالایزر ابتدایی"
 
@@ -1722,7 +1734,7 @@ msgstr ""
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_locker_batch__free_lockers
 msgid "Free Lockers"
-msgstr ""
+msgstr "پلمپ های آزاد"
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_input_info__front_container
@@ -1785,6 +1797,12 @@ msgstr "اطلاعات عمومی"
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.outgate_daily_report_wizard_form
 msgid "Generate"
 msgstr "ایجاد"
+
+#. module: sd_payaneh_nafti
+#: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_locker_package_list
+#: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_locker_package_list_namage
+msgid "Generate Lockers"
+msgstr ""
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields.selection,name:sd_payaneh_nafti.selection__sd_payaneh_nafti_report_annual_report__calendar__en_us
@@ -2204,9 +2222,12 @@ msgid "Last Modified on"
 msgstr "تاریخ آخرین تغییر"
 
 #. module: sd_payaneh_nafti
+#. openerp-web
+#: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_meter_data__last_totalizer
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.contract_daily_report_table_header_export
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.meter_report_data
+#, python-format
 msgid "Last Totalizer"
 msgstr "توتالایزر انتهایی"
 
@@ -2453,48 +2474,55 @@ msgstr "نوع بارگیری"
 #: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_locker_batch
 #: model:ir.ui.menu,name:sd_payaneh_nafti.locker_batch_menu
 msgid "Locker Batch"
-msgstr ""
+msgstr "گروه پلمپ"
 
 #. module: sd_payaneh_nafti
 #: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_locker_log
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_lockers__locker_log
 #: model:ir.ui.menu,name:sd_payaneh_nafti.locker_log_menu
 msgid "Locker Log"
-msgstr ""
+msgstr "ثبت پلمپ"
 
 #. module: sd_payaneh_nafti
 #: model:ir.model,name:sd_payaneh_nafti.model_report_sd_payaneh_nafti_locker_log_report_template
 #: model:ir.model,name:sd_payaneh_nafti.model_report_sd_payaneh_nafti_locker_log_sheet_template
 msgid "Locker Log Report"
-msgstr ""
+msgstr "گزارش ثبت پلمپ"
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_lockers__locker_no
+#: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data
 msgid "Locker No"
-msgstr ""
+msgstr "شماره پلمپ"
 
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.locker_log_sheet_data
 msgid "Locker Number"
-msgstr ""
+msgstr "شماره پلمپ"
+
+#. module: sd_payaneh_nafti
+#. openerp-web
+#: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
+#: model:ir.ui.menu,name:sd_payaneh_nafti.locker_package_menu
+#, python-format
+msgid "Locker Package"
+msgstr "جعبه پلمپ"
 
 #. module: sd_payaneh_nafti
 #: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_locker_package
-#: model:ir.ui.menu,name:sd_payaneh_nafti.locker_package_menu
-msgid "Locker Package"
-msgstr ""
+msgid "Locker Package 1"
+msgstr "جعبه پلمپ"
 
 #. module: sd_payaneh_nafti
 #: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_locker_type
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_lockers__locker_type
 #: model:ir.ui.menu,name:sd_payaneh_nafti.locker_type_menu
 msgid "Locker Type"
-msgstr ""
+msgstr "نوع پلمپ"
 
 #. module: sd_payaneh_nafti
 #. openerp-web
 #: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
-#: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_lockers
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_input_info__lockers
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_locker_log__lockers
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_locker_package__lockers
@@ -2508,9 +2536,14 @@ msgid "Lockers"
 msgstr "پلمپ ها"
 
 #. module: sd_payaneh_nafti
+#: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_lockers
+msgid "Lockers 1"
+msgstr "پلمپ ها"
+
+#. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.locker_log_sheet_data
 msgid "Log Type"
-msgstr ""
+msgstr "نوع ثبت "
 
 #. module: sd_payaneh_nafti
 #: model:ir.actions.report,name:sd_payaneh_nafti.locker_log_sheet
@@ -2544,7 +2577,7 @@ msgstr ""
 #. module: sd_payaneh_nafti
 #: model:sd_payaneh_nafti.locker_type,name:sd_payaneh_nafti.locker_type_30
 msgid "Lost"
-msgstr ""
+msgstr "گم شده"
 
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.contract_daily_report_table_header
@@ -2750,8 +2783,11 @@ msgid "Meter M.T."
 msgstr ""
 
 #. module: sd_payaneh_nafti
+#. openerp-web
+#: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_input_info__meter_no
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_input_info_list_search
+#, python-format
 msgid "Meter No"
 msgstr "شماره میتر"
 
@@ -2778,7 +2814,7 @@ msgstr ""
 #. module: sd_payaneh_nafti
 #: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_meter_comments
 msgid "Meter comments"
-msgstr ""
+msgstr "توضیحات میتر"
 
 #. module: sd_payaneh_nafti
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_report_meter_report__meters
@@ -2896,7 +2932,6 @@ msgstr "شرکت ملی نفت ایران"
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__buyer
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_loading_plan__destination
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_locker_type__name
-#: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_lockers__name
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_plate1__name
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_plate2__name
 #: model:ir.model.fields,field_description:sd_payaneh_nafti.field_sd_payaneh_nafti_plate3__name
@@ -2924,9 +2959,13 @@ msgstr ""
 #. module: sd_payaneh_nafti
 #. openerp-web
 #: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
+#, python-format
+msgid "New Loadings"
+msgstr "بارگیری های جدید"
+
+#. module: sd_payaneh_nafti
 #: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_input_info_1_new
 #: model:ir.ui.menu,name:sd_payaneh_nafti.input_info_1_menu_new
-#, python-format
 msgid "New Request"
 msgstr "درخواست جدید"
 
@@ -3139,6 +3178,13 @@ msgstr ""
 #: model:ir.model.fields.selection,name:sd_payaneh_nafti.selection__sd_payaneh_nafti_sd_payaneh_nafti__state__ongoing
 msgid "Ongoing"
 msgstr "در جریان"
+
+#. module: sd_payaneh_nafti
+#. openerp-web
+#: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
+#, python-format
+msgid "Ongoing Contracts"
+msgstr "قراردادهای باز"
 
 #. module: sd_payaneh_nafti
 #. openerp-web
@@ -3613,8 +3659,11 @@ msgid "SP.GR. - API - Tank No."
 msgstr ""
 
 #. module: sd_payaneh_nafti
+#. openerp-web
+#: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
 #: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_spgr
 #: model:ir.ui.menu,name:sd_payaneh_nafti.spgr_menu
+#, python-format
 msgid "SPGR"
 msgstr ""
 
@@ -3717,7 +3766,7 @@ msgstr "امظاء کنندگان"
 #: code:addons/sd_payaneh_nafti/models/lockers.py:0
 #, python-format
 msgid "Some lockers are in use"
-msgstr ""
+msgstr "پلمپ ها در حال استفاده هستند"
 
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data1
@@ -3936,7 +3985,7 @@ msgstr ""
 #: code:addons/sd_payaneh_nafti/models/lockers.py:0
 #, python-format
 msgid "There is no locker to create."
-msgstr ""
+msgstr "پلمپ برای ایجاد وجود ندارد"
 
 #. module: sd_payaneh_nafti
 #: model:ir.ui.menu,name:sd_payaneh_nafti.input_info_1_menu_today
@@ -4002,10 +4051,13 @@ msgid "Truck No"
 msgstr "شماره نفت کش"
 
 #. module: sd_payaneh_nafti
+#. openerp-web
+#: code:addons/sd_payaneh_nafti/static/src/components/data_dashboard.js:0
 #: model:ir.actions.act_window,name:sd_payaneh_nafti.action_window_trucks
 #: model:ir.ui.menu,name:sd_payaneh_nafti.trucks_menu
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.meter_report_data
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_trucks_list_search
+#, python-format
 msgid "Trucks"
 msgstr "نفت کش ها"
 
@@ -4109,7 +4161,6 @@ msgstr ""
 #. module: sd_payaneh_nafti
 #. openerp-web
 #: code:addons/sd_payaneh_nafti/static/src/components/input_cards/input_cards.js:0
-#: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_locker_batch_form
 #, python-format
 msgid "View"
 msgstr ""
@@ -4278,19 +4329,16 @@ msgid "apps"
 msgstr ""
 
 #. module: sd_payaneh_nafti
-#: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data1
 msgid "compartment_1"
 msgstr "محفظه 1"
 
 #. module: sd_payaneh_nafti
-#: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data1
 msgid "compartment_2"
 msgstr "محفظه 2"
 
 #. module: sd_payaneh_nafti
-#: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.cargo_document_report_data1
 msgid "compartment_3"
 msgstr "محفظه 3"
@@ -4313,7 +4361,7 @@ msgstr "مقصد ها"
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_locker_log_form
 msgid "e.g. Master meter repair"
-msgstr ""
+msgstr "مثال، تعمیر مستر میتر"
 
 #. module: sd_payaneh_nafti
 #: model_terms:ir.ui.view,arch_db:sd_payaneh_nafti.sd_payaneh_nafti_loading_plan_list_search
