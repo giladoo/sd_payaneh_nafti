@@ -28,6 +28,7 @@ class ReportSdPayanehNaftiMeterReport(models.AbstractModel):
         time_z = pytz.timezone(context.get('tz'))
         date_time = datetime.now(time_z)
         date_time = self.date_converter(date_time, context.get('lang'))
+        input_info_model = self.env['sd_payaneh_nafti.input_info']
         form_data = data.get('form_data')
         date_format = '%Y-%m-%d'
         meter_report_date = form_data.get('meter_report_date')
@@ -39,7 +40,7 @@ class ReportSdPayanehNaftiMeterReport(models.AbstractModel):
         else:
             s_start_date = meter_report_date.strftime("%Y/%m/%d")
 
-        this_date_input = self.env['sd_payaneh_nafti.input_info'].search(
+        this_date_input = input_info_model.search(
             [('loading_info_date', '=', meter_report_date), ('state', 'in', ['done', 'finished']), ])
         if len(this_date_input) == 0:
             return {
@@ -63,6 +64,14 @@ class ReportSdPayanehNaftiMeterReport(models.AbstractModel):
             totalizer_end = sorted(list([ii.totalizer_end for ii in meter_data_inputs if ii.meter_no == meter_no]))
             first_totalizer = min(totalizer_start) if totalizer_start else 0
             last_totalizer = max(totalizer_end) if totalizer_end else 0
+            if not first_totalizer:
+                totalizers = input_info_model.search_read([('meter_no', '=', meter_no),
+                                                           ('totalizer_end', '!=', False)],
+                                                          ['totalizer_end'], order='id', limit=30)
+                totalizer = max(list([rec.get('totalizer_end') for rec in totalizers]))
+                first_totalizer = totalizer
+                last_totalizer = totalizer
+
             meter_amounts = last_totalizer - first_totalizer
             meter_amount_sum = meter_amount_sum + meter_amounts
             data = {'meter_no': int(meter_no),

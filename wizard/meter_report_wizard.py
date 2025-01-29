@@ -242,6 +242,11 @@ class SdPayanehNaftiReportMeterReport(models.TransientModel):
             totalizer_end = sorted(list([ii.totalizer_end for ii in this_date_input if ii.meter_no == meter_no]))
             first_totalizer = min(totalizer_start) if totalizer_start else 0
             last_totalizer = max(totalizer_end) if totalizer_end else 0
+            if not first_totalizer:
+                totalizers = self.search_read([('meter_no', '=', meter_no), ('totalizer_end', '!=', False)],['totalizer_end'], order='id', limit=30)
+                totalizer = max(list([rec.get('totalizer_end') for rec in totalizers]))
+                first_totalizer = totalizer
+                last_totalizer = totalizer
             meter_amounts = last_totalizer - first_totalizer
             meter_amount_sum = meter_amount_sum + meter_amounts
             data = {'meter_no': int(meter_no),
